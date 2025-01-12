@@ -1,0 +1,167 @@
+// Mixin for defining @font-face
+@mixin font-face($name, $weight, $style, $file) {
+    @font-face {
+        font-family: $name;
+        src: url("#{$file}.ttf") format("truetype");
+        font-weight: $weight;
+        font-style: $style;
+    }
+}
+
+// Register all Montserrat font styles
+@include font-face("Montserrat", 400, normal, "src/assets/fonts/Montserrat/static/Montserrat-Regular");
+@include font-face("Montserrat", 700, normal, "src/assets/fonts/Montserrat/static/Montserrat-Bold");
+@include font-face("Montserrat", 700, italic, "src/assets/fonts/Montserrat/static/Montserrat-BoldItalic");
+@include font-face("Montserrat", 800, normal, "src/assets/fonts/Montserrat/static/Montserrat-ExtraBold");
+@include font-face("Montserrat", 800, italic, "src/assets/fonts/Montserrat/static/Montserrat-ExtraBoldItalic");
+@include font-face("Montserrat", 300, normal, "src/assets/fonts/Montserrat/static/Montserrat-ExtraLight");
+@include font-face("Montserrat", 300, italic, "src/assets/fonts/Montserrat/static/Montserrat-ExtraLightItalic");
+@include font-face("Montserrat", 500, normal, "src/assets/fonts/Montserrat/static/Montserrat-Medium");
+@include font-face("Montserrat", 500, italic, "src/assets/fonts/Montserrat/static/Montserrat-MediumItalic");
+@include font-face("Montserrat", 600, normal, "src/assets/fonts/Montserrat/static/Montserrat-SemiBold");
+@include font-face("Montserrat", 600, italic, "src/assets/fonts/Montserrat/static/Montserrat-SemiBoldItalic");
+@include font-face("Montserrat", 900, normal, "src/assets/fonts/Montserrat/static/Montserrat-Black");
+@include font-face("Montserrat", 900, italic, "src/assets/fonts/Montserrat/static/Montserrat-BlackItalic");
+
+// Nulifier ============================
+*,
+*::before,
+*::after {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    outline: none;
+
+    scroll-behavior: smooth;
+}
+
+button {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+input,
+textarea,
+button {
+    font-family: 'Montserrat', sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/*** 
+====================================================================
+    Global Settings
+====================================================================
+***/
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #000;
+    line-height: 1.7em;
+    font-weight: 400;
+    background: #fff;
+    position: relative;
+
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+}
+
+body.active {
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    font-weight: normal;
+    margin: 0px;
+    background: none;
+    line-height: 1.6em;
+}
+
+/* Typography */
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+h3 {
+    font-size: 34px;
+}
+
+h4 {
+    font-size: 22px;
+}
+
+h5 {
+    font-size: 20px;
+}
+
+h6 {
+    font-size: 18px;
+}
+
+p {
+    position: relative;
+    line-height: 1.8em;
+}
+
+.auto_container {
+    position: relative;
+    max-width: 1500px;
+    padding: 0px 60px;
+    margin: 0 auto;
+}
+
+ul,
+li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #fff;
+    border: 1px solid #DFDFDF;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #DFDFDF;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #DFDFDF;
+}
