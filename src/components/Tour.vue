@@ -27,7 +27,7 @@
 
     onMounted(async () => {
         try {
-            const response = await axios.get('/api/tours');
+            const response = await axios.get('https://www.flyashgabat.com:4443/api/tours');
             state.tours = response.data.data;
 
         } catch (error) {

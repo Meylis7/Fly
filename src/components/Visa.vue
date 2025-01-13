@@ -11,7 +11,7 @@
 
     onMounted(async () => {
         try {
-            const response = await axios.get('/api/visas ');
+            const response = await axios.get('https://www.flyashgabat.com:4443/api/visas');
             state.visas = response.data.data;
 
         } catch (error) {

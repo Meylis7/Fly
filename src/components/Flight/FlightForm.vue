@@ -167,7 +167,7 @@
         }
 
         try {
-            const url = `/api/search/airports?query=${encodeURIComponent(departureCity.value)}`;
+            const url = `https://www.flyashgabat.com:4443/api/search/airports?query=${encodeURIComponent(departureCity.value)}`;
             const response = await axios.get(url);
             state.flights = response.data.data;
         } catch (error) {

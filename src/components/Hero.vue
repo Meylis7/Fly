@@ -14,7 +14,7 @@
 </script>
 
 <template>
-    <section class="hero h-screen w-full bg-[url('./src/assets/images/hero-bg.png')] bg-no-repeat bg-cover relative">
+    <section class="hero h-screen w-full bg-[url('@/assets/images/hero-bg.png')] bg-no-repeat bg-cover relative">
         <div class="auto_container">
             <div class="wrapper pt-[160px]">
                 <div class="max-w-[1200px] m-auto">
