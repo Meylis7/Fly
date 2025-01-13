@@ -2,7 +2,7 @@
     import { Swiper, SwiperSlide } from 'swiper/vue';
     import { Navigation } from 'swiper/modules';
     import { RouterLink } from 'vue-router';
-    import { onMounted, reactive, ref } from 'vue';
+    import { onMounted, reactive } from 'vue';
 
     import axios from 'axios';
 
@@ -13,11 +13,11 @@
     // import 'swiper/css/autoplay ';
 
     const onSwiper = (swiper) => {
-        console.log(swiper);
+        // console.log(swiper);
     };
 
     const onSlideChange = () => {
-        console.log('slide change');
+        // console.log('slide change');
     };
 
 
@@ -78,8 +78,8 @@
                     :slides-per-view="4" :loop="true" :space-between="20" @swiper="onSwiper"
                     @slideChange="onSlideChange" class="mt-5">
 
-                    <SwiperSlide v-for="tour in state.tours" :key="tour.id" >
-                        <TourCard :tour="tour"/>
+                    <SwiperSlide v-for="tour in state.tours" :key="tour.id">
+                        <TourCard :tour="tour" />
                     </SwiperSlide>
                 </Swiper>
 

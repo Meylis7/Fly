@@ -1,6 +1,24 @@
 <script setup>
     import { RouterLink } from 'vue-router';
     import VisaCard from './VisaCard.vue';
+    import { onMounted, reactive } from 'vue';
+    import axios from 'axios';
+
+
+    const state = reactive({
+        visas: [],
+    });
+
+    onMounted(async () => {
+        try {
+            const response = await axios.get('/api/visas ');
+            state.visas = response.data.data;
+
+        } catch (error) {
+            console.error('Error fetching visas ', error);
+        }
+    });
+
 
 
 </script>
@@ -17,7 +35,7 @@
                 </p>
 
                 <div class="flex flex-wrap gap-5 mt-8">
-                    <VisaCard v-for="visa in 6" :key="visa" class="block w-[calc(33.33%-14px)]" />
+                    <VisaCard v-for="visa in state.visas" :key="visa.id" :visa="visa" class="block w-[calc(33.33%-14px)]" />
                 </div>
 
                 <RouterLink to="/"

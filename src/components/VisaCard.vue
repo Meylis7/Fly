@@ -1,20 +1,27 @@
 <script setup>
     import { RouterLink } from 'vue-router';
+    import { defineProps } from 'vue';
 
+    defineProps({
+        visa: {
+            type: Object,
+            required: true,
+        }
+    });
 </script>
 
 <template>
     <div>
-        <img class="w-full h-[320px] object-cover rounded-[20px]" src="../assets/images/visa.png" alt="visa-img">
+        <img class="w-full h-[320px] object-cover rounded-[20px]" :src=visa.main_image alt="visa-img">
 
         <div
             class="relative -mt-10 ml-auto p-5 flex items-center justify-between shadow-lg rounded-tl-2xl rounded-br-2xl rounded-bl-2xl rounded-tr-0 bg-white w-[calc(100%-50px)]">
             <div>
-                <h4>
-                    Таиланд
+                <h4 class="text-xl font-bold">
+                    {{ visa.location }}
                 </h4>
-                <p>
-                    80 $
+                <p class="text-xl text-[#223A60] font-medium">
+                    {{ visa.price }} $
                 </p>
             </div>
 
