@@ -1,7 +1,7 @@
 <script setup>
     import { ref } from 'vue';
     import FlightForm from './Flight/FlightForm.vue';
-    import HotelForm from './Flight/HotelForm.vue';
+    import HotelForm from './Hotel/HotelForm.vue';
 
     import clouds from '@/assets/images/clouds.png'
 
@@ -77,7 +77,7 @@
                         </span>
 
                         <p class="text-base font-bold">
-                            Flights
+                            Hotels
                         </p>
                     </button>
                 </div>

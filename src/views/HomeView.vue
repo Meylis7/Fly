@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <main>
+  <main class="pb-60">
     <Hero />
     <Tour />
     <Visa />

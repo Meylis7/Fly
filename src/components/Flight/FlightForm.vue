@@ -1,5 +1,6 @@
 <script setup>
     import { ref, reactive, watch, computed, onMounted, onUnmounted } from "vue";
+    import Autocomplete from "../Autocomplete.vue";
     import axios from "axios";
 
     import 'v-calendar/style.css'; // Import the CSS
@@ -126,12 +127,11 @@
         if (showModal.value && !event.target.closest('.modal') && !event.target.closest('#passengers-input')) {
             showModal.value = false;
         }
+
+        if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
+            state.flights = {};
+        }
     };
-
-
-
-
-
 
     onMounted(() => {
         document.addEventListener('click', handleClickOutside);
@@ -143,11 +143,12 @@
         document.removeEventListener('click', handleOutsideClick);
     });
 
-
+    const autocompleteContainer = ref(null);
     const state = reactive({
         flights: [],
-        isLoading: [],
     })
+
+    const emit = defineEmits(['city-selected', 'airport-selected']);
 
     const debounce = (func, delay) => {
         let timeoutId;
@@ -161,18 +162,17 @@
 
     const fetchAirports = async () => {
         if (departureCity.value.length < 3) {
-            state.flights = [];
+            state.flights = {};
             return;
         }
 
         try {
-            const url = `/api/airports?query=${encodeURIComponent(departureCity.value)}`;
+            const url = `/api/search/airports?query=${encodeURIComponent(departureCity.value)}`;
             const response = await axios.get(url);
-            state.flights = response.data.data; // Access the "data" property from the API response
-            console.log(state.flights);
+            state.flights = response.data.data;
         } catch (error) {
             console.error("Error fetching airports:", error);
-            state.flights = [];
+            state.flights = {};
         }
     };
 
@@ -181,6 +181,18 @@
     watch(departureCity, () => {
         debouncedFetchAirports();
     });
+
+    const selectCity = (city, cityCode, country) => {
+        departureCity.value = city; // Optionally update input field
+        state.flights = {}; // Close the dropdown
+        emit('city-selected', { city, cityCode, country });
+    };
+
+    const selectAirport = (city, airport) => {
+        departureCity.value = `${city} (${airport.code})`; // Optionally update input field
+        state.flights = {}; // Close the dropdown
+        emit('airport-selected', { city, airport });
+    };
 </script>
 
 
@@ -226,41 +238,8 @@
                         <input type="text" v-model="departureCity" placeholder="From"
                             class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
 
-                        <ul class="flights block absolute top-[calc(100%+60px)] left-0 w-[390px] bg-white rounded-xl shadow-lg overflow-auto max-h-80"
-                            v-if="Object.keys(state.flights).length > 0">
-                            <li v-for="(cityData, city) in state.flights" :key="city"
-                                class="p-4 border-solid border-0 border-b border-b-[#84889B] hover:bg-[#303c8526] transition">
-                                <a href="#" class="flex items-center justify-between"
-                                    v-if="cityData && cityData.citycode">
-                                    <h3 class="text-lg font-semibold">
-                                        {{ city }},
-                                        <span class="text-base font-normal"
-                                            v-if="cityData.cities && cityData.cities[0] && cityData.cities[0].country">
-                                            {{ cityData.cities[0].country.en }}
-                                        </span>
-                                    </h3>
-                                    <p class="text-sm font-semibold capitalize text-[#84889B]">
-                                        {{ cityData.citycode }}
-                                    </p>
-                                </a>
-                                <ul class="subFlights" v-if="cityData && cityData.cities && cityData.cities.length > 0">
-                                    <li v-for="airport in cityData.cities" :key="airport.code"
-                                        class="p-4 pl-8 hover:bg-[#303c8526] cursor-pointer transition">
-                                        <a href="#" class="flex items-center justify-between">
-                                            <h6 class="flex items-center">
-                                                <span class="block mr-2">
-                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"></svg>
-                                                </span>
-                                                <span v-if="airport && airport.airportName">{{ airport.airportName.ru
-                                                    }}</span>
-                                            </h6>
-                                            <p v-if="airport">{{ airport.code }}</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
+                            @airport-selected="handleDepartureAirportSelected" />
                     </div>
 
                     <button @click="swapCities" type="button"
@@ -295,6 +274,9 @@
 
                         <input type="text" v-model="arrivalCity" placeholder="To"
                             class="bg-[#F2F3F4] text-base font-medium pl-6 p-3 rounded-md focus:ring-1 focus:ring-prime-color">
+
+                        <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
+                            @airport-selected="handleArrivalAirportSelected" />
                     </div>
                 </div>
 
@@ -448,9 +430,9 @@
         </div>
 
         <button type="submit"
-            class="flex items-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px] cursor-no-drop">
+            class="flex items-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px] cursor-pointer">
             <p class="text-base font-semibold text-white">
-                Search flights
+                Search Flights
             </p>
 
             <span>
