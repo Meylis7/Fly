@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <header class=" absolute z-10 top-7 left-0 w-full">
+    <header class="absolute z-20 top-7 left-0 w-full">
         <div class="auto_container">
             <div class="inner p-5 flex items-center justify-between">
                 <RouterLink to="/">

@@ -200,8 +200,6 @@
 
 
 <template>
-    <!-- {{ state.flights }} -->
-
     <form class="w-full relative z-10">
         <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl ">
             <div class="flex items-center mb-5">
