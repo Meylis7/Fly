@@ -13,7 +13,7 @@
     </div>
   </section>
 
-  <section class="relative pt-20 pb-24 bg-[#F9F9F9]">
+  <section class="relative pt-20 pb-24 bg-[#w]">
     <div class="auto_container">
       <div class="wrapper">
         <div class="flex gap-[30px]">
