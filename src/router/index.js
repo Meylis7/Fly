@@ -11,7 +11,7 @@ const router = createRouter({
     },
     {
       path: "/flight-result",
-      name: "result",
+      name: "flight-result",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -22,6 +22,24 @@ const router = createRouter({
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
     },
+
+
+    {
+      path: "/hotel-info",
+      name: "hotel-info",
+      component: () => import("../views/HotelInfoView.vue"),
+    },
+
+    // {
+    //   path: "/signin",
+    //   name: "signin",
+    //   component: () => import("../views/SignInView.vue"),
+    // },
+    // {
+    //   path: "/sigup",
+    //   name: "sigup",
+    //   component: () => import("../views/SignUpView.vue"),
+    // },
   ],
 });
 

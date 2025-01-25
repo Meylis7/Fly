@@ -88,4 +88,106 @@
     </aside>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+
+    .filter_check {
+        input {
+            display: none;
+
+            &:checked~label {
+                &::before {
+                    background: #223A60;
+                }
+
+                &::after {
+                    opacity: 1;
+                }
+            }
+        }
+
+        label {
+            display: block;
+            position: relative;
+            cursor: pointer;
+
+            &::before {
+                content: '';
+                transition: all .1s linear;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+                background: #EDF0F1;
+                border: 1px solid #C2C2C2;
+                width: 20px;
+                height: 20px;
+                border-radius: 3px;
+            }
+
+            &::after {
+                content: '';
+                transition: all .3s linear;
+                opacity: 0;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 3px;
+                width: 14px;
+                height: 14px;
+                background: url("@/assets/images/svg/tick.svg") no-repeat center;
+
+            }
+        }
+    }
+
+    .filter_radio {
+        input {
+            display: none;
+
+            &:checked~label {
+                &::before {
+                    background: #223A60;
+                }
+
+                &::after {
+                    background: #fff;
+                    right: 0;
+                }
+            }
+        }
+
+        label {
+            display: block;
+            position: relative;
+            cursor: pointer;
+
+            &::before {
+                content: '';
+                transition: all .1s linear;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+                background: #EDF0F1;
+                border: 1px solid #C2C2C2;
+                width: 42px;
+                height: 20px;
+                border-radius: 12px;
+            }
+
+            &::after {
+                content: '';
+                transition: all .4s linear;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 23px;
+                border-radius: 50%;
+                width: 18px;
+                height: 18px;
+                background: #223A60;
+            }
+        }
+    }
+</style>

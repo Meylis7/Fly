@@ -8,6 +8,7 @@
   <Header />
   <RouterView />
   <Footer />
+
 </template>
 
 <style lang="scss">

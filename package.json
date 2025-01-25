@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
+    "lightgallery": "^2.8.2",
     "swiper": "^11.2.0",
     "v-calendar": "^3.1.2",
     "vue": "^3.5.13",
