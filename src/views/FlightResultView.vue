@@ -1,9 +1,95 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue'
+  import { useRoute } from 'vue-router'
+  import axios from 'axios'
+
 
   import Filter from '@/components/Flight/Filter.vue';
   import FlightForm from '@/components/Flight/FlightForm.vue';
   import FlightResultItem from '@/components/Flight/FlightResultItem.vue';
+
+  const API_BASE_URL = 'https://www.flyashgabat.com:4443/api/search/tfusion/flights'
+  const API_TOKEN = '123' // Use environment variables in production
+
+  const route = useRoute()
+  const flights = ref([])
+  const loading = ref(true)
+  const error = ref(null)
+
+  // Helper to format dates to YYYY-MM-DD
+  const formatDate = (date) => {
+    if (!date) return null
+    const d = new Date(date)
+    return d.toISOString().split('T')[0]
+  }
+
+  // Search flights method
+  const searchFlights = async (params) => {
+    try {
+      // Construct dynamic query parameters
+      const queryParams = {
+        departure_code: params.departureCityCode,
+        arrival_code: params.arrivalCityCode,
+        departure_date: formatDate(params.departureDate),
+        flight_type: params.tripType,
+        is_direct_flight: '0',
+        adults_count: params.adults || 1,
+        class_type: params.flightClass || 'all'
+      }
+
+      // Conditionally add children and infants
+      if (params.children > 0) {
+        queryParams.children_count = params.children
+      }
+      if (params.infants > 0) {
+        queryParams.infants_count = params.infants
+      }
+
+      // Add return date only for round trips
+      if (params.tripType === 'round-trip' && params.returnDate) {
+        queryParams.arrival_date = formatDate(params.returnDate)
+      }
+
+      const response = await axios.get(API_BASE_URL, {
+        params: queryParams,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${API_TOKEN}`
+        }
+      })
+
+      return response.data
+    } catch (error) {
+      console.error('Flight search error:', error)
+      throw error
+    }
+  }
+
+  onMounted(async () => {
+    try {
+      // Convert route query to search parameters
+      const searchParams = {
+        departureCityCode: route.query.departureCityCode,
+        arrivalCityCode: route.query.arrivalCityCode,
+        departureDate: route.query.departureDate,
+        returnDate: route.query.returnDate,
+        tripType: route.query.tripType || 'one-way',
+        adults: Number(route.query.adults) || 1,
+        children: Number(route.query.children) || 0,
+        infants: Number(route.query.infants) || 0,
+        flightClass: route.query.flightClass || 'all'
+      }
+
+      // Perform flight search
+      const results = await searchFlights(searchParams)
+      flights.value = results.data.flights
+    } catch (searchError) {
+      error.value = searchError
+    } finally {
+      loading.value = false
+    }
+  })
+
 
   const activeTab = ref('src-1');
 
@@ -45,7 +131,7 @@
               </h3>
             </div>
 
-            <FlightResultItem />
+            <FlightResultItem v-for="flight in flights" :key="flight.id" :flight="flight" />
           </section>
         </div>
       </div>

@@ -61,35 +61,44 @@
     const debouncedFetchAirports = debounce(fetchAirports, 300);
 
     const selectCity = (city, cityData, country) => {
-        isSelecting.value = true; // Add this line
+        isSelecting.value = true;
         searchQuery.value = city;
         state.flights = {};
         emit('update:modelValue', city);
-        emit('city-selected', { city, cityData, country });
+        emit('city-selected', {
+            city,
+            cityData,
+            country,
+            cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
+        });
     };
 
+    // const selectCity = (city, cityData, country) => {
+    //     isSelecting.value = true; // Add this line
+    //     searchQuery.value = city;
+    //     state.flights = {};
+    //     emit('update:modelValue', city);
+    //     emit('city-selected', { city, cityData, country });
+    // };
+
+
+    const selectAirport = (airport) => {
+        isSelecting.value = true;
+        searchQuery.value = `${airport.name.ru}`;
+        state.flights = {};
+        emit('update:modelValue', `${airport.name.ru}`);
+        emit('airport-selected', {
+            airport,
+            airportCode: airport.code
+        });
+    };
     // const selectAirport = (airport) => {
-    //     searchQuery.value = `${airport.name.ru}`; // ${airport.name.ru} (${airport.code})
+    //     isSelecting.value = true; // Add this line
+    //     searchQuery.value = `${airport.name.ru}`; //${airport.name.ru} (${airport.code})
     //     state.flights = {};
     //     emit('update:modelValue', `${airport.name.ru}`); //${airport.name.ru} (${airport.code})
     //     emit('airport-selected', { airport });
     // };
-
-    // const selectCity = (cityData, country) => {
-    //     isSelecting.value = true; // Add this line
-    //     searchQuery.value = cityData.citycode;
-    //     state.flights = {};
-    //     emit('update:modelValue', cityData.citycode);
-    //     emit('city-selected', { city, cityData, country });
-    // };
-
-    const selectAirport = (airport) => {
-        isSelecting.value = true; // Add this line
-        searchQuery.value = `${airport.name.ru}`; //${airport.name.ru} (${airport.code})
-        state.flights = {};
-        emit('update:modelValue', `${airport.name.ru}`); //${airport.name.ru} (${airport.code})
-        emit('airport-selected', { airport });
-    };
 
     const handleClickOutside = (event) => {
         if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {

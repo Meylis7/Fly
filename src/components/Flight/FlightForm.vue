@@ -2,6 +2,7 @@
     import { ref, reactive, watch, computed, onMounted, onUnmounted } from "vue";
     import Autocomplete from "../Autocomplete.vue";
     import axios from "axios";
+    import { useRouter, useRoute } from 'vue-router'
 
     import 'v-calendar/style.css'; // Import the CSS
     import minus from '@/assets/images/svg/minus.svg'
@@ -9,7 +10,12 @@
     import calendar from '@/assets/images/svg/calendar.svg'
 
 
+    const route = useRoute()
+    const router = useRouter()
+
+    const departureCityCode = ref("");
     const departureCity = ref("");
+    const arrivalCityCode = ref("");
     const arrivalCity = ref("");
     const tripType = ref('one-way');
     const isRotating = ref(false);
@@ -22,6 +28,10 @@
         const temp = departureCity.value;
         departureCity.value = arrivalCity.value;
         arrivalCity.value = temp;
+
+        const tempCode = departureCityCode;
+        departureCityCode = arrivalCityCode.value;
+        arrivalCityCode = tempCode;
 
         // Remove animation class after animation ends
         setTimeout(() => {
@@ -110,17 +120,58 @@
 
     const showModal = ref(false);
 
-    const selectedClass = ref('Econom'); // Default selected class
+    const selectedClass = ref('all'); // Default selected class
 
     const passengerDisplay = computed(() => {
         // Get the selected class text (Econom or Business)
-        const selectedClassText = selectedClass.value === 'Econom' ? 'Econom' : 'Business';
+        const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
+
 
         return `${totalCount.value} Passenger${totalCount.value !== 1 ? "'s" : ""}, ${selectedClassText}`;
     });
     const toggleModal = () => {
         showModal.value = !showModal.value;
     };
+
+    // Form submission handler
+    const handleSubmit = (event) => {
+        event.preventDefault()
+
+        // Prepare query parameters
+        const queryParams = {
+            tripType: tripType.value,
+            departureCityCode: departureCityCode.value,
+            departureCity: departureCity.value,
+            arrivalCityCode: arrivalCityCode.value,
+            arrivalCity: arrivalCity.value,
+            departureDate: departureDate.value ? departureDate.value.toLocaleDateString() : '',
+            returnDate: returnDate.value ? returnDate.value.toLocaleDateString() : '',
+            adults: counts.value.adult,
+            children: counts.value.child,
+            infants: counts.value.infant,
+            flightClass: selectedClass.value
+        }
+
+        // Navigate to results with query parameters
+        if (route.name === 'flight-result') {
+            // router.replace({
+            //     name: 'flight-result',
+            //     query: queryParams,
+            //     force: true
+            // })
+
+            window.location.href = router.resolve({
+                name: 'flight-result',
+                query: queryParams
+            }).href
+        } else {
+            router.push({
+                name: 'flight-result',
+                query: queryParams,
+                force: true
+            })
+        }
+    }
 
     // Close modal when clicking outside
     const handleOutsideClick = (event) => {
@@ -136,6 +187,31 @@
     onMounted(() => {
         document.addEventListener('click', handleClickOutside);
         document.addEventListener('click', handleOutsideClick);
+
+
+        // Populate city details from route params
+        departureCityCode.value = route.query.departureCityCode || ""
+        departureCity.value = route.query.departureCity || ""
+        arrivalCityCode.value = route.query.arrivalCityCode || ""
+        arrivalCity.value = route.query.arrivalCity || ""
+
+        // Populate dates
+        departureDate.value = route.query.departureDate
+            ? new Date(route.query.departureDate)
+            : null
+
+        returnDate.value = route.query.returnDate
+            ? new Date(route.query.returnDate)
+            : null
+
+        // Populate passenger counts
+        counts.value.adult = Number(route.query.adults) || 1
+        counts.value.child = Number(route.query.children) || 0
+        counts.value.infant = Number(route.query.infants) || 0
+
+        // Populate flight class and type
+        selectedClass.value = route.query.flightClass || 'all'
+        tripType.value = route.query.tripType || 'one-way'
     });
 
     onUnmounted(() => {
@@ -182,16 +258,24 @@
         debouncedFetchAirports();
     });
 
-    const selectCity = (city, cityCode, country) => {
-        departureCity.value = city; // Optionally update input field
-        state.flights = {}; // Close the dropdown
-        emit('city-selected', { city, cityCode, country });
+    const handleDepartureCitySelected = (selectedCity) => {
+        departureCity.value = selectedCity.city;
+        departureCityCode.value = selectedCity.cityCode;
     };
 
-    const selectAirport = (city, airport) => {
-        departureCity.value = `${city} (${airport.code})`; // Optionally update input field
-        state.flights = {}; // Close the dropdown
-        emit('airport-selected', { city, airport });
+    const handleDepartureAirportSelected = (selectedAirport) => {
+        departureCity.value = selectedAirport.airport.name.ru;
+        departureCityCode.value = selectedAirport.airportCode;
+    };
+
+    const handleArrivalCitySelected = (selectedCity) => {
+        arrivalCity.value = selectedCity.city;
+        arrivalCityCode.value = selectedCity.cityCode;
+    };
+
+    const handleArrivalAirportSelected = (selectedAirport) => {
+        arrivalCity.value = selectedAirport.airport.name.ru;
+        arrivalCityCode.value = selectedAirport.airportCode;
     };
 </script>
 
@@ -200,7 +284,7 @@
 
 
 <template>
-    <form class="w-full relative z-10">
+    <form class="w-full relative z-10" @submit.prevent="handleSubmit">
         <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl ">
             <div class="flex items-center mb-5">
                 <div class="air-type">
@@ -415,12 +499,16 @@
                 </div>
 
                 <div class="class_type p-[10px] mt-3 rounded-[7px] bg-[#ECEFF5] flex items-center">
-                    <div class="class-type w-[50%]">
-                        <input type="radio" id="econom" name="flight-type" value="Econom" v-model="selectedClass">
+                    <div class="class-type w-[33.33%]">
+                        <input type="radio" id="all" name="flight-type" value="all" v-model="selectedClass">
+                        <label for="all">All</label>
+                    </div>
+                    <div class="class-type w-[33.33%]">
+                        <input type="radio" id="econom" name="flight-type" value="econom" v-model="selectedClass">
                         <label for="econom">Econom</label>
                     </div>
-                    <div class="class-type w-[50%]">
-                        <input type="radio" id="business" name="flight-type" value="Business" v-model="selectedClass">
+                    <div class="class-type w-[33.33%]">
+                        <input type="radio" id="business" name="flight-type" value="business" v-model="selectedClass">
                         <label for="business">Business</label>
                     </div>
                 </div>
