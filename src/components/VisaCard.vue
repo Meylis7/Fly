@@ -25,7 +25,7 @@
                 </p>
             </div>
 
-            <RouterLink class="cursor-pointer">
+            <RouterLink to="/" class="cursor-pointer">
                 <p class="text-white text-base font-semibold flex items-center p-4 rounded-[20px] bg-[#223A60]">
                     Book
 

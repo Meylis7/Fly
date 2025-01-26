@@ -1,6 +1,9 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { useRoute } from 'vue-router'
+  import { Vue3Lottie } from 'vue3-lottie'
+  import LoadAnimationJSON from '@/assets/ticket-loading.json'
+  import LoadingJson from '@/assets/Loading.json'
   import axios from 'axios'
 
 
@@ -12,9 +15,15 @@
   const API_TOKEN = '123' // Use environment variables in production
 
   const route = useRoute()
+  const displayedFlights = ref([]);
   const flights = ref([])
   const loading = ref(true)
   const error = ref(null)
+
+  // Pagination state
+  const currentPage = ref(1)
+  const itemsPerPage = 3
+  const loadingMore = ref(false); // For "Load More" button animation
 
   // Helper to format dates to YYYY-MM-DD
   const formatDate = (date) => {
@@ -83,6 +92,11 @@
       // Perform flight search
       const results = await searchFlights(searchParams)
       flights.value = results.data.flights
+      // console.log("aaaaaaaaaaaaaaaaaaaaa")
+      // console.log(flights.value)
+
+      // Initialize displayed flights
+      displayedFlights.value = flights.value.slice(0, itemsPerPage);
     } catch (searchError) {
       error.value = searchError
     } finally {
@@ -90,9 +104,25 @@
     }
   })
 
+  // Load more function
+  const loadMore = () => {
+    if (loadingMore.value) return; // Prevent multiple clicks
+    loadingMore.value = true;
 
+    setTimeout(() => {
+      currentPage.value++;
+      const start = (currentPage.value - 1) * itemsPerPage;
+      const end = currentPage.value * itemsPerPage;
+
+      // Append new items to displayed flights
+      displayedFlights.value.push(...flights.value.slice(start, end));
+      loadingMore.value = false;
+    }, 1000); // Simulate API delay for loading animation
+  };
+
+
+  // Tabs ============================
   const activeTab = ref('src-1');
-
   const setActiveTab = (tab) => {
     activeTab.value = tab;
   };
@@ -111,27 +141,47 @@
   <section class="relative pt-20 pb-24 bg-[#F9F9F9]">
     <div class="auto_container">
       <div class="wrapper">
-        <div class="flex gap-[30px]">
+        <div class="flex items-start gap-[30px]">
           <Filter />
 
-          <section class="w-[calc(100%-380px)]">
+          <div v-if="loading" class="w-[calc(100%-380px)] flex items-center min-h-[700px]">
+            <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-[400px] !h-[400px]" />
+          </div>
+
+
+          <!-- <div v-else-if="flights == null">
+            No flight
+          </div> -->
+
+          <section v-else class="w-[calc(100%-380px)] flex flex-col">
             <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
               <h3 @click="setActiveTab('src-1')" :class="[
                 'tab-item relative cursor-pointer text-base font-semibold p-5 rounded-xl min-w-[180px] text-center text-[#223A60] opacity-40 transition-all',
-                activeTab === 'src-1' ? 'text-white bg-prime-color opacity-100' : ''
+                activeTab === 'src-1' ? 'text-white bg-prime-color !opacity-100' : ''
               ]">
                 European source
               </h3>
 
               <h3 @click="setActiveTab('src-2')" :class="[
                 'tab-item relative cursor-pointer text-base font-semibold p-5 rounded-xl min-w-[180px] text-center text-[#223A60] opacity-40 transition-all',
-                activeTab === 'src-2' ? 'text-white bg-prime-color opacity-100' : ''
+                activeTab === 'src-2' ? 'text-white bg-prime-color !opacity-100' : ''
               ]">
                 CIS source
               </h3>
             </div>
 
-            <FlightResultItem v-for="flight in flights" :key="flight.id" :flight="flight" />
+            <FlightResultItem v-for="flight in displayedFlights" :key="flight.id" :flight="flight" />
+
+
+            <div v-if="loadingMore" class="flex justify-center w-full my-4">
+              <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
+            </div>
+
+            <button v-if="displayedFlights.length < flights.length && !loadingMore" @click="loadMore"
+              class="bg-prime-color text-white px-6 py-2 mx-auto rounded-lg mt-6">
+              Load More
+            </button>
+            <div v-if="flights.length === 0 && !loading">No flights found.</div>
           </section>
         </div>
       </div>

@@ -534,7 +534,7 @@
 </template>
 
 <style lang="scss" scoped>
-    @import '../../assets/css/variables.scss';
+    @use '../../assets/css/variables.scss' as v;
 
 
     .modal {
@@ -552,7 +552,7 @@
             display: none;
 
             &:checked~label {
-                background: $main-color;
+                background: v.$main-color;
                 color: #fff;
             }
         }

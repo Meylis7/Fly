@@ -69,7 +69,7 @@
 </template>
 
 <style lang="scss" scoped>
-    @import '../../assets/css/variables.scss';
+    @use '../../assets/css/variables.scss' as v;
 
 
 
@@ -84,7 +84,7 @@
             display: none;
 
             &:checked~label {
-                background: $main-color;
+                background: v.$main-color;
                 color: #fff;
             }
         }
