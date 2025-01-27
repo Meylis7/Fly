@@ -23,7 +23,7 @@
 
   // Pagination state
   const currentPage = ref(1)
-  const itemsPerPage = 3
+  const itemsPerPage = 6
   const loadingMore = ref(false); // For "Load More" button animation
 
   // Helper to format dates to YYYY-MM-DD
@@ -122,7 +122,7 @@
   };
 
   const noFlightsFound = computed(() => {
-    return flights.value && flights.value.message === "No result found";
+    return flights.value && flights.value.message === "No result found" || flights.value.length == 0;
   });
 
 
@@ -164,7 +164,7 @@
           </div>
 
           <section v-else class="w-[calc(100%-380px)] flex flex-col">
-            <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
+            <!-- <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
               <h3 @click="setActiveTab('src-1')" :class="[
                 'tab-item relative cursor-pointer text-base font-semibold p-5 rounded-xl min-w-[180px] text-center text-[#223A60] opacity-40 transition-all',
                 activeTab === 'src-1' ? 'text-white bg-prime-color !opacity-100' : ''
@@ -178,7 +178,7 @@
               ]">
                 CIS source
               </h3>
-            </div>
+            </div> -->
 
             <FlightResultItem v-for="flight in displayedFlights" :key="flight.id" :flight="flight" />
 
