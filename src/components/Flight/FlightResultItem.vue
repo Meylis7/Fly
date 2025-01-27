@@ -12,7 +12,7 @@
     <div class="card flex justify-between p-5 mb-8 rounded-lg bg-white border border-solid border-[#223a604d]">
         <div class="block w-[740px]">
             <div class="block">
-                <div class="flex items-center justify-between">
+                <!-- <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <img class="h-12 object-contain block mr-3" src="@/assets/images/airline-1.png"
                             alt="airline-img">
@@ -22,17 +22,17 @@
                     </div>
 
                     <p class="text-base font-normal">Travel Class: Economy</p>
-                </div>
+                </div> -->
 
                 <div class="block bg-[#FAFCFC] rounded-lg mt-4 py-4 px-7">
-                    <div class="flex items-center justify-between">
+                    <!-- <div class="flex items-center justify-between">
                         <h6 class="text-base font-normal mb-3">
                             {{ flight.Outward.DepartDate.Date }}
                         </h6>
                         <h6 class="text-base font-normal mb-3">
                             {{ flight.Outward.ArriveDate.Date }}
                         </h6>
-                    </div>
+                    </div> -->
 
                     <div class="flex items-center justify-between">
                         <div class="block">
@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="block mx-3">
-                            <p class="text-base font-semibold text-center mb-5">
+                            <p class="text-base font-semibold text-center mb-2">
                                 {{ flight.Outward.Duration.Hours }}hr {{ flight.Outward.Duration.Minutes }}min
                             </p>
 
@@ -52,6 +52,10 @@
                                 <img src="@/assets/images/svg/ticket-plane.svg" alt="plane-icon">
                                 <span class="w-[70px] h-[1px] bg-[#C8C8C8] block"></span>
                             </span>
+
+                            <p class="text-base font-semibold text-center mt-2">
+                                {{ flight.Outward.Duration.Hours }}hr {{ flight.Outward.Duration.Minutes }}min
+                            </p>
                         </div>
 
                         <div class="block">
