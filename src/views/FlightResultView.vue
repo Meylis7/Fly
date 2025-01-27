@@ -4,6 +4,7 @@
   import { Vue3Lottie } from 'vue3-lottie'
   import LoadAnimationJSON from '@/assets/ticket-loading.json'
   import LoadingJson from '@/assets/Loading.json'
+  import NotFoundJson from '@/assets/not-found.json'
   import axios from 'axios'
 
 
@@ -120,6 +121,10 @@
     }, 1000); // Simulate API delay for loading animation
   };
 
+  const noFlightsFound = computed(() => {
+    return flights.value && flights.value.message === "No result found";
+  });
+
 
   // Tabs ============================
   const activeTab = ref('src-1');
@@ -148,10 +153,15 @@
             <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-[400px] !h-[400px]" />
           </div>
 
+          <div v-else-if="noFlightsFound && !loading"
+            class="w-[calc(100%-380px)] pt-10 flex flex-col items-center min-h-[700px]">
+            <h4 class="text-3xl font-semibold text-center">
+              No flights found.
+            </h4>
 
-          <!-- <div v-else-if="flights == null">
-            No flight
-          </div> -->
+            <Vue3Lottie :animationData="NotFoundJson" class="!w-[400px] !h-[400px]" />
+
+          </div>
 
           <section v-else class="w-[calc(100%-380px)] flex flex-col">
             <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
@@ -181,8 +191,8 @@
               class="bg-prime-color text-white px-6 py-2 mx-auto rounded-lg mt-6">
               Load More
             </button>
-            <div v-if="flights.length === 0 && !loading">No flights found.</div>
           </section>
+
         </div>
       </div>
     </div>
