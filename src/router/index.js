@@ -23,11 +23,15 @@ const router = createRouter({
       component: () => import("../views/ProfileView.vue"),
     },
 
-
     {
       path: "/hotel-info",
       name: "hotel-info",
       component: () => import("../views/HotelInfoView.vue"),
+    },
+    {
+      path: "/flight-booking",
+      name: "flight-booking",
+      component: () => import("../views/FlightBookingView.vue"),
     },
 
     // {

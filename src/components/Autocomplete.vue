@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
+    import { ref, reactive, watch, onMounted, onUnmounted, defineProps } from 'vue';
     import axios from 'axios';
 
     const props = defineProps({

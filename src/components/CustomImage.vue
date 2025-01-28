@@ -1,15 +1,10 @@
 <template>
-     <img
-        v-if="!hasError && url"
-        :src="url"
-        :alt="alt"
-        @error="handleError"
-      />
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  
+  <img v-if="!hasError && url" :src="url" :alt="alt" @error="handleError" />
+</template>
+
+<script setup>
+  import { ref, defineProps } from 'vue'
+
   const props = defineProps({
     url: {
       type: String,
@@ -20,11 +15,10 @@
       default: 'Logo'
     }
   })
-  
+
   const hasError = ref(false)
-  
+
   const handleError = () => {
     hasError.value = true
   }
-  </script>
-  
+</script>

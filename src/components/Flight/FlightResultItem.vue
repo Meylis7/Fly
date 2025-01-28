@@ -1,38 +1,38 @@
 <script setup>
-import { defineProps, ref, onMounted, onUnmounted } from 'vue';
-import CustomImage from '../CustomImage.vue';
-defineProps({
-    flight: {
-        type: Object,
-        required: true
+    import { defineProps, ref, onMounted, onUnmounted } from 'vue';
+    import CustomImage from '../CustomImage.vue';
+    defineProps({
+        flight: {
+            type: Object,
+            required: true
+        }
+    })
+
+    // Instead of boolean, use number to track which item is open
+    const openIndex = ref(-1) // -1 means all closed
+
+    const toggleDetails = (index) => {
+        // If clicking the same item that's already open, close it
+        if (openIndex.value === index) {
+            openIndex.value = -1
+        } else {
+            // Otherwise, open the clicked item (which automatically closes others)
+            openIndex.value = index
+        }
     }
-})
 
-// Instead of boolean, use number to track which item is open
-const openIndex = ref(-1) // -1 means all closed
-
-const toggleDetails = (index) => {
-    // If clicking the same item that's already open, close it
-    if (openIndex.value === index) {
+    const handleClickOutside = () => {
+        // Close all details
         openIndex.value = -1
-    } else {
-        // Otherwise, open the clicked item (which automatically closes others)
-        openIndex.value = index
     }
-}
 
-const handleClickOutside = () => {
-    // Close all details
-    openIndex.value = -1
-}
+    // onMounted(() => {
+    //     window.addEventListener('click', handleClickOutside)
+    // })
 
-// onMounted(() => {
-//     window.addEventListener('click', handleClickOutside)
-// })
-
-// onUnmounted(() => {
-//     window.removeEventListener('click', handleClickOutside)
-// })
+    // onUnmounted(() => {
+    //     window.removeEventListener('click', handleClickOutside)
+    // })
 </script>
 
 <template>
@@ -42,7 +42,7 @@ const handleClickOutside = () => {
                 <div class="block w-[740px]">
                     <div class="block">
 
-                        <div class="block bg-[#FAFCFC] rounded-lg mt-4 py-4 px-7">
+                        <div class="block bg-[#E8F0FE] rounded-lg mt-4 py-4 px-7">
                             <div class="flex items-center justify-between">
                                 <div class="block">
                                     <h6 class="text-base font-normal">{{ flight.Origin.Code }}</h6>
@@ -89,35 +89,35 @@ const handleClickOutside = () => {
                         </div>
                     </div>
 
-            <div class="mt-6" v-if="flight.Return != null">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <img class="h-12 object-contain block mr-3" src="@/assets/images/airline-1.png"
-                            alt="airline-img">
-                        <h4 class="text-lg font-normal">
-                            ABC Airline
-                        </h4>
-                    </div>
+                    <div class="mt-6" v-if="flight.Return != null">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img class="h-12 object-contain block mr-3" src="@/assets/images/airline-1.png"
+                                    alt="airline-img">
+                                <h4 class="text-lg font-normal">
+                                    ABC Airline
+                                </h4>
+                            </div>
 
-                    <p class="text-base font-normal">Travel Class: Economy</p>
-                </div>
-                <div class="block bg-[#FAFCFC] rounded-lg mt-4 py-4 px-7">
-                    <div class="flex items-center justify-between">
-                        <h6 class="text-base font-normal mb-3">
-                            {{ flight.Return.DepartDate.Date }}
-                        </h6>
-                        <h6 class="text-base font-normal mb-3">
-                            {{ flight.Return.ArriveDate.Date }}
-                        </h6>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="block">
-                            <p class="text-base font-semibold mb-1">
-                                {{ flight.Return.DepartDate.Time }}
-                            </p>
-                            <h6 class="text-base font-normal">{{ flight.Origin.Airport.ru }}</h6>
+                            <p class="text-base font-normal">Travel Class: Economy</p>
                         </div>
+                        <div class="block bg-[#E8F0FE] rounded-lg mt-4 py-4 px-7">
+                            <div class="flex items-center justify-between">
+                                <h6 class="text-base font-normal mb-3">
+                                    {{ flight.Return.DepartDate.Date }}
+                                </h6>
+                                <h6 class="text-base font-normal mb-3">
+                                    {{ flight.Return.ArriveDate.Date }}
+                                </h6>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="block">
+                                    <p class="text-base font-semibold mb-1">
+                                        {{ flight.Return.DepartDate.Time }}
+                                    </p>
+                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.ru }}</h6>
+                                </div>
 
                                 <div class="block mx-3">
                                     <p class="text-base font-semibold text-center mb-5">
@@ -132,8 +132,7 @@ const handleClickOutside = () => {
                                     <p class="text-sm font-semibold text-center mt-2">
                                         <template v-if="!flight.Return.Stops || flight.Return.Stops.length === 0">
                                             Nonstop
-                                        </template>
-                                        <template v-else>
+                                        </template> <template v-else>
                                             <span v-for="(stop, index) in flight.Return.Stops" :key="index"
                                                 class="block">
                                                 {{ (stop.Duration.Hours || 0) + 'h ' + (stop.Duration.Minutes || 0) +
@@ -177,7 +176,7 @@ const handleClickOutside = () => {
                             Details
                         </p>
 
-                        <span class="block">
+                        <span :class="['transition-all', openIndex === index ? '-rotate-180' : '']" class="block">
                             <svg class=" object-contain" width="10" height="6" viewBox="0 0 10 6" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -314,7 +313,7 @@ const handleClickOutside = () => {
                     </div>
 
                     <div v-if="flight.Outward.Stops && flight.Outward.Stops[index]"
-                        class="stopover bg-[#C8CDD3] py-3 mt-3 rounded">
+                        class="stopover bg-[#E8F0FE] py-3 mt-3 rounded">
                         <p class="text-sm font-bold text-[#223A60] text-center ">
                             Waiting duration:
                             <span class="font-normal">
@@ -454,7 +453,7 @@ const handleClickOutside = () => {
                     </div>
 
                     <div v-if="flight.Return.Stops && flight.Return.Stops[index]"
-                        class="stopover bg-[#C8CDD3] py-3 mt-3 rounded">
+                        class="stopover bg-[#E8F0FE] py-3 mt-3 rounded">
                         <p class="text-sm font-bold text-[#223A60] text-center ">
                             Waiting duration:
                             <span class="font-normal">
@@ -475,34 +474,33 @@ const handleClickOutside = () => {
 <!--  -->
 
 <style lang="scss" scoped>
-.line {
-    width: 1px;
-    border-left: 2px dashed #F2F2F2;
-    // border-left: 2px dashed #223A60;
+    .line {
+        width: 1px;
+        border-left: 3px dashed #F2F2F2;
+        // border-left: 2px dashed #223A60;
 
+        &::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 20px;
+            background: #F9F9F9;
+            border-radius: 7px;
+        }
 
-    &::before {
-        content: '';
-        position: absolute;
-        top: -30px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 40px;
-        height: 20px;
-        background: #F9F9F9;
-        border-radius: 7px;
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 20px;
+            background: #F9F9F9;
+            border-radius: 7px;
+        }
     }
-
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -30px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 40px;
-        height: 20px;
-        background: #F9F9F9;
-        border-radius: 7px;
-    }
-}
 </style>

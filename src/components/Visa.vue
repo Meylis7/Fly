@@ -24,7 +24,7 @@
 </script>
 
 <template>
-    <section class="visa mt-[60px]">
+    <section class="visa mt-[60px] mb-[100px]">
         <div class="auto_container">
             <div class="wrapper relative">
                 <h2 class=" text-[32px] text-prime-color font-semibold mb-4">
