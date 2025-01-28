@@ -26,10 +26,10 @@
 
                 <div class="block bg-[#FAFCFC] rounded-lg mt-4 py-4 px-7">
                     <div class="flex items-center justify-between">
-                        <h6 class="text-base font-normal mb-3">
+                        <h6 class="text-base font-semibold mb-3">
                             {{ flight.Outward.DepartDate.Date }}
                         </h6>
-                        <h6 class="text-base font-normal mb-3">
+                        <h6 class="text-base font-semibold mb-3">
                             {{ flight.Outward.ArriveDate.Date }}
                         </h6>
                     </div>
@@ -78,10 +78,10 @@
                 </div>
                 <div class="block bg-[#FAFCFC] rounded-lg mt-4 py-4 px-7">
                     <div class="flex items-center justify-between">
-                        <h6 class="text-base font-normal mb-3">
+                        <h6 class="text-base font-semibold mb-3">
                             {{ flight.Return.DepartDate.Date }}
                         </h6>
-                        <h6 class="text-base font-normal mb-3">
+                        <h6 class="text-base font-semibold mb-3">
                             {{ flight.Return.ArriveDate.Date }}
                         </h6>
                     </div>
