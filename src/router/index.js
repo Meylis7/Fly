@@ -18,6 +18,28 @@ const router = createRouter({
       component: () => import("../views/FlightResultView.vue"),
     },
     {
+      path: "/tours",
+      name: "tour",
+      component: () => import("../views/ToursView.vue"),
+    },
+    {
+      path: "/tours/:id/details",
+      name: "tour-details",
+      component: () => import("../views/TourDetailsView.vue"),
+    },
+
+    {
+      path: "/visas",
+      name: "visa",
+      component: () => import("../views/VisasView.vue"),
+    },
+    {
+      path: "/visas/:id/details",
+      name: "visa-details",
+      component: () => import("../views/VisaDetailsView.vue"),
+    },
+
+    {
       path: "/profile",
       name: "profile",
       component: () => import("../views/ProfileView.vue"),

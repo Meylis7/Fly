@@ -11,6 +11,7 @@
   import Filter from '@/components/Flight/Filter.vue';
   import FlightForm from '@/components/Flight/FlightForm.vue';
   import FlightResultItem from '@/components/Flight/FlightResultItem.vue';
+  import LoadMore from '@/components/LoadMore.vue'
 
   const API_BASE_URL = 'https://www.flyashgabat.com:4443/api/search/tfusion/flights'
   const API_TOKEN = '123' // Use environment variables in production
@@ -21,10 +22,12 @@
   const loading = ref(true)
   const error = ref(null)
 
-  // Pagination state
-  const currentPage = ref(1)
-  const itemsPerPage = 6
-  const loadingMore = ref(false); // For "Load More" button animation
+  const itemsPerPage = ref(3);
+
+  // // Pagination state
+  // const currentPage = ref(1)
+  // const itemsPerPage = 6
+  // const loadingMore = ref(false); // For "Load More" button animation
 
   // Helper to format dates to YYYY-MM-DD
   const formatDate = (date) => {
@@ -93,11 +96,10 @@
       // Perform flight search
       const results = await searchFlights(searchParams)
       flights.value = results.data.flights
-      // console.log("aaaaaaaaaaaaaaaaaaaaa")
-      // console.log(flights.value)
+
 
       // Initialize displayed flights
-      displayedFlights.value = flights.value.slice(0, itemsPerPage);
+      displayedFlights.value = flights.value.slice(0, itemsPerPage.value);
     } catch (searchError) {
       error.value = searchError
     } finally {
@@ -105,20 +107,24 @@
     }
   })
 
-  // Load more function
-  const loadMore = () => {
-    if (loadingMore.value) return; // Prevent multiple clicks
-    loadingMore.value = true;
+  // // Load more function
+  // const loadMore = () => {
+  //   if (loadingMore.value) return; // Prevent multiple clicks
+  //   loadingMore.value = true;
 
-    setTimeout(() => {
-      currentPage.value++;
-      const start = (currentPage.value - 1) * itemsPerPage;
-      const end = currentPage.value * itemsPerPage;
+  //   setTimeout(() => {
+  //     currentPage.value++;
+  //     const start = (currentPage.value - 1) * itemsPerPage;
+  //     const end = currentPage.value * itemsPerPage;
 
-      // Append new items to displayed flights
-      displayedFlights.value.push(...flights.value.slice(start, end));
-      loadingMore.value = false;
-    }, 1000); // Simulate API delay for loading animation
+  //     // Append new items to displayed flights
+  //     displayedFlights.value.push(...flights.value.slice(start, end));
+  //     loadingMore.value = false;
+  //   }, 1000); // Simulate API delay for loading animation
+  // };
+
+  const handleFlightsLoaded = (loadedFlights) => {
+    displayedFlights.value = loadedFlights;
   };
 
   const noFlightsFound = computed(() => {
@@ -146,24 +152,23 @@
   <section class="relative pt-20 pb-24 bg-[#F9F9F9]">
     <div class="auto_container">
       <div class="wrapper">
-        <div class="flex items-start gap-[30px]">
+        <div v-if="loading" class="w-full flex items-center min-h-[700px]">
+          <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-[400px] !h-[400px]" />
+        </div>
+
+        <div v-else-if="noFlightsFound && !loading" class="w-full pt-10 flex flex-col items-center min-h-[700px]">
+          <h4 class="text-3xl font-semibold text-center">
+            No flights found.
+          </h4>
+
+          <Vue3Lottie :animationData="NotFoundJson" class="!w-[400px] !h-[400px]" />
+
+        </div>
+
+        <div v-else class="flex items-start gap-[30px]">
           <Filter />
 
-          <div v-if="loading" class="w-[calc(100%-380px)] flex items-center min-h-[700px]">
-            <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-[400px] !h-[400px]" />
-          </div>
-
-          <div v-else-if="noFlightsFound && !loading"
-            class="w-[calc(100%-380px)] pt-10 flex flex-col items-center min-h-[700px]">
-            <h4 class="text-3xl font-semibold text-center">
-              No flights found.
-            </h4>
-
-            <Vue3Lottie :animationData="NotFoundJson" class="!w-[400px] !h-[400px]" />
-
-          </div>
-
-          <section v-else class="w-[calc(100%-380px)] flex flex-col">
+          <section class="w-[calc(100%-380px)] flex flex-col">
             <!-- <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
               <h3 @click="setActiveTab('src-1')" :class="[
                 'tab-item relative cursor-pointer text-base font-semibold p-5 rounded-xl min-w-[180px] text-center text-[#223A60] opacity-40 transition-all',
@@ -180,17 +185,13 @@
               </h3>
             </div> -->
 
-            <FlightResultItem v-for="flight in displayedFlights" :key="flight.id" :flight="flight" />
-
-
-            <div v-if="loadingMore" class="flex justify-center w-full my-4">
-              <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
+            <div>
+              <FlightResultItem v-for="flight in displayedFlights" :key="flight.id" :flight="flight"
+                class="last:mb-0" />
             </div>
 
-            <button v-if="displayedFlights.length < flights.length && !loadingMore" @click="loadMore"
-              class="bg-prime-color text-white px-6 py-2 mx-auto rounded-lg mt-6">
-              Load More
-            </button>
+            <LoadMore v-if="displayedFlights.length < flights.length" :items="flights" :itemsPerPage="itemsPerPage"
+              @loaded="handleFlightsLoaded" />
           </section>
 
         </div>

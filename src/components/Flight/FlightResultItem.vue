@@ -26,13 +26,6 @@
         openIndex.value = -1
     }
 
-    // onMounted(() => {
-    //     window.addEventListener('click', handleClickOutside)
-    // })
-
-    // onUnmounted(() => {
-    //     window.removeEventListener('click', handleClickOutside)
-    // })
 </script>
 
 <template>

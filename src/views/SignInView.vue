@@ -1,5 +1,5 @@
 <script setup>
-    import LoginSlider from '@/components/loginSlider.vue';
+    import LoginSlider from '@/components/LoginSlider.vue';
 
 
 </script>

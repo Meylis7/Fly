@@ -91,5 +91,4 @@
             <img class="w-full" :src="clouds" alt="clouds">
         </div>
     </section>
-
 </template>

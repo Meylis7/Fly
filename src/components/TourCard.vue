@@ -70,7 +70,7 @@
                     {{ tour.name }}
                 </p>
 
-                <RouterLink to="/"
+                <RouterLink :to="'/tours/' + tour.id + '/details'"
                     class="block relative text-center py-4 text-sm font-medium mt-4 cursor-pointer bg-[#8DD3BB] rounded">
                     Book Tour
                 </RouterLink>

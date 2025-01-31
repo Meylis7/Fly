@@ -166,6 +166,37 @@
         </button>
     </form>
 
+
+
+
+
+
+
+
+    <template>
+        <img
+          class="absolute top-0 left-0 object-cover w-full h-full"
+          :src="tourImageSrc"  // <-- Dynamic binding
+          alt="Tour-country-image"
+          v-if="tourImageSrc" // Conditionally render the image
+        />
+        <div v-else>Loading image...</div> </template>
+      
+      <script setup>
+      // ... other imports and code
+      
+      import { computed } from 'vue';
+      
+      // ... onMounted function (same as before)
+      
+      const tourImageSrc = computed(() => {
+        if (state.tour && state.tour.background_image) {
+          return state.tour.background_image; // Directly use the URL from the API
+        }
+        return null; // Or a placeholder image URL if you prefer
+      });
+      
+      </script>
 </body>
 
 </html>
