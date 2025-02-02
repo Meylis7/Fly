@@ -1,7 +1,7 @@
 <script setup>
     import Back from '@/components/Back.vue';
     import Tour from '@/components/Tour.vue';
-    import { reactive, onMounted, defineProps, computed } from 'vue';
+    import { reactive, onMounted, watch, computed } from 'vue';
     import { useRoute, RouterLink, useRouter } from 'vue-router';
 
     import axios from 'axios';
@@ -27,25 +27,33 @@
     });
 
     onMounted(async () => {
+        await fetchTourDetails(route.params.id); // Initial fetch
+    });
+
+    watch(
+        () => route.params.id,
+        async (newTourId) => {
+            await fetchTourDetails(newTourId); // Fetch when route changes
+        }
+    );
+
+    const fetchTourDetails = async (tourId) => {
         try {
             const response = await axios.get(`https://www.flyashgabat.com:4443/api/tours/${tourId}/details`);
-            state.tour = response.data;
 
-            if (response.data && response.data.data) { // Check if data exists
+            if (response.data && response.data.data) {
                 state.tour = response.data.data;
             } else {
-                state.error = "Invalid API response"; // Set an error message
+                state.error = "Invalid API response";
                 console.error("Invalid API response:", response);
             }
-
-            // console.log(state.tour)
         } catch (error) {
-            state.error = "Error fetching tour details"; // Set a more informative error message
+            state.error = "Error fetching tour details";
             console.error('Error fetching tour', error);
         } finally {
             state.isLoading = false;
         }
-    });
+    };
 </script>
 
 <template>

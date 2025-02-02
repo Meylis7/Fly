@@ -207,7 +207,7 @@
                             </div>
 
                             <div
-                                class="flex items-start relative before:block before:w-3 before:h-3 before:mt-2 before:rounded-full
+                                class="flex items-start relative before:block before:!w-3 before:h-3 before:mt-2 before:rounded-full
                              before:bg-prime-color before:mr-2 mb-4 after:block after:absolute after:left-[5.5px] after:top-[22px] 
                              after:w-[1px] after:h-full after:border-dashed after:border-0 after:border-l after:border-l-[#223A60]">
                                 <div class="block">
@@ -219,7 +219,7 @@
                                 </div>
                             </div>
                             <div
-                                class="flex items-start relative before:block before:w-3 before:h-3 before:mt-2 before:rounded-full before:bg-prime-color before:mr-2">
+                                class="flex items-start relative before:block before:!w-3 before:h-3 before:mt-2 before:rounded-full before:bg-prime-color before:mr-2">
                                 <div class="block">
                                     <div class="flex items-center my-1">
                                         <p class="text-sm font-semibold mr-2">{{ segment.ArriveDate.Time }}</p>
@@ -346,7 +346,7 @@
                             </div>
 
                             <div
-                                class="flex items-start relative before:block before:w-3 before:h-3 before:mt-2 before:rounded-full
+                                class="flex items-start relative before:block before:!w-3 before:h-3 before:mt-2 before:rounded-full
                              before:bg-prime-color before:mr-2 mb-4 after:block after:absolute after:left-[5.5px] after:top-[22px] 
                              after:w-[1px] after:h-full after:border-dashed after:border-0 after:border-l after:border-l-[#223A60]">
                                 <div class="block">
@@ -358,7 +358,7 @@
                                 </div>
                             </div>
                             <div
-                                class="flex items-start relative before:block before:w-3 before:h-3 before:mt-2 before:rounded-full before:bg-prime-color before:mr-2">
+                                class="flex items-start relative before:block before:!w-3 before:h-3 before:mt-2 before:rounded-full before:bg-prime-color before:mr-2">
                                 <div class="block">
                                     <div class="flex items-center my-1">
                                         <p class="text-sm font-semibold mr-2">{{ segment.ArriveDate.Time }}</p>

@@ -13,10 +13,6 @@
             type: String,
             default: '',
         },
-        // subtitle: {
-        //     type: String,
-        //     default: '',
-        // },
         Btn: {
             type: Boolean,
             default: false,

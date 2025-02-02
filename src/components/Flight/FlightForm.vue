@@ -379,7 +379,7 @@
                         @input="onDepartureDateSelect"
                         class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
 
-                    <span class="icon absolute bottom-3 right-2">
+                    <span class="icon absolute bottom-3 right-2 pointer-events-none">
                         <img :src="calendar" alt="calendar-icon">
                     </span>
                 </div>
@@ -401,7 +401,7 @@
                         v-if="returnCalendarVisible" @input="onReturnDateSelect"
                         class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
 
-                    <span class="icon absolute bottom-3 right-2">
+                    <span class="icon absolute bottom-3 right-2 pointer-events-none">
                         <img :src="calendar" alt="calendar-icon">
                     </span>
                 </div>
