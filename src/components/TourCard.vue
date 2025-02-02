@@ -12,7 +12,8 @@
 </script>
 
 <template>
-    <div class="card relative rounded-xl overflow-hidden w-full h-[420px] flex flex-col justify-end">
+    <card-shimmer v-if="isLoading" />
+    <div v-else class="card relative rounded-xl overflow-hidden w-full h-[420px] flex flex-col justify-end">
         <img :src=tour.main_image class="object-cover w-full h-full" alt="Tour-img">
 
         <div

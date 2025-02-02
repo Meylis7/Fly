@@ -25,7 +25,7 @@
                 </p>
             </div>
 
-            <RouterLink to="/" class="cursor-pointer">
+            <RouterLink :to="'/visas/' + visa.id + '/details'" class="cursor-pointer">
                 <p class="text-white text-base font-semibold flex items-center p-4 rounded-[20px] bg-[#223A60]">
                     Book
 

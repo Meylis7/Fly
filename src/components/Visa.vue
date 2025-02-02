@@ -35,6 +35,9 @@
 </script>
 
 <template>
+    <h2 class=" text-[32px] text-prime-color font-semibold mb-4">
+        {{ title }}
+    </h2>
 
     <div class="flex flex-wrap gap-5 mt-8">
         <VisaCard v-for="visa in state.visas" :key="visa.id" :visa="visa" class="block w-[calc(33.33%-14px)]" />

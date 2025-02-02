@@ -34,6 +34,7 @@
 
     const state = reactive({
         tours: [],
+        isLoading: true,
     });
 
     onMounted(async () => {
@@ -43,6 +44,8 @@
 
         } catch (error) {
             console.error('Error fetching tours', error);
+        } finally {
+            state.isLoading = false;
         }
     });
 
@@ -83,7 +86,7 @@
         :loop="true" :space-between="20" @swiper="onSwiper" @slideChange="onSlideChange" class="mt-5">
 
         <SwiperSlide v-for="tour in state.tours" :key="tour.id">
-            <TourCard :tour="tour" />
+            <TourCard :tour="tour" :is-loading="isLoading" />
         </SwiperSlide>
     </Swiper>
 

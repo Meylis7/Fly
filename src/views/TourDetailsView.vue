@@ -136,6 +136,19 @@
                     </div>
                 </div>
 
+                <a href="#"
+                    class="bg-prime-color flex items-center justify-center text-white text-base font-semibold text-center px-6 py-3 mx-auto rounded-lg mt-10 max-w-[200px]">
+                    Book Now
+
+                    <span class="block ml-3">
+                        <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.9237 8.42506L11.6737 14.675C11.4393 14.9094 11.1269 15.0266 10.8143 15.0266C10.4628 15.0266 10.1503 14.9094 9.91588 14.675C9.4081 14.2063 9.40803 13.386 9.91595 12.9172L14.0175 8.77656L2.0643 8.77662C1.36116 8.77664 0.814288 8.22976 0.814302 7.52663C0.814323 6.86254 1.36119 6.27661 2.06433 6.27661L14.0175 6.27663L9.91588 2.17505C9.40807 1.70629 9.40807 0.885984 9.91589 0.417229C10.3846 -0.0905797 11.2049 -0.0905868 11.6737 0.417229L17.9237 6.66722C18.4315 7.13595 18.4315 7.9563 17.9237 8.42506Z"
+                                fill="white" />
+                        </svg>
+                    </span>
+                </a>
+
                 <div class="relative !mt-[100px]">
                     <Tour title="Tours" />
                 </div>
