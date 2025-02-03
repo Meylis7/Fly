@@ -153,20 +153,20 @@
         }
 
         // Navigate to results with query parameters
-        if (route.name === 'flight-result') {
+        if (route.name === 'flights') {
             // router.replace({
-            //     name: 'flight-result',
+            //     name: 'flights',
             //     query: queryParams,
             //     force: true
             // })
 
             window.location.href = router.resolve({
-                name: 'flight-result',
+                name: 'flights',
                 query: queryParams
             }).href
         } else {
             router.push({
-                name: 'flight-result',
+                name: 'flights',
                 query: queryParams,
                 force: true
             })

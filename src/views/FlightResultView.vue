@@ -20,6 +20,7 @@
   const route = useRoute()
   const displayedFlights = ref([]);
   const flights = ref([])
+  const routingId = ref()
   const loading = ref(true)
   const error = ref(null)
 
@@ -97,6 +98,7 @@
       // Perform flight search
       const results = await searchFlights(searchParams)
       flights.value = results.data.flights
+      routingId.value = results.data.routing_id
 
 
       // Initialize displayed flights

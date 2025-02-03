@@ -19,7 +19,7 @@
                     </p>
                 </RouterLink>
 
-                <div
+                <!-- <div
                     class="flex items-center justify-between rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d]">
                     <div class="block text-white bg-prime-color rounded-[10px] text-center w-[250px] py-8">
                         <p class="text-base font-normal">Sat</p>
@@ -65,7 +65,7 @@
                         <p class="text-4xl font-bold my-[10px]">25</p>
                         <p class="text-lg font-medium">January</p>
                     </div>
-                </div>
+                </div> -->
 
                 <form class="flex items-start mt-[30px] gap-x-[20px]">
                     <div class="flex flex-col w-[calc(100%-480px)] gap-y-[30px]">
