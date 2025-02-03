@@ -12,6 +12,7 @@
   import FlightForm from '@/components/Flight/FlightForm.vue';
   import FlightResultItem from '@/components/Flight/FlightResultItem.vue';
   import LoadMore from '@/components/LoadMore.vue'
+  import ToTop from '@/components/ToTop.vue'
 
   const API_BASE_URL = 'https://www.flyashgabat.com:4443/api/search/tfusion/flights'
   const API_TOKEN = '123' // Use environment variables in production
@@ -198,6 +199,8 @@
       </div>
     </div>
   </section>
+
+  <ToTop />
 </template>
 
 <style lang="scss" scoped>

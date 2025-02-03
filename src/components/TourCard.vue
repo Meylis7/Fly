@@ -2,17 +2,26 @@
     import { RouterLink } from 'vue-router';
     import { defineProps } from 'vue';
 
-    defineProps({
+    const props = defineProps({
         tour: {
             type: Object,
+            required: true,
+        },
+        isLoading: {
+            type: Boolean,
             required: true,
         }
     });
 
+    // console.log(props.isLoading)
+
 </script>
 
 <template>
-    <card-shimmer v-if="isLoading" />
+    <!-- <card-shimmer v-if="isLoading" /> -->
+    <div v-if="isLoading">
+        Loading
+    </div>
     <div v-else class="card relative rounded-xl overflow-hidden w-full h-[420px] flex flex-col justify-end">
         <img :src=tour.main_image class="object-cover w-full h-full" alt="Tour-img">
 
