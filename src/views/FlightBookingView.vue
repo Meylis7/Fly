@@ -231,15 +231,15 @@
 
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="payment input w-[calc(50%-10px)]">
-                                    <input type="radio" class="peer hidden" name="method" id="pay-balance">
+                                    <input type="radio" class="peer hidden" name="method" id="pay-balance" checked>
                                     <label for="pay-balance">
                                         Paywith balance
                                     </label>
                                 </div>
 
                                 <div class="payment input w-[calc(50%-10px)]">
-                                    <input type="radio" class="peer hidden" name="method" id="visa">
-                                    <label for="visa">
+                                    <input type="radio" class="peer hidden" name="method" id="visa" disabled>
+                                    <label for="visa" class=" opacity-65">
                                         Visacard
                                     </label>
                                 </div>

@@ -9,20 +9,15 @@
         },
         isLoading: {
             type: Boolean,
-            required: true,
-        }
+            default: true,
+        },
     });
 
-    // console.log(props.isLoading)
 
 </script>
 
 <template>
-    <!-- <card-shimmer v-if="isLoading" /> -->
-    <div v-if="isLoading">
-        Loading
-    </div>
-    <div v-else class="card relative rounded-xl overflow-hidden w-full h-[420px] flex flex-col justify-end">
+    <div class="card relative rounded-xl overflow-hidden w-full h-[420px] flex flex-col justify-end">
         <img :src=tour.main_image class="object-cover w-full h-full" alt="Tour-img">
 
         <div

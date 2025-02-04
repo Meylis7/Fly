@@ -1,8 +1,11 @@
 <script setup>
     import { RouterLink } from 'vue-router';
     import VisaCard from './VisaCard.vue';
-    import { onMounted, reactive, defineProps } from 'vue';
+    import { onMounted, reactive, defineProps, ref } from 'vue';
     import axios from 'axios';
+
+    import Shimmer from './Shimmer.vue';
+
 
     defineProps({
         title: {
@@ -20,6 +23,8 @@
         visas: [],
     });
 
+    const isLoading = ref(true);
+
     onMounted(async () => {
         try {
             const response = await axios.get('https://www.flyashgabat.com:4443/api/visas');
@@ -27,6 +32,8 @@
 
         } catch (error) {
             console.error('Error fetching visas ', error);
+        } finally {
+            isLoading.value = false;
         }
     });
 
@@ -39,7 +46,13 @@
         {{ title }}
     </h2>
 
-    <div class="flex flex-wrap gap-5 mt-8">
+    <div v-if="isLoading" class="shimmer-wrapper flex gap-4 h-[420px] overflow-hidden">
+        <Shimmer class="w-[calc(33.33%-12px)]" />
+        <Shimmer class="w-[calc(33.33%-12px)]" />
+        <Shimmer class="w-[calc(33.33%-12px)]" />
+    </div>
+
+    <div v-else class="flex flex-wrap gap-5 mt-8">
         <VisaCard v-for="visa in state.visas" :key="visa.id" :visa="visa" class="block w-[calc(33.33%-14px)]" />
     </div>
 

@@ -21,10 +21,10 @@ const toggleDetails = (index) => {
     }
 }
 
-const handleClickOutside = () => {
-    // Close all details
-    openIndex.value = -1
-}
+// const handleClickOutside = () => {
+//     // Close all details
+//     openIndex.value = -1
+// }
 
 </script>
 

@@ -3,7 +3,6 @@
   import { useRoute } from 'vue-router'
   import { Vue3Lottie } from 'vue3-lottie'
   import LoadAnimationJSON from '@/assets/ticket-loading.json'
-  import LoadingJson from '@/assets/Loading.json'
   import NotFoundJson from '@/assets/not-found.json'
   import axios from 'axios'
 
@@ -25,11 +24,6 @@
   const error = ref(null)
 
   const itemsPerPage = ref(3);
-
-  // // Pagination state
-  // const currentPage = ref(1)
-  // const itemsPerPage = 6
-  // const loadingMore = ref(false); // For "Load More" button animation
 
   // Helper to format dates to YYYY-MM-DD
   const formatDate = (date) => {
@@ -110,22 +104,6 @@
     }
   })
 
-  // // Load more function
-  // const loadMore = () => {
-  //   if (loadingMore.value) return; // Prevent multiple clicks
-  //   loadingMore.value = true;
-
-  //   setTimeout(() => {
-  //     currentPage.value++;
-  //     const start = (currentPage.value - 1) * itemsPerPage;
-  //     const end = currentPage.value * itemsPerPage;
-
-  //     // Append new items to displayed flights
-  //     displayedFlights.value.push(...flights.value.slice(start, end));
-  //     loadingMore.value = false;
-  //   }, 1000); // Simulate API delay for loading animation
-  // };
-
   const handleFlightsLoaded = (loadedFlights) => {
     displayedFlights.value = loadedFlights;
   };
@@ -155,7 +133,7 @@
   <section class="relative pt-20 pb-24 bg-[#F9F9F9]">
     <div class="auto_container">
       <div class="wrapper">
-        <div v-if="loading" class="w-full flex items-center min-h-[700px]">
+        <div v-if="loading" class="w-full min-h-[700px]">
           <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-[400px] !h-[400px]" />
         </div>
 
