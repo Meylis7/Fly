@@ -1,12 +1,50 @@
 <script setup>
-import { defineProps, ref, onMounted, onUnmounted } from 'vue';
+import { defineProps, ref, computed, onUnmounted } from 'vue';
 import FlightSegment from './FlightSegment.vue';
-defineProps({
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const props = defineProps({
     flight: {
         type: Object,
         required: true
+    },
+    searchData: {
+        type: Object,
+        required: true
+    },
+    index: {
+        type: Number,
+        required: true
     }
-})
+});
+
+// const updatedSearchData = computed(() => ({
+//     ...props.searchData, // ✅ Use props.searchData
+//     outward_id: props.flight?.Outward?.Id, // ✅ Use props.flight
+//     return_id: props.flight?.Return?.Id || null
+// }));
+
+const goToBookingPage = () => {
+    console.log(
+        {
+            ...props.searchData,
+            outward_id: props.flight?.Outward?.Id,
+            return_id: props.flight?.Return?.Id || null
+        }
+    )
+    router.push({
+        path: '/flight/book',
+        state: {
+            updatedSearchData: {
+                ...props.searchData,
+                outward_id: props.flight?.Outward?.Id,
+                return_id: props.flight?.Return?.Id || null
+            }
+        }
+    });
+};
 
 // Instead of boolean, use number to track which item is open
 const openIndex = ref(-1) // -1 means all closed
@@ -157,10 +195,10 @@ const toggleDetails = (index) => {
                             {{ Math.floor(flight.TotalSum.Amount) }} {{ flight.TotalSum.Currency }}
                         </h5>
 
-                        <RouterLink :to="'/flight/book'"
+                        <button @click="goToBookingPage"
                             class="block text-base font-normal text-white text-center py-4 w-[200px] bg-prime-color rounded-lg cursor-pointer">
                             Book now
-                        </RouterLink>
+                        </button>
                     </div>
 
                     <button type="button" class="details cursor-pointer flex items-center mt-5"

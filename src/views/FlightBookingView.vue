@@ -1,110 +1,109 @@
 <script setup>
-    import { RouterLink } from 'vue-router';
-    import { ref, onMounted, reactive } from 'vue'
-    import axios from 'axios';
+import { RouterLink, useRoute } from 'vue-router';
+import { ref, onMounted, reactive } from 'vue'
+import axios from 'axios';
 
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
+const bookingData = history.state?.updatedSearchData || {};
 
-    // const state = reactive({
-    //     country: [],
-    //     selectedCountryKeyPassport: '',
-    //     selectedCountryKeyCitizenship: '',
-    // });
+const states = reactive({
+    country: [],
+});
 
-    // onMounted(async () => {
-    //     try {
-    //         const response = await axios.get('https://www.flyashgabat.com:4443/api/nationalities');
-    //         state.country = response.data.data;
-
-    //     } catch (error) {
-    //         console.error("Error loading countries:", error);
-    //     }
-    // });
-
-    const states = reactive({
-        country: [],
-    });
-
-    const state = reactive({
-        passengers: [
-            {
-                firstName: '',
-                lastName: '',
-                birthdate: '',
-                passport_country: '',
-                nationality: '',
-                gender: 'male',
-                passport_number: '',
-                passport_expiry_date: '',
-            }
-        ],
-
-        contactInfo: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
+const state = reactive({
+    passengers: [
+        {
+            firstname: '',
+            lastname: '',
+            birthdate: '',
+            passport_country: '',
+            nationality: '',
             gender: 'male',
+            passport_number: '',
+            passport_expiry_date: '',
+        }
+    ],
+
+    contact_details: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: {
+            code: '993',
+            number: ''
         },
-        countries: [],
-        paymentMethod: 'balance'
-    });
-
-    // Fetch country list
-    onMounted(async () => {
-        try {
-            const response = await axios.get('https://www.flyashgabat.com:4443/api/nationalities');
-            states.country = response.data.data;
-
-        } catch (error) {
-            console.error("Error loading countries:", error);
+        gender: 'male',
+        address: {
+            country_code: '',
+            city: '',
+            street: ''
         }
-    });
+    },
+    // paymentMethod: 'balance'
+});
 
-    // Add new passenger
-    const addPassenger = () => {
-        if (state.passengers.length < 9) {
-            state.passengers.push(
-                {
-                    firstName: '',
-                    lastName: '',
-                    birthdate: '',
-                    passport_country: '',
-                    passport_expiry_date: '',
-                    passport_number: '',
-                    nationality: '',
-                    gender: '',
-                });
-        }
-    };
+// Fetch country list
+onMounted(async () => {
+    try {
+        const response = await axios.get('https://www.flyashgabat.com:4443/api/nationalities');
+        states.country = response.data.data;
 
-    // Submit form
-    const submitForm = async () => {
-        try {
-            console.log('State before submit:', JSON.stringify(state, null, 2));
+        console.log(bookingData)
 
-            const payload = {
-                contactInfo: state.contactInfo,
-                passengers: state.passengers,
-                paymentMethod: state.paymentMethod
-            };
+        const passengersCount = bookingData.travellers_count || 1;
 
-            // const response = await axios.post('https://your-api-endpoint.com/submit', payload);
-            // console.log('Form submitted successfully:', response.data);
-            // console.log('Form submitted successfully:', payload);
-            console.log('Form payload:', JSON.stringify(payload, null, 2));
+        // Initialize passengers array
+        state.passengers = Array.from({ length: passengersCount }, () => ({
+            firstname: '',
+            lastname: '',
+            birthdate: '',
+            passport_country: '',
+            passport_expiry_date: '',
+            passport_number: '',
+            nationality: '',
+            gender: 'male',
+        }));
+    } catch (error) {
+        console.error("Error loading countries:", error);
+    }
+});
 
-            alert('Booking submitted successfully!');
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            alert('Failed to submit the form. Please try again.');
-        }
-    };
+
+// Submit form
+const submitForm = async () => {
+    try {
+        // console.log('State before submit:', JSON.stringify(state, null, 2));
+
+        const payload = {
+            'routing_id': bookingData.routing_id,
+            'outward_id': bookingData.outward_id,
+            'return_id': bookingData.return_id,
+            'contact_details': state.contact_details,
+            'travellers': state.passengers,
+            // paymentMethod: state.paymentMethod
+        };
+
+        const response = await axios.post('https://www.flyashgabat.com:4443/api/book/tfusion', payload);
+        console.log('Form submitted successfully:', response.data);
+        // console.log('Form submitted successfully:', payload);
+        // console.log('Form payload:', JSON.stringify(payload, null, 2));
+        toast.success('Booking submitted successfully!', {
+            autoClose: 1000,
+        }); 
+    } catch (error) {
+        toast.error(error.message, {
+            autoClose: 1000,
+        });
+        // console.error('Error submitting form:', error);
+        // alert('Failed to submit the form. Please try again.');
+    }
+};
 
 </script>
 
 <template>
-
 
     <section class="mt-[150px] pt-[50px] pb-[100px] bg-[#F9F9F9]">
         <div class="auto_container">
@@ -126,54 +125,6 @@
                     <!-- {{ state.country }} -->
                 </p>
 
-                <!-- <div
-                    class="flex items-center justify-between rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d]">
-                    <div class="block text-white bg-prime-color rounded-[10px] text-center w-[250px] py-8">
-                        <p class="text-base font-normal">Sat</p>
-                        <p class="text-4xl font-bold my-[10px]">25</p>
-                        <p class="text-lg font-medium">January</p>
-                    </div>
-
-                    <div class="block w-[calc(100%-560px)]">
-                        <div class="flex items-center mb-4">
-                            <span>
-                                <img src="@/assets/images/airline-2.png" alt="Airline-icon">
-                            </span>
-                            <h5 class=" text-2xl font-normal ml-2">Aeroflot</h5>
-                        </div>
-
-                        <div class="flex items-center justify-between  bg-[#E8F0FE] rounded-lg py-4 px-7">
-                            <div class="block">
-                                <p class="text-base font-semibold mb-1">14.50</p>
-                                <h6 class="text-base font-normal">Moi Intl, Mombasa Kenya</h6>
-                            </div>
-
-                            <div class="block mx-3">
-                                <p class="text-base font-semibold text-center mb-5">
-                                    9hr 50min
-                                </p>
-
-                                <span class="flex items-center gap-[10px]">
-                                    <span class="w-[70px] h-[1px] bg-[#C8C8C8] block"></span>
-                                    <img src="@/assets/images/svg/ticket-plane.svg" alt="plane-icon">
-                                    <span class="w-[70px] h-[1px] bg-[#C8C8C8] block"></span>
-                                </span>
-                            </div>
-
-                            <div class="block">
-                                <p class="text-base font-semibold mb-1">14.50</p>
-                                <h6 class="text-base font-normal">JFK Terminal, Nairobi, Kenya</h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="block text-white bg-prime-color rounded-[10px] text-center w-[250px] py-8">
-                        <p class="text-base font-normal">Sat</p>
-                        <p class="text-4xl font-bold my-[10px]">25</p>
-                        <p class="text-lg font-medium">January</p>
-                    </div>
-                </div> -->
-
                 <form @submit.prevent="submitForm" class="flex items-start mt-[30px] gap-x-[20px]">
                     <div class="flex flex-col w-[calc(100%-480px)] gap-y-[30px]">
                         <!-- Contact Information -->
@@ -190,37 +141,30 @@
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Firstname</label>
-                                    <input v-model="state.contactInfo.firstName" required type="text"
+                                    <input v-model="state.contact_details.firstname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g. Aman">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Lastname</label>
-                                    <input v-model="state.contactInfo.lastName" required type="text"
+                                    <input v-model="state.contact_details.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g. Amanow">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Email</label>
-                                    <input v-model="state.contactInfo.email" required type="email"
+                                    <input v-model="state.contact_details.email" required type="email"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g. Aman@gmial.com">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Phone number</label>
-                                    <input v-model="state.contactInfo.phone" required type="number"
+                                    <input v-model="state.contact_details.phone.number" required type="number" min="8"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g. +993 65 123456">
-                                </div>
-
-                                <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Address</label>
-                                    <input type="text"
-                                        class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Apt 101, 123, Main St">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
@@ -230,7 +174,7 @@
 
                                     <div class="flex items-center bg-[#F2F2F2] py-3 px-3 rounded-lg w-fit gap-[10px]">
                                         <div class="block w-[109px]">
-                                            <input v-model="state.contactInfo.gender" required type="radio"
+                                            <input v-model="state.contact_details.gender" required type="radio"
                                                 class="peer hidden" name="user-gender" value="male" id="user-male"
                                                 checked>
                                             <label
@@ -251,7 +195,7 @@
                                         </div>
 
                                         <div class="block w-[109px]">
-                                            <input v-model="state.contactInfo.gender" required type="radio"
+                                            <input v-model="state.contact_details.gender" required type="radio"
                                                 class="peer hidden" name="user-gender" value="female" id="user-female">
                                             <label
                                                 class="text-sm font-normal cursor-pointer flex items-center justify-center transition-all rounded w-full py-2 text-[#AFAFC2] peer-checked:bg-prime-color peer-checked:text-white"
@@ -272,6 +216,34 @@
                                     </div>
 
                                 </div>
+
+                                <br>
+
+                                <div class="input w-[calc(50%-10px)]">
+                                    <label class="text-sm font-normal mb-2 block">Address Country:</label>
+                                    <select v-model="state.contact_details.address.country_code"
+                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
+                                        <option value="" disabled>Select a country</option>
+                                        <option v-for="country in states.country" :key="country.key"
+                                            :value="country.key" class="text-base text-black">
+                                            {{ country.country_en }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="input w-[calc(50%-10px)]">
+                                    <label class="text-sm font-normal mb-2 block">City</label>
+                                    <input v-model="state.contact_details.address.city" required="text"
+                                        class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        placeholder="e.g. Apt 101, 123, Main St">
+                                </div>
+
+                                <div class="input w-[calc(50%-10px)]">
+                                    <label class="text-sm font-normal mb-2 block">Street</label>
+                                    <input v-model="state.contact_details.address.street" required="text"
+                                        class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        placeholder="e.g. Apt 101, 123, Main St">
+                                </div>
                             </div>
                         </div>
 
@@ -291,14 +263,14 @@
                             <div class="flex flex-wrap gap-x-5 gap-y-4 mb-4">
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Firstname</label>
-                                    <input v-model="passenger.firstName" required type="text"
+                                    <input v-model="passenger.firstname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g. Aman">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Lastname</label>
-                                    <input v-model="passenger.lastName" required type="text"
+                                    <input v-model="passenger.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g. Amanow">
                                 </div>
@@ -318,10 +290,10 @@
                                     <div class="flex items-center bg-[#F2F2F2] py-3 px-3 rounded-lg w-fit gap-[10px]">
                                         <div class="block w-[109px]">
                                             <input v-model="passenger.gender" value="male" required type="radio"
-                                                class="peer hidden" name="gender" id="male" checked>
+                                                class="peer hidden" :name="`gender-${index}`" :id="`male-${index}`">
                                             <label
                                                 class="text-sm font-normal cursor-pointer flex items-center justify-center transition-all rounded w-full py-2 text-[#AFAFC2] peer-checked:bg-prime-color peer-checked:text-white"
-                                                for="male">
+                                                :for="`male-${index}`">
                                                 <span class="block mr-2">
                                                     <svg width="7" height="15" viewBox="0 0 7 15" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -337,11 +309,11 @@
                                         </div>
 
                                         <div class="block w-[109px]">
-                                            <input v-model="passenger.gender" value="female" required type="radio" class="peer hidden"
-                                                name="gender" id="female">
+                                            <input v-model="passenger.gender" value="female" required type="radio"
+                                                class="peer hidden" :name="`gender-${index}`" :id="`female-${index}`">
                                             <label
                                                 class="text-sm font-normal cursor-pointer flex items-center justify-center transition-all rounded w-full py-2 text-[#AFAFC2] peer-checked:bg-prime-color peer-checked:text-white"
-                                                for="female">
+                                                :for="`female-${index}`">
                                                 <span class="block mr-2">
                                                     <svg width="7" height="15" viewBox="0 0 7 15" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -398,7 +370,7 @@
 
                                 <div class="input w-[calc(50%-10px)] relative">
                                     <label class="text-sm font-normal mb-2 block">Passport expiration date</label>
-                                    <input v-model="passenger.passport_expiry_date" type="text"
+                                    <input v-model="passenger.passport_expiry_date" type="date"
                                         class="text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         placeholder="e.g 01.01.2026">
                                 </div>
@@ -444,95 +416,92 @@
 </template>
 
 <style lang="scss" scoped>
+input[type="date"] {
+    position: relative;
+    padding: 10px;
 
-    input[type="date"] {
-        position: relative;
-        padding: 10px;
+    &::-webkit-calendar-picker-indicator {
+        color: transparent;
+        background: none;
+        z-index: 1;
+        opacity: 0;
 
-        &::-webkit-calendar-picker-indicator {
-            color: transparent;
-            background: none;
-            z-index: 1;
-            opacity: 0;
-
-        }
-
-        &:before {
-            content: '';
-            color: transparent;
-            background: none;
-            display: block;
-            width: 24px;
-            height: 24px;
-            position: absolute;
-            top: 14px;
-            right: 12px;
-            background: url('@/assets/images/svg/input-calendar.svg');
-            cursor: pointer;
-        }
     }
 
-    .payment {
-        input {
-            &:checked~label {
-                border-color: #223A60;
+    &:before {
+        content: '';
+        color: transparent;
+        background: none;
+        display: block;
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        top: 14px;
+        right: 12px;
+        background: url('@/assets/images/svg/input-calendar.svg');
+        cursor: pointer;
+    }
+}
 
-                &::before {
-                    border-color: #223A60;
-                }
-
-                &::after {
-                    opacity: 1;
-                    background: #223A60;
-                }
-            }
-        }
-
-        label {
-            position: relative;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid #CDCDCD;
-            border-radius: 6px;
-
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-            padding: 17px;
+.payment {
+    input {
+        &:checked~label {
+            border-color: #223A60;
 
             &::before {
-                content: '';
-                display: block;
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                border: 1px solid #CDCDCD;
-                margin-right: 10px;
+                border-color: #223A60;
             }
 
             &::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                left: 22px;
-                width: 14px;
-                height: 14px;
-                background: #CDCDCD;
-                border-radius: 50%;
-                transition: all .2s linear;
-                opacity: 0;
+                opacity: 1;
+                background: #223A60;
             }
         }
     }
 
-    // .input-field {
-    //     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
-    // }
+    label {
+        position: relative;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid #CDCDCD;
+        border-radius: 6px;
 
-    // .btn-primary {
-    //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
-    // }
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        padding: 17px;
 
-</style>
+        &::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #CDCDCD;
+            margin-right: 10px;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 22px;
+            width: 14px;
+            height: 14px;
+            background: #CDCDCD;
+            border-radius: 50%;
+            transition: all .2s linear;
+            opacity: 0;
+        }
+    }
+}
+
+// .input-field {
+//     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
+// }
+
+// .btn-primary {
+//     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
+// }</style>
