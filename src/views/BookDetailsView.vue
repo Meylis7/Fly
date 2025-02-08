@@ -1,9 +1,10 @@
 <script setup>
 import { reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
 import { Vue3Lottie } from 'vue3-lottie';
 import Load_3 from '@/assets/loading-3.json';
+
+import apiService from '@/services/apiService';
 
 const route = useRoute();
 
@@ -14,39 +15,33 @@ const state = reactive({
     tickets: [],
 });
 
+
+
 const checkBookingStatus = async () => {
-    try {
-        const response = await axios.get(`https://www.flyashgabat.com:4443/api/book/${state.bookId}/check`);
+  const data = await apiService.getBookingStatus(state.bookId);
 
-        if (response.data?.data) {
-            state.status = response.data.data.status;
+  if (data) {
+    state.status = data.status;
 
-            if (state.status === 'BookingInProgress') {
-                setTimeout(checkBookingStatus, 3000); // Retry after 3 seconds
-            } else {
-                state.loading = false;
-                if (state.status === 'Succeeded') {
-                    await fetchBookingDetails(); // Fetch ticket details after success
-                }
-            }
-        }
-    } catch (error) {
-        console.error("Error fetching booking status:", error);
-        state.status = 'Failed';
-        state.loading = false;
+    if (state.status === 'BookingInProgress') {
+      setTimeout(checkBookingStatus, 5000);
+    } else {
+      state.loading = false;
+      if (state.status === 'Succeeded') {
+        await fetchBookingDetails();
+      }
     }
+  } else {
+    state.status = 'Failed';
+    state.loading = false;
+  }
 };
 
 const fetchBookingDetails = async () => {
-    try {
-        const response = await axios.get(`https://www.flyashgabat.com:4443/api/book/${state.bookId}/details`);
-
-        if (response.data?.data?.success) {
-            state.tickets = response.data.data.tickets;
-        }
-    } catch (error) {
-        console.error("Error fetching booking details:", error);
-    }
+  const data = await apiService.getBookingDetails(state.bookId);
+  if (data?.success) {
+    state.tickets = data.tickets;
+  }
 };
 
 onMounted(() => {

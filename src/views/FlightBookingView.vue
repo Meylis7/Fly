@@ -2,9 +2,12 @@
 import { RouterLink, useRoute } from 'vue-router';
 import { ref, onMounted, reactive } from 'vue'
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+
+const router = useRouter();
 
 const bookingData = history.state?.updatedSearchData || {};
 
@@ -41,7 +44,7 @@ const state = reactive({
             street: ''
         }
     },
-    // paymentMethod: 'balance'
+    paymentMethod: 'balance'
 });
 
 // Fetch country list
@@ -87,11 +90,14 @@ const submitForm = async () => {
 
         const response = await axios.post('https://www.flyashgabat.com:4443/api/book/tfusion', payload);
         console.log('Form submitted successfully:', response.data);
-        // console.log('Form submitted successfully:', payload);
-        // console.log('Form payload:', JSON.stringify(payload, null, 2));
+
         toast.success('Booking submitted successfully!', {
             autoClose: 1000,
-        }); 
+        });
+
+        router.push({
+            path: '/flight/book/' + response.data.data.book_id,
+        });
     } catch (error) {
         toast.error(error.message, {
             autoClose: 1000,
@@ -393,19 +399,19 @@ const submitForm = async () => {
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="payment input w-[calc(50%-10px)]">
                                     <input v-model="state.paymentMethod" required type="radio" class="peer hidden"
-                                        name="method" id="pay-balance" checked>
-                                    <label for="pay-balance">
+                                        name="method" id="balance" checked>
+                                    <label for="balance">
                                         Paywith balance
                                     </label>
                                 </div>
 
-                                <div class="payment input w-[calc(50%-10px)]">
+                                <!-- <div class="payment input w-[calc(50%-10px)]">
                                     <input v-model="state.paymentMethod" required type="radio" class="peer hidden"
                                         name="method" id="visa" disabled>
                                     <label for="visa" class=" opacity-65">
                                         Visacard
                                     </label>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

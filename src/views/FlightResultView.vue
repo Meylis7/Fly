@@ -23,7 +23,7 @@ const loading = ref(true)
 const error = ref(null)
 const searchData = ref({});
 
-const itemsPerPage = ref(1);
+const itemsPerPage = ref(8);
 
 // Helper to format dates to YYYY-MM-DD
 const formatDate = (date) => {
