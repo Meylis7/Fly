@@ -23,9 +23,9 @@ const router = createRouter({
       component: () => import("../views/FlightBookingView.vue"),
     },
     {
-      path: "/booking-load",
-      name: "booking-load",
-      component: () => import("../views/BookSuccessView.vue"),
+      path: "/flight/book/:id",
+      name: "booking-details",
+      component: () => import("../views/BookDetailsView.vue"),
     },
     {
       path: "/tours",
