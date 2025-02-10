@@ -12,7 +12,7 @@
 
 <template>
     <div>
-        <img class="w-full h-[320px] object-cover rounded-[20px]" :src=visa.main_image alt="visa-img">
+        <img class="w-full h-[320px] object-cover rounded-[20px]" loading="lazy" :src=visa.main_image alt="visa-img">
 
         <div
             class="relative -mt-10 ml-auto p-5 flex items-center justify-between shadow-lg rounded-tl-2xl rounded-br-2xl rounded-bl-2xl rounded-tr-0 bg-white w-[calc(100%-50px)]">

@@ -18,7 +18,7 @@
 
 <template>
     <div class="card relative rounded-xl overflow-hidden w-full h-[420px] flex flex-col justify-end">
-        <img :src=tour.main_image class="object-cover w-full h-full" alt="Tour-img">
+        <img :src=tour.main_image class="object-cover w-full h-full" loading="lazy" alt="Tour-img">
 
         <div
             class="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 rounded-xl p-3 w-[calc(100%-30px)] h-[calc(100%-30px)] bg-black/[0.3] flex flex-col justify-between">

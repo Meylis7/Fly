@@ -1,111 +1,118 @@
 <script setup>
-import { RouterLink, useRoute } from 'vue-router';
-import { ref, onMounted, reactive } from 'vue'
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+    import { RouterLink, useRoute } from 'vue-router';
+    import { ref, computed, onMounted, reactive } from 'vue'
+    import axios from 'axios';
+    import { useRouter } from 'vue-router';
 
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+    import { toast } from 'vue3-toastify';
+    import 'vue3-toastify/dist/index.css';
 
-const router = useRouter();
+    import { Vue3Lottie } from 'vue3-lottie'
+    import LoadingJson from '@/assets/btn-load.json'
 
-const bookingData = history.state?.updatedSearchData || {};
+    const router = useRouter();
+    const loading = ref(false);
 
-const states = reactive({
-    country: [],
-});
+    const bookingData = history.state?.updatedSearchData || {};
 
-const state = reactive({
-    passengers: [
-        {
+    const states = reactive({
+        country: [],
+    });
+
+    const state = reactive({
+        passengers: [
+            {
+                firstname: '',
+                lastname: '',
+                birthdate: '',
+                passport_country: '',
+                nationality: '',
+                gender: 'male',
+                passport_number: '',
+                passport_expiry_date: '',
+            }
+        ],
+
+        contact_details: {
             firstname: '',
             lastname: '',
-            birthdate: '',
-            passport_country: '',
-            nationality: '',
+            email: '',
+            phone: {
+                code: '993',
+                number: ''
+            },
             gender: 'male',
-            passport_number: '',
-            passport_expiry_date: '',
-        }
-    ],
-
-    contact_details: {
-        firstname: '',
-        lastname: '',
-        email: '',
-        phone: {
-            code: '993',
-            number: ''
+            address: {
+                country_code: '',
+                city: '',
+                street: ''
+            }
         },
-        gender: 'male',
-        address: {
-            country_code: '',
-            city: '',
-            street: ''
+        paymentMethod: 'balance'
+    });
+
+    // Fetch country list
+    onMounted(async () => {
+        try {
+            const response = await axios.get('https://www.flyashgabat.com:4443/api/nationalities');
+            states.country = response.data.data;
+
+            console.log(bookingData)
+
+            const passengersCount = bookingData.travellers_count || 1;
+
+            // Initialize passengers array
+            state.passengers = Array.from({ length: passengersCount }, () => ({
+                firstname: '',
+                lastname: '',
+                birthdate: '',
+                passport_country: '',
+                passport_expiry_date: '',
+                passport_number: '',
+                nationality: '',
+                gender: 'male',
+            }));
+        } catch (error) {
+            console.error("Error loading countries:", error);
         }
-    },
-    paymentMethod: 'balance'
-});
-
-// Fetch country list
-onMounted(async () => {
-    try {
-        const response = await axios.get('https://www.flyashgabat.com:4443/api/nationalities');
-        states.country = response.data.data;
-
-        console.log(bookingData)
-
-        const passengersCount = bookingData.travellers_count || 1;
-
-        // Initialize passengers array
-        state.passengers = Array.from({ length: passengersCount }, () => ({
-            firstname: '',
-            lastname: '',
-            birthdate: '',
-            passport_country: '',
-            passport_expiry_date: '',
-            passport_number: '',
-            nationality: '',
-            gender: 'male',
-        }));
-    } catch (error) {
-        console.error("Error loading countries:", error);
-    }
-});
+    });
 
 
-// Submit form
-const submitForm = async () => {
-    try {
-        // console.log('State before submit:', JSON.stringify(state, null, 2));
+    // Submit form
+    const submitForm = async () => {
+        loading.value = true;
+        try {
+            // console.log('State before submit:', JSON.stringify(state, null, 2));
 
-        const payload = {
-            'routing_id': bookingData.routing_id,
-            'outward_id': bookingData.outward_id,
-            'return_id': bookingData.return_id,
-            'contact_details': state.contact_details,
-            'travellers': state.passengers,
-            // paymentMethod: state.paymentMethod
-        };
+            const payload = {
+                'routing_id': bookingData.routing_id,
+                'outward_id': bookingData.outward_id,
+                'return_id': bookingData.return_id,
+                'contact_details': state.contact_details,
+                'travellers': state.passengers,
+                // paymentMethod: state.paymentMethod
+            };
 
-        const response = await axios.post('https://www.flyashgabat.com:4443/api/book/tfusion', payload);
-        console.log('Form submitted successfully:', response.data);
+            const response = await axios.post('https://www.flyashgabat.com:4443/api/book/tfusion', payload);
+            console.log('Form submitted successfully:', response.data);
 
-        toast.success('Booking submitted successfully!', {
-            autoClose: 1000,
-        });
+            toast.success('Booking submitted successfully!', {
+                autoClose: 1000,
+            });
 
-        router.push({
-            path: '/flight/book/' + response.data.data.book_id,
-        });
-    } catch (error) {
-        toast.error(error.message, {
-            autoClose: 1000,
-        });
-        // console.error('Error submitting form:', error);
-        // alert('Failed to submit the form. Please try again.');
-    }
-};
+            router.push({
+                path: '/flight/book/' + response.data.data.book_id,
+            });
+        } catch (error) {
+            toast.error(error.message, {
+                autoClose: 1000,
+            });
+            // console.error('Error submitting form:', error);
+            // alert('Failed to submit the form. Please try again.');
+        } finally {
+            loading.value = false;
+        }
+    };
 
 </script>
 
@@ -156,14 +163,14 @@ const submitForm = async () => {
                                     <label class="text-sm font-normal mb-2 block">Lastname</label>
                                     <input v-model="state.contact_details.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Amanow">
+                                        placeholder="e.g. Amanov">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <label class="text-sm font-normal mb-2 block">Email</label>
                                     <input v-model="state.contact_details.email" required type="email"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Aman@gmial.com">
+                                        placeholder="e.g. Aman@gmail.com">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
@@ -278,7 +285,7 @@ const submitForm = async () => {
                                     <label class="text-sm font-normal mb-2 block">Lastname</label>
                                     <input v-model="passenger.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Amanow">
+                                        placeholder="e.g. Amanov">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)] relative">
@@ -371,7 +378,7 @@ const submitForm = async () => {
                                     <label class="text-sm font-normal mb-2 block">Series and number</label>
                                     <input v-model="passenger.passport_number" type="text"
                                         class="text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. I-AS 010101">
+                                        placeholder="e.g. A0000000">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)] relative">
@@ -383,10 +390,17 @@ const submitForm = async () => {
                             </div>
                         </div>
 
-                        <button type="submit"
-                            class="bg-prime-color text-white block px-6 py-2 mx-auto rounded-lg mt-10">
-                            Submit
+                        <button type="submit" :disabled="loading"
+                            class="bg-prime-color text-white flex items-center gap-2  mx-auto rounded-lg mt-10">
+                            <div v-if="loading" class="flex items-center pl-6 py-0">
+                                Loading
+                                <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
+                            </div>
+                            <p v-else class="px-6 py-2">
+                                Submit
+                            </p>
                         </button>
+
                     </div>
 
                     <div class=" block w-[480px] ">
@@ -422,92 +436,92 @@ const submitForm = async () => {
 </template>
 
 <style lang="scss" scoped>
-input[type="date"] {
-    position: relative;
-    padding: 10px;
-
-    &::-webkit-calendar-picker-indicator {
-        color: transparent;
-        background: none;
-        z-index: 1;
-        opacity: 0;
-
-    }
-
-    &:before {
-        content: '';
-        color: transparent;
-        background: none;
-        display: block;
-        width: 24px;
-        height: 24px;
-        position: absolute;
-        top: 14px;
-        right: 12px;
-        background: url('@/assets/images/svg/input-calendar.svg');
-        cursor: pointer;
-    }
-}
-
-.payment {
-    input {
-        &:checked~label {
-            border-color: #223A60;
-
-            &::before {
-                border-color: #223A60;
-            }
-
-            &::after {
-                opacity: 1;
-                background: #223A60;
-            }
-        }
-    }
-
-    label {
+    input[type="date"] {
         position: relative;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        border: 1px solid #CDCDCD;
-        border-radius: 6px;
+        padding: 10px;
 
-        font-size: 14px;
-        font-weight: 700;
-        text-align: center;
-        padding: 17px;
+        &::-webkit-calendar-picker-indicator {
+            color: transparent;
+            background: none;
+            z-index: 1;
+            opacity: 0;
 
-        &::before {
+        }
+
+        &:before {
             content: '';
+            color: transparent;
+            background: none;
             display: block;
             width: 24px;
             height: 24px;
-            border-radius: 50%;
-            border: 1px solid #CDCDCD;
-            margin-right: 10px;
-        }
-
-        &::after {
-            content: '';
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 22px;
-            width: 14px;
-            height: 14px;
-            background: #CDCDCD;
-            border-radius: 50%;
-            transition: all .2s linear;
-            opacity: 0;
+            top: 14px;
+            right: 12px;
+            background: url('@/assets/images/svg/input-calendar.svg');
+            cursor: pointer;
         }
     }
-}
 
-// .input-field {
-//     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
-// }
+    .payment {
+        input {
+            &:checked~label {
+                border-color: #223A60;
 
-// .btn-primary {
-//     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
-// }</style>
+                &::before {
+                    border-color: #223A60;
+                }
+
+                &::after {
+                    opacity: 1;
+                    background: #223A60;
+                }
+            }
+        }
+
+        label {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #CDCDCD;
+            border-radius: 6px;
+
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            padding: 17px;
+
+            &::before {
+                content: '';
+                display: block;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                border: 1px solid #CDCDCD;
+                margin-right: 10px;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                left: 22px;
+                width: 14px;
+                height: 14px;
+                background: #CDCDCD;
+                border-radius: 50%;
+                transition: all .2s linear;
+                opacity: 0;
+            }
+        }
+    }
+
+    // .input-field {
+    //     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
+    // }
+
+    // .btn-primary {
+    //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
+    // }</style>
