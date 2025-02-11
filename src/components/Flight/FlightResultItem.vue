@@ -75,12 +75,21 @@ const toggleDetails = (index) => {
 
                         <div class="block bg-[#E8F0FE] rounded-lg mt-4 py-4 px-7">
                             <div class="flex items-center justify-between">
+                                <h6 class="text-base font-normal mb-3">
+                                    {{ flight.Outward.DepartDate.Date }}
+                                </h6>
+                                <h6 class="text-base font-normal mb-3">
+                                    {{ flight.Outward.ArriveDate.Date }}
+                                </h6>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                
                                 <div class="block">
                                     <h6 class="text-base font-normal">{{ flight.Origin.Code }}</h6>
                                     <p class="text-lg font-semibold my-1">
                                         {{ flight.Outward.DepartDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.ru }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.en }}</h6>
                                 </div>
 
                                 <div class="block mx-3">
@@ -121,17 +130,7 @@ const toggleDetails = (index) => {
                     </div>
 
                     <div class="mt-6" v-if="flight.Return != null">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img class="h-12 object-contain block mr-3" src="@/assets/images/airline-1.png"
-                                    alt="airline-img">
-                                <h4 class="text-lg font-normal">
-                                    ABC Airline
-                                </h4>
-                            </div>
-
-                            <p class="text-base font-normal">Travel Class: Economy</p>
-                        </div>
+                    
                         <div class="block bg-[#E8F0FE] rounded-lg mt-4 py-4 px-7">
                             <div class="flex items-center justify-between">
                                 <h6 class="text-base font-normal mb-3">
@@ -144,10 +143,11 @@ const toggleDetails = (index) => {
 
                             <div class="flex items-center justify-between">
                                 <div class="block">
+                                    <h6 class="text-base font-normal">{{ flight.Destination.Code }}</h6>
                                     <p class="text-base font-semibold mb-1">
                                         {{ flight.Return.DepartDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.ru }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Destination.Airport.en }}</h6>
                                 </div>
 
                                 <div class="block mx-3">
@@ -175,11 +175,11 @@ const toggleDetails = (index) => {
                                 </div>
 
                                 <div class="block">
-                                    <h6 class="text-base font-normal">{{ flight.Destination.Code }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Origin.Code }}</h6>
                                     <p class="text-lg font-semibold my-1">
                                         {{ flight.Return.ArriveDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Destination.Airport.en }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.en }}</h6>
                                 </div>
                             </div>
                         </div>

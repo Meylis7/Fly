@@ -154,7 +154,7 @@ const setActiveTab = (tab) => {
         </div>
 
         <div v-else class="flex items-start gap-[30px]">
-          <Filter />
+          <Filter class="pointer-events-none" />
 
           <section class="w-[calc(100%-380px)] flex flex-col">
             <!-- <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
