@@ -33,6 +33,12 @@
                         Sign up
                     </RouterLink>
                 </button>
+
+                <select v-model="$i18n.locale">
+                    <option value="en">English</option>
+                    <option value="ru">Russian</option>
+                    <option value="tm">Turkmen</option>
+                </select>
             </div>
         </div>
     </header>

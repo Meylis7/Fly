@@ -289,12 +289,12 @@
             <div class="flex items-center mb-5">
                 <div class="air-type">
                     <input type="radio" name="type" checked id="one-way" value="one-way" v-model="tripType">
-                    <label for="one-way">One-way</label>
+                    <label for="one-way">{{ $t("searchForm.flightType.oneWay") }}</label>
                 </div>
 
                 <div class="air-type">
                     <input type="radio" name="type" id="round" value="round-trip" v-model="tripType">
-                    <label for="round">Round-trip</label>
+                    <label for="round">{{ $t("searchForm.flightType.RoundTrip") }}</label>
                 </div>
             </div>
 

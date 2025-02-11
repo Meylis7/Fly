@@ -50,7 +50,7 @@
                         </span>
 
                         <p class="text-base font-bold">
-                            Flights
+                            {{ $t("searchForm.tabs.flights") }}
                         </p>
                     </button>
 
@@ -77,7 +77,7 @@
                         </span>
 
                         <p class="text-base font-bold">
-                            Hotels
+                            {{ $t("searchForm.tabs.hotels") }}
                         </p>
                     </button>
                 </div>
