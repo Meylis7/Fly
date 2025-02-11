@@ -20,8 +20,8 @@ const state = reactive({
 const checkBookingStatus = async () => {
   const data = await apiService.getBookingStatus(state.bookId);
 
-  if (data) {
-    state.status = data.status;
+  if (data.data) {
+    state.status = data.data.status;
 
     if (state.status === 'BookingInProgress') {
       setTimeout(checkBookingStatus, 5000);
@@ -39,8 +39,8 @@ const checkBookingStatus = async () => {
 
 const fetchBookingDetails = async () => {
   const data = await apiService.getBookingDetails(state.bookId);
-  if (data?.success) {
-    state.tickets = data.tickets;
+  if (data.data?.success) {
+    state.tickets = data.data.tickets;
   }
 };
 
