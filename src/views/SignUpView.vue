@@ -1,7 +1,86 @@
 <script setup>
-    import LoginSlider from '@/components/loginSlider.vue';
+import { ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import LoginSlider from '@/components/LoginSlider.vue';
+import router from '@/router';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import apiService from '@/services/apiService';
 
+import { Vue3Lottie } from 'vue3-lottie'
+import LoadingJson from '@/assets/btn-load.json'
 
+const userStore = useUserStore();
+const loading = ref(false);
+
+const form = ref({
+    firstname: '',
+    lastname: '',
+    email: '',
+    company: '',
+    password: '',
+    password_confirmation: '',
+    terms: false
+});
+
+const errors = ref({});
+
+const validateForm = () => {
+    errors.value = {};
+
+    if (!form.value.firstname) errors.value.firstname = "First name is required";
+    if (!form.value.lastname) errors.value.lastname = "Last name is required";
+    if (!form.value.email) {
+        errors.value.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+        errors.value.email = "Invalid email format";
+    }
+    if (!form.value.company) errors.value.company = "Company name is required";
+    if (!form.value.password) errors.value.password = "Password is required";
+    if (form.value.password.length < 6) errors.value.password = "Password must be at least 6 characters";
+    if (form.value.password !== form.value.password_confirmation) {
+        errors.value.password_confirmation = "Passwords do not match";
+    }
+    // if (!form.value.terms) errors.value.terms = "You must agree to the terms and policies";
+
+    return Object.keys(errors.value).length === 0;
+};
+
+const register = async () => {
+
+    if (!validateForm()) return;
+
+    loading.value = true;
+    try {
+        const userData = {
+            firstname: form.value.firstname,
+            lastname: form.value.lastname,
+            email: form.value.email,
+            company: form.value.company,
+            password: form.value.password,
+            password_confirmation: form.value.password_confirmation
+        };
+
+        const data = await apiService.registerUser(userData);
+
+        // ✅ Use Pinia to set user data
+        userStore.setUser(data.data.user, data.data.token);
+
+        // Show success message
+        toast.success("Registration successful!", { autoClose: 3000 });
+
+        router.push({
+            name: 'home',
+            force: true
+        })
+
+    } catch (error) {
+        const errorMessage = error.message || "Registration failed";
+        toast.error(errorMessage, { autoClose: 3000 });
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
 <template>
@@ -15,67 +94,58 @@
                 <div class="flex items-center justify-between">
                     <LoginSlider class="w-[calc(50%-10px)]" />
 
-                    <form class="w-[calc(50%-10px)] flex flex-wrap justify-between">
-                        <h2 class="text-3xl font-normal mb-4 w-full">
-                            Sign up
-                        </h2>
+                    <form class="w-[calc(50%-10px)] flex flex-wrap justify-between" @submit.prevent="register">
+                        <h2 class="text-3xl font-normal mb-4 w-full">Sign up</h2>
                         <p class="text-base font-normal mb-12 w-full">
-                            Let’s get you all st up so you can access your personal account.
+                            Let’s get you all set up so you can access your personal account.
                         </p>
 
+                        <!-- First Name -->
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                First Name
-                            </label>
-                            <input type="text"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] px-4"
-                                placeholder="Aman">
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">First
+                                Name</label>
+                            <input v-model="form.firstname" type="text"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.firstname ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.firstname" class="text-red-500 text-sm">{{ errors.firstname }}</p>
                         </div>
 
+                        <!-- Last Name -->
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Last Name
-                            </label>
-                            <input type="text"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] px-4"
-                                placeholder="Amanow">
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Last
+                                Name</label>
+                            <input v-model="form.lastname" type="text"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.lastname ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.lastname" class="text-red-500 text-sm">{{ errors.lastname }}</p>
                         </div>
 
+                        <!-- Email -->
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Email
-                            </label>
-                            <input type="text"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] px-4"
-                                placeholder="Aman@gmail.com">
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Email</label>
+                            <input v-model="form.email" type="email"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.email ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</p>
                         </div>
 
+                        <!-- Company Name -->
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Phone Number
-                            </label>
-                            <input type="text"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] px-4"
-                                placeholder="+993 65 123456">
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Company
+                                Name</label>
+                            <input v-model="form.company" type="text"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.company ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.company" class="text-red-500 text-sm">{{ errors.company }}</p>
                         </div>
 
-                        <div class="block relative mb-6 w-[calc(50%-10px)]">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Company name
-                            </label>
-                            <input type="text"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] px-4"
-                                placeholder="Altyn H.J">
-                        </div>
-
+                        <!-- Password -->
                         <div class="block relative mb-6 w-full">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Password
-                            </label>
-                            <input type="password"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] pr-11 pl-4"
-                                placeholder="•••••••••••••••••••••••••">
-
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Password</label>
+                            <input v-model="form.password" type="password"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.password ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
                             <button type="button" class="absolute bottom-5 right-3 w-6 block cursor-pointer">
                                 <svg width="24" height="25" class="object-contain" viewBox="0 0 24 25" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -89,14 +159,15 @@
                             </button>
                         </div>
 
+                        <!-- Confirm Password -->
                         <div class="block relative mb-6 w-full">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Confirm Password
-                            </label>
-                            <input type="password"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] pr-11 pl-4"
-                                placeholder="•••••••••••••••••••••••••">
-
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Confirm
+                                Password</label>
+                            <input v-model="form.password_confirmation" type="password"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.password_confirmation ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.password_confirmation" class="text-red-500 text-sm">{{
+                                errors.password_confirmation }}</p>
                             <button type="button" class="absolute bottom-5 right-3 w-6 block cursor-pointer">
                                 <svg width="24" height="25" class="object-contain" viewBox="0 0 24 25" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -110,18 +181,18 @@
                             </button>
                         </div>
 
-                        <div class="terms block w-full mb-10">
-                            <input type="checkbox" id="terms" required>
-                            <label for="terms" class="text-sm font-semibold flex items-center">
-                                I agree to all the <a href="#" class="text-[#223A60] inline-block mx-1">Terms</a> and <a
-                                    href="#" class="text-[#223A60] inline-block mx-1">Privacy Policies</a>
-                            </label>
-                        </div>
-
-                        <button type="submit"
-                            class="w-full rounded bg-[#223A60] py-[14px] text-white text-center text-base font-semibold cursor-pointer mb-4">
-                            Create account
+                        <button type="submit" :disabled="loading"
+                            class="w-full text-center justify-center py-[14px] mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <div v-if="loading" class="flex items-center pl-6 py-0">
+                                Loading
+                                <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
+                            </div>
+                            <p v-else class="px-6 py-2">
+                                Create account
+                            </p>
                         </button>
+
+                        <p v-if="errors.api" class="text-red-500 text-center w-full">{{ errors.api }}</p>
 
                         <p class="text-sm font-medium text-[#112211] text-center w-full">
                             Already have an account? <a href="#" class="text-[#FF8682]">Login</a>
@@ -133,55 +204,56 @@
     </section>
 </template>
 
+
 <style lang="scss" scoped>
-    .terms {
-        input {
-            display: none;
+.terms {
+    input {
+        display: none;
 
-            &:checked~label {
-                &::before {
-                    border-color: #223A60;
-                }
-
-                &::after {
-                    background: #223A60;
-                    opacity: 1;
-                }
-            }
-        }
-
-        label {
-            position: relative;
-            cursor: pointer;
-
+        &:checked~label {
             &::before {
-                content: '';
-                display: block;
-                margin-right: 10px;
-                width: 18px;
-                height: 18px;
-                border: 1px solid #112211;
-                border-radius: 3px;
+                border-color: #223A60;
             }
 
             &::after {
-                content: '✓';
-                position: absolute;
-                top: 0;
-                left: 0;
-                border-radius: 3px;
-                width: 18px;
-                height: 18px;
-                font-size: 14px;
-                font-weight: 500;
-                color: #fff;
-                opacity: 0;
-                transition: all .2s linear;
-
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                background: #223A60;
+                opacity: 1;
             }
         }
     }
+
+    label {
+        position: relative;
+        cursor: pointer;
+
+        &::before {
+            content: '';
+            display: block;
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #112211;
+            border-radius: 3px;
+        }
+
+        &::after {
+            content: '✓';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 3px;
+            width: 18px;
+            height: 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            opacity: 0;
+            transition: all .2s linear;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
 </style>

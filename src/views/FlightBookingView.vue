@@ -391,7 +391,7 @@
                         </div>
 
                         <button type="submit" :disabled="loading"
-                            class="bg-prime-color text-white flex items-center gap-2  mx-auto rounded-lg mt-10">
+                            class="bg-prime-color text-white flex items-center gap-2  mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <div v-if="loading" class="flex items-center pl-6 py-0">
                                 Loading
                                 <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />

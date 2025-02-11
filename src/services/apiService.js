@@ -22,6 +22,36 @@ const apiService = {
       return null;
     }
   },
+
+  async registerUser(userData) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/user/register`, userData, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
+      throw error.response?.data || { message: "An error occurred. Please try again." };
+    }
+  },
+
+  async loginUser(credentials) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/user/login`, credentials, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+      throw error.response?.data || { message: "An error occurred. Please try again." };
+    }
+  }
 };
 
 export default apiService;

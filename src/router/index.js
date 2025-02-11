@@ -66,16 +66,16 @@ const router = createRouter({
       component: () => import("../views/FlightBookingView.vue"),
     },
 
-    // {
-    //   path: "/signin",
-    //   name: "signin",
-    //   component: () => import("../views/SignInView.vue"),
-    // },
-    // {
-    //   path: "/sigup",
-    //   name: "sigup",
-    //   component: () => import("../views/SignUpView.vue"),
-    // },
+    {
+      path: "/signin",
+      name: "signin",
+      component: () => import("../views/SignInView.vue"),
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: () => import("../views/SignUpView.vue"),
+    },
   ],
 });
 

@@ -1,7 +1,68 @@
 <script setup>
-    import LoginSlider from '@/components/LoginSlider.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import LoginSlider from '@/components/LoginSlider.vue';
+import apiService from '@/services/apiService';
+import { useUserStore } from '@/stores/userStore';
+import { Vue3Lottie } from 'vue3-lottie'
+import LoadingJson from '@/assets/btn-load.json'
 
+const userStore = useUserStore();
+const router = useRouter();
+const loading = ref(false);
 
+const form = ref({
+    email: '',
+    password: ''
+});
+
+const errors = ref({});
+
+const validateForm = () => {
+    errors.value = {};
+
+    if (!form.value.email) {
+        errors.value.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+        errors.value.email = "Invalid email format";
+    }
+    if (!form.value.password) {
+        errors.value.password = "Password is required";
+    }
+
+    return Object.keys(errors.value).length === 0;
+};
+
+const login = async () => {
+    if (!validateForm()) return;
+
+    loading.value = true;
+    try {
+        const credentials = {
+            email: form.value.email,
+            password: form.value.password
+        };
+
+        const data = await apiService.loginUser(credentials);
+
+        // ✅ Use Pinia to set user data
+        userStore.setUser(data.data.user, data.data.token);
+
+        // Show success message
+        toast.success("Login successful!", { autoClose: 3000 });
+
+        // Redirect to home
+        router.push({ name: 'home', force: true });
+
+    } catch (error) {
+        const errorMessage = error.message || "Login failed";
+        toast.error(errorMessage, { autoClose: 3000 });
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
 <template>
@@ -13,31 +74,28 @@
                 </a>
 
                 <div class="flex items-center justify-between">
-                    <form class="w-[calc(50%-10px)]">
-                        <h2 class="text-3xl font-normal mb-4">
-                            Login
-                        </h2>
+                    <form class="w-[calc(50%-10px)]" @submit.prevent="login">
+                        <h2 class="text-3xl font-normal mb-4">Login</h2>
                         <p class="text-base font-normal mb-12">
                             Login to access your Golobe account
                         </p>
 
+                        <!-- Email -->
                         <div class="block relative mb-6">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Email
-                            </label>
-                            <input type="text"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] px-4"
-                                placeholder="Aman@gmail.com">
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Email</label>
+                            <input v-model="form.email" type="text"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.email ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</p>
                         </div>
 
+                        <!-- Password -->
                         <div class="block relative mb-6">
-                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                Password
-                            </label>
-                            <input type="password"
-                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid border-[#223a604d] rounded py-[18px] pr-11 pl-4"
-                                placeholder="•••••••••••••••••••••••••">
-
+                            <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">Password</label>
+                            <input v-model="form.password" type="password"
+                                class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
+                                :class="errors.password ? 'border-red-500' : 'border-[#223a604d]'">
+                            <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
                             <button type="button" class="absolute bottom-5 right-3 w-6 block cursor-pointer">
                                 <svg width="24" height="25" class="object-contain" viewBox="0 0 24 25" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -55,10 +113,17 @@
                             Forgot password
                         </a>
 
-                        <button type="submit"
-                            class="w-full rounded bg-[#223A60] py-[14px] text-white text-center text-base font-semibold cursor-pointer mb-4">
-                            Login
+                        <button type="submit" :disabled="loading"
+                            class="w-full text-center justify-center py-3 mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <div v-if="loading" class="flex items-center pl-6 py-0">
+                                Loading
+                                <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
+                            </div>
+                            <p v-else class="px-6 py-2">
+                                Login
+                            </p>
                         </button>
+
 
                         <p class="text-sm font-medium text-[#112211] text-center w-full">
                             Don’t have an account? <a href="#" class="text-[#FF8682]">Sign up</a>
@@ -71,7 +136,3 @@
         </div>
     </section>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

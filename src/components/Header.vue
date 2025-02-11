@@ -1,8 +1,35 @@
 <script setup>
-    import { RouterLink } from 'vue-router';
-    import logo from "@/assets/images/logo.png"
+import { computed, ref,watchEffect } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+import logo from "@/assets/images/logo.png";
 
+const router = useRouter();
+const userStore = useUserStore();
+
+// Ensure Header updates when user logs in or out
+watchEffect(() => {
+    userStore.user = JSON.parse(localStorage.getItem('user')) || null;
+});
+
+// Computed user name
+const userDisplayName = computed(() => {
+    if (userStore.user) {
+        return `${userStore.user.firstname} ${userStore.user.lastname.charAt(0)}.`;
+    }
+    return null;
+});
+
+// Locale selection
+const selectedLocale = ref(localStorage.getItem('locale') || 'en');
+
+const changeLocale = () => {
+    localStorage.setItem('locale', selectedLocale.value);
+    location.reload();
+};
 </script>
+
+
 
 <template>
     <header class="absolute z-20 top-7 left-0 w-full">
@@ -20,36 +47,50 @@
                             <RouterLink to="/" class="text-base">Flights & Hotels</RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/" class="text-base">Tour</RouterLink>
+                            <RouterLink to="/tours" class="text-base">Tour</RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/" class="text-base">Visa</RouterLink>
+                            <RouterLink to="/visas" class="text-base">Visa</RouterLink>
                         </li>
                     </ul>
                 </nav>
 
-                <button>
-                    <RouterLink to="/" class="text-base text-white bg-prime-color rounded-lg py-3 px-8">
-                        Sign up
+                <!-- <button>
+                    <RouterLink to="/signin" class="text-base text-white bg-prime-color rounded-lg py-3 px-8">
+                        Sign in
                     </RouterLink>
-                </button>
+                </button> -->
 
-                <select v-model="$i18n.locale">
-                    <option value="en">English</option>
-                    <option value="ru">Russian</option>
-                    <option value="tm">Turkmen</option>
-                </select>
+                <div class="flex items-center gap-4">
+                    <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
+                        class="text-base text-white bg-[#223A60] rounded-lg py-3 px-6 hover:bg-[#1B2E50] transition">
+                        {{ userDisplayName }}
+                    </button>
+
+                    <!-- Show Sign in if not logged in -->
+                    <RouterLink v-else to="/signin"
+                        class="text-base text-white bg-[#223A60] rounded-lg py-3 px-6 hover:bg-[#1B2E50] transition">
+                        Sign in
+                    </RouterLink>
+                    <!-- Custom Locale Selector -->
+                    <div class="relative">
+                        <select v-model="selectedLocale" @change="changeLocale"
+                            class="py-2 px-4 border border-[#223A60] text-center rounded-lg bg-white text-[#223A60] cursor-pointer appearance-none">
+                            <option value="en">English</option>
+                            <option value="ru">Russian</option>
+                            <option value="tm">Turkmen</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 </template>
 
 <style lang="scss" scoped>
-
-    .inner {
-        background: linear-gradient(90.12deg, rgba(234, 240, 240, 0.3) 0%, rgba(234, 240, 240, 0.2) 100%);
-        backdrop-filter: blur(5.5px);
-        border-radius: 14px;
-    }
-
+.inner {
+    background: linear-gradient(90.12deg, rgba(234, 240, 240, 0.3) 0%, rgba(234, 240, 240, 0.2) 100%);
+    backdrop-filter: blur(5.5px);
+    border-radius: 14px;
+}
 </style>
