@@ -78,7 +78,7 @@ const changeLocale = () => {
                             class="py-2 px-4 border border-[#223A60] text-center rounded-lg bg-white text-[#223A60] cursor-pointer appearance-none">
                             <option value="en">English</option>
                             <option value="ru">Russian</option>
-                            <option value="tm">Turkmen</option>
+                            <option value="tk">Turkmen</option>
                         </select>
                     </div>
                 </div>

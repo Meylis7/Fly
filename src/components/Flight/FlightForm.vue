@@ -9,7 +9,6 @@
     import plus from '@/assets/images/svg/plus.svg'
     import calendar from '@/assets/images/svg/calendar.svg'
 
-
     const route = useRoute()
     const router = useRouter()
 
@@ -38,8 +37,6 @@
             isRotating.value = false;
         }, 500); // Match the animation duration
     };
-
-
 
     // Calendar inputs ======================================================
     const departureDate = ref(null);
@@ -86,10 +83,6 @@
             returnCalendarVisible.value = false;
         }
     };
-
-
-
-
 
     // Modal people count ======================================
 
@@ -154,12 +147,6 @@
 
         // Navigate to results with query parameters
         if (route.name === 'flights') {
-            // router.replace({
-            //     name: 'flights',
-            //     query: queryParams,
-            //     force: true
-            // })
-
             window.location.href = router.resolve({
                 name: 'flights',
                 query: queryParams
@@ -278,10 +265,6 @@
         arrivalCityCode.value = selectedAirport.airportCode;
     };
 </script>
-
-
-
-
 
 <template>
     <form class="w-full relative z-10" @submit.prevent="handleSubmit">
