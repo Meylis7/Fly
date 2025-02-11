@@ -19,12 +19,12 @@
             <div class="wrapper pt-[160px]">
                 <div class="max-w-[1200px] m-auto">
                     <h1 class="mb-6 text-[38px] leading-snug font-bold text-prime-color text-center">
-                        Start your adventure with Jahankeshde <br>
+                        Start your adventure with Fly-Ashgabat<br>
                         where your perfect trip begins.
                     </h1>
                     <!-- <p class="text-lg font-medium opacity-60 text-center">
                         Experience the ease of booking your dream vacations and creating unforgettable memories with
-                        Jahankeshde – your ultimate partner for seamless travel planning.
+                        Fly-Ashgabat– your ultimate partner for seamless travel planning.
                     </p> -->
                 </div>
 

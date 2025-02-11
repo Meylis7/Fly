@@ -23,9 +23,6 @@ const setActiveTab = (tab) => {
 };
 </script>
 
-
-
-
 <template>
     <section class="profile mt-[150px] pt-[50px] pb-[100px] bg-[#F9F9F9]">
         <div class="auto_container">
@@ -39,12 +36,13 @@ const setActiveTab = (tab) => {
                         <img src="@/assets/images/user.png" class="w-40 object-contain" alt="user-img">
 
                         <h4 class="text-2xl font-semibold mb-2">
-                            Amanow Aman
+                            {{ userStore.user?.firstname }} {{ userStore.user?.lastname }}
                         </h4>
 
                         <p class="text-base font-normal">
-                            Aman@gmail.com
+                            {{ userStore.user?.email }}
                         </p>
+
                     </div>
 
                     <div class="flex items-start justify-between mt-8">

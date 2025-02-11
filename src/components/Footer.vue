@@ -15,7 +15,7 @@
                         </RouterLink>
 
                         <p class="text-base font-normal max-w-[300px]">
-                            Jahankeshde – Your trusted partner in seamless travel and unforgettable adventures.
+                            Fly-Ashgabat– Your trusted partner in seamless travel and unforgettable adventures.
                         </p>
                     </div>
 

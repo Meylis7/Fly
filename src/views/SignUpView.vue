@@ -195,7 +195,7 @@ const register = async () => {
                         <p v-if="errors.api" class="text-red-500 text-center w-full">{{ errors.api }}</p>
 
                         <p class="text-sm font-medium text-[#112211] text-center w-full">
-                            Already have an account? <a href="#" class="text-[#FF8682]">Login</a>
+                            Already have an account? <RouterLink to="/signup" class="text-[#FF8682]">Login</RouterLink>
                         </p>
                     </form>
                 </div>

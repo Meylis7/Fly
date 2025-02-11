@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref,watchEffect } from 'vue';
+import { computed, ref, watchEffect, onMounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import logo from "@/assets/images/logo.png";
@@ -8,8 +8,8 @@ const router = useRouter();
 const userStore = useUserStore();
 
 // Ensure Header updates when user logs in or out
-watchEffect(() => {
-    userStore.user = JSON.parse(localStorage.getItem('user')) || null;
+onMounted(() => {
+    userStore.loadUser();
 });
 
 // Computed user name

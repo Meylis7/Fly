@@ -126,7 +126,7 @@ const login = async () => {
 
 
                         <p class="text-sm font-medium text-[#112211] text-center w-full">
-                            Don’t have an account? <a href="#" class="text-[#FF8682]">Sign up</a>
+                            Don’t have an account? <RouterLink to="/signup" class="text-[#FF8682]">Sign up</RouterLink>
                         </p>
                     </form>
 

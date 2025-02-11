@@ -8,7 +8,7 @@ export default {
     signup: "Sign up",
   },
   herTitle:
-    "Start your adventure with Jahankeshde where your perfect trip begins.",
+    "Start your adventure with Fly-Ashgabatwhere your perfect trip begins.",
 
   searchForm: {
     tabs: {
@@ -104,7 +104,7 @@ export default {
   seeMore: "See All",
   viewMore: "View More",
   footer: {
-    text: "Jahankeshde – Your trusted partner in seamless travel and unforgettable adventures.",
+    text: "Fly-Ashgabat– Your trusted partner in seamless travel and unforgettable adventures.",
     usefullLink: "Useful Link",
     socialMedia: "Social media",
     copyright: "© 2024 Jahankeshde. All Rights Reserved",
