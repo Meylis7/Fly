@@ -2,10 +2,10 @@ import { createI18n } from "vue-i18n";
 import { watch } from "vue";
 import en from "./locales/en.js";
 import ru from "./locales/ru.js";
-import tm from "./locales/tk.js";
+import tk from "./locales/tk.js";
 
 // Get saved language from localStorage or default to 'en'
-const savedLanguage = localStorage.getItem("user-language") || "en";
+const savedLanguage = localStorage.getItem("locale") || "en";
 
 function loadLocaleMessages() {
   const locales = [{ en: en }, { ru: ru }, { tk: tk }];
