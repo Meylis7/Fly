@@ -7,7 +7,7 @@ const apiRequest = async (method, endpoint, data = null) => {
     try {
         const token = localStorage.getItem('authToken');
         const locale = localStorage.getItem('locale') || 'en';
-        console.log(token);
+        
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ const apiRequest = async (method, endpoint, data = null) => {
         });
 
         // ✅ If response status is 200, return response data directly
-        if (response.status === 200) {
+        if (response.status >= 200 && response.status < 300) {
             return response.data;
         }
 
