@@ -109,4 +109,5 @@ export default {
     socialMedia: "Social media",
     copyright: "© 2024 Jahankeshde. All Rights Reserved",
   },
+  
 };
