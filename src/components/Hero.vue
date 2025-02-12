@@ -18,9 +18,9 @@
         <div class="auto_container">
             <div class="wrapper pt-[160px]">
                 <div class="max-w-[1200px] m-auto">
-                    <h1 class="mb-6 text-[38px] leading-snug font-bold text-prime-color text-center">
-                        Start your adventure with Fly-Ashgabat<br>
-                        where your perfect trip begins.
+                    <h1
+                        class="mb-6 text-[38px] max-w-[950px] mx-auto leading-snug font-bold text-prime-color text-center">
+                        {{ $t("heroTitle") }}
                     </h1>
                     <!-- <p class="text-lg font-medium opacity-60 text-center">
                         Experience the ease of booking your dream vacations and creating unforgettable memories with
@@ -39,11 +39,12 @@
                                 <g clip-path="url(#clip0_69_11075)">
                                     <path
                                         d="M11.6209 9.33333L8.91544 0H12.1319C12.7608 -2.06927e-06 13.3781 0.169451 13.9189 0.49054C14.4596 0.811629 14.9039 1.27249 15.2049 1.82467L18.9791 9.33333H11.6209ZM24.4986 11.6667H5.81677L2.7986 8.64617C2.52127 8.35391 2.1457 8.17447 1.74408 8.14233C1.34246 8.1102 0.943136 8.22763 0.622858 8.47208C0.302579 8.71652 0.0839495 9.07071 0.00899011 9.46658C-0.0659693 9.86245 0.00803174 10.2721 0.21677 10.6167L3.97344 17.5H12.3128L8.18744 28H11.7609C12.3779 28.0025 12.9844 27.8402 13.5176 27.5299C14.0509 27.2195 14.4916 26.7725 14.7943 26.2348L20.1458 17.5H27.9986V15.1667C27.9986 14.2384 27.6299 13.3482 26.9735 12.6918C26.3171 12.0354 25.4269 11.6667 24.4986 11.6667Z"
-                                         :fill="activeTab === 'flights' ? 'white' : '#223A60'" />
+                                        :fill="activeTab === 'flights' ? 'white' : '#223A60'" />
                                 </g>
                                 <defs>
                                     <clipPath id="clip0_69_11075">
-                                        <rect width="28" height="28"  :fill="activeTab === 'flights' ? 'white' : '#223A60'" />
+                                        <rect width="28" height="28"
+                                            :fill="activeTab === 'flights' ? 'white' : '#223A60'" />
                                     </clipPath>
                                 </defs>
                             </svg>

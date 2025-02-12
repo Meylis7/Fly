@@ -44,13 +44,13 @@ const changeLocale = () => {
                 <nav>
                     <ul class="flex items-center gap-12">
                         <li>
-                            <RouterLink to="/" class="text-base">Flights & Hotels</RouterLink>
+                            <RouterLink to="/" class="text-base">{{ $t("header.links.flightHotel") }}</RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/tours" class="text-base">Tour</RouterLink>
+                            <RouterLink to="/tours" class="text-base">{{ $t("header.links.tour") }}</RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/visas" class="text-base">Visa</RouterLink>
+                            <RouterLink to="/visas" class="text-base">{{ $t("header.links.visa") }}</RouterLink>
                         </li>
                     </ul>
                 </nav>
@@ -70,7 +70,7 @@ const changeLocale = () => {
                     <!-- Show Sign in if not logged in -->
                     <RouterLink v-else to="/signin"
                         class="text-base text-white bg-[#223A60] rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
-                        Sign in
+                        {{ $t("header.signin") }}
                     </RouterLink>
 
                     <!-- Custom Locale Selector -->

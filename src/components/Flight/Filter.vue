@@ -6,62 +6,62 @@
     <aside
         class="aside p-5 w-[350px] bg-white rounded-xl border border-solid border-[#223a604d] shadow-[0px_4px_5px_rgba(0, 0, 0, 0.15)]">
         <h3 class=" text-xl font-semibold mb-10">
-            Filter by
+            {{ $t("filter.title") }}
         </h3>
 
         <form>
             <div class="block mb-5 border-solid border-0 border-b border-b-[#E7E7E7] pb-7">
                 <div class="filter_check mb-[14px]">
                     <input type="checkbox" id="cheap">
-                    <label class="text-base font-normal relative block" for="cheap">Cheaper first</label>
+                    <label class="text-base font-normal relative block" for="cheap">{{ $t("filter.sort.val_1") }}</label>
                 </div>
 
                 <div class="filter_check mb-[14px]">
                     <input type="checkbox" id="fast">
-                    <label class="text-base font-normal relative block" for="fast">First the fast ones</label>
+                    <label class="text-base font-normal relative block" for="fast">{{ $t("filter.sort.val_2") }}</label>
                 </div>
 
                 <div class="filter_check">
                     <input type="checkbox" id="time">
-                    <label class="text-base font-normal relative block" for="time">By departure time</label>
+                    <label class="text-base font-normal relative block" for="time">{{ $t("filter.sort.val_3") }}</label>
                 </div>
             </div>
 
             <div class="block mb-5 border-solid border-0 border-b border-b-[#E7E7E7] pb-7">
                 <h5 class=" text-lg font-semibold mb-4">
-                    Stop
+                    {{ $t("filter.stops.title") }}
                 </h5>
 
                 <div class="filter_check mb-[14px]">
                     <input type="checkbox" id="nonstop">
-                    <label class="text-base font-normal relative block" for="nonstop">Nonstop (10)</label>
+                    <label class="text-base font-normal relative block" for="nonstop">{{ $t("filter.stops.val_1") }} (10)</label>
                 </div>
 
                 <div class="filter_check mb-[14px]">
                     <input type="checkbox" id="1_stop">
-                    <label class="text-base font-normal relative block" for="1_stop">1 stop (4)</label>
+                    <label class="text-base font-normal relative block" for="1_stop">{{ $t("filter.stops.val_2") }} (4)</label>
                 </div>
 
                 <div class="filter_check mb-[14px]">
                     <input type="checkbox" id="2_stop">
-                    <label class="text-base font-normal relative block" for="2_stop">2+ stop (34)</label>
+                    <label class="text-base font-normal relative block" for="2_stop">{{ $t("filter.stops.val_3") }} (34)</label>
                 </div>
             </div>
 
             <div class="block mb-5 border-solid border-0 border-b border-b-[#E7E7E7] pb-7">
                 <h5 class=" text-lg font-semibold mb-4">
-                    Baggage
+                    {{ $t("filter.baggage.title") }}
                 </h5>
 
                 <div class="filter_radio mb-[14px]">
                     <input type="checkbox" id="luggage">
-                    <label class="text-base font-normal relative block" for="luggage">Include luggage</label>
+                    <label class="text-base font-normal relative block" for="luggage">{{ $t("filter.baggage.val_1") }}</label>
                 </div>
             </div>
 
             <div class="flex flex-wrap mb-5 gap-x-[10px] border-solid border-0 border-b border-b-[#E7E7E7] pb-7">
                 <h5 class=" text-lg font-semibold mb-4 w-full">
-                    Departure time
+                    {{ $t("filter.departTime.title") }}
                 </h5>
 
                 <div class="filter_time mb-[10px] w-[calc(50%-5px)]">
@@ -79,11 +79,11 @@
                         </span>
 
                         <p class="text-[13px] font-semibold">
-                            Morning
+                            {{ $t("filter.departTime.val_1") }}
                         </p>
 
                         <p class="text-[10px] font-semibold">
-                            (05:00 am - 11:59 am)
+                            {{ $t("filter.departTime.text_1") }}
                         </p>
                     </label>
                 </div>
@@ -130,11 +130,11 @@
                         </span>
 
                         <p class="text-[13px] font-semibold">
-                            Afternoon
+                            {{ $t("filter.departTime.val_2") }}
                         </p>
 
                         <p class="text-[10px] font-semibold">
-                            (12:00 am - 05:59 am)
+                            {{ $t("filter.departTime.text_2") }}
                         </p>
                     </label>
                 </div>
@@ -160,11 +160,11 @@
                         </span>
 
                         <p class="text-[13px] font-semibold">
-                            Evening
+                            {{ $t("filter.departTime.val_3") }}
                         </p>
 
                         <p class="text-[10px] font-semibold">
-                            (06:00 am - 11:59 am)
+                            {{ $t("filter.departTime.text_3") }}
                         </p>
                     </label>
                 </div>
@@ -172,7 +172,7 @@
 
             <div class="flex flex-wrap mb-5 gap-x-[10px] border-solid border-0 border-b border-b-[#E7E7E7] pb-7">
                 <h5 class=" text-lg font-semibold mb-4 w-full">
-                    Arrival time
+                    {{ $t("filter.arriveTime.title") }}
                 </h5>
 
                 <div class="filter_time mb-[10px] w-[calc(50%-5px)]">
@@ -190,11 +190,11 @@
                         </span>
 
                         <p class="text-[13px] font-semibold">
-                            Morning
+                            {{ $t("filter.departTime.val_1") }}
                         </p>
 
                         <p class="text-[10px] font-semibold">
-                            (05:00 am - 11:59 am)
+                            {{ $t("filter.departTime.text_1") }}
                         </p>
                     </label>
                 </div>
@@ -241,11 +241,11 @@
                         </span>
 
                         <p class="text-[13px] font-semibold">
-                            Afternoon
+                            {{ $t("filter.departTime.val_2") }}
                         </p>
 
                         <p class="text-[10px] font-semibold">
-                            (12:00 am - 05:59 am)
+                            {{ $t("filter.departTime.text_2") }}
                         </p>
                     </label>
                 </div>
@@ -271,11 +271,11 @@
                         </span>
 
                         <p class="text-[13px] font-semibold">
-                            Evening
+                            {{ $t("filter.departTime.val_3") }}
                         </p>
 
                         <p class="text-[10px] font-semibold">
-                            (06:00 am - 11:59 am)
+                            {{ $t("filter.departTime.text_3") }}
                         </p>
                     </label>
                 </div>
@@ -283,7 +283,7 @@
 
             <div class="block mb-5 border-solid border-0 border-b border-b-[#E7E7E7] pb-7">
                 <h5 class=" text-lg font-semibold mb-4">
-                    Airlines
+                    {{ $t("filter.airlines.title") }}
                 </h5>
 
                 <div class="filter_check mb-[14px]">
@@ -304,7 +304,7 @@
 
             <button type="reset"
                 class="w-full cursor-pointer border border-solid border-[#223A60] rounded-lg p-3 transition-all hover:bg-[#223A60] hover:text-white">
-                Reset
+                {{ $t("filter.btn") }}
             </button>
         </form>
     </aside>

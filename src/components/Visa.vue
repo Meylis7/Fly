@@ -58,7 +58,7 @@
 
     <RouterLink to="/visas" class="bg-[#223A60] py-5 px-[25px] block w-fit mx-auto mt-5 cursor-pointer rounded-xl">
         <p class=" text-base text-white font-semibold flex items-center">
-            View More
+            {{ $t("viewMore") }}
 
             <span class="block ml-3">
                 <svg width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -11,17 +11,19 @@
                     <div class="col">
                         <RouterLink to="/" class="flex items-center mb-5">
                             <img src="@/assets/images/logo.png" alt="logo">
-                            <p class="text-white text-3xl font-bold ml-4">Jahankeşde</p>
+                            <p class="text-white text-3xl font-bold ml-4">
+                                {{ $t("footer.title") }}
+                            </p>
                         </RouterLink>
 
                         <p class="text-base font-normal max-w-[300px]">
-                            Fly-Ashgabat– Your trusted partner in seamless travel and unforgettable adventures.
+                            {{ $t("footer.text") }}
                         </p>
                     </div>
 
                     <div class="col">
                         <h3 class=" text-[22px] mb-[30px] font-bold">
-                            Useful Link
+                            {{ $t("footer.usefullLink") }}
                         </h3>
 
                         <div class="flex items-center gap-10">
@@ -36,11 +38,11 @@
                                 </span>
 
                                 <p class="text-base font-normal ml-3">
-                                    Flights & Hotels
+                                    {{ $t("header.links.flightHotel") }}
                                 </p>
                             </RouterLink>
 
-                            <RouterLink to="/" class="flex items-center text-white">
+                            <RouterLink to="/tours" class="flex items-center text-white">
                                 <span>
                                     <svg width="8" height="11" viewBox="0 0 8 11" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -51,11 +53,11 @@
                                 </span>
 
                                 <p class="text-base font-normal ml-3">
-                                    Tour
+                                    {{ $t("header.links.tour") }}
                                 </p>
                             </RouterLink>
 
-                            <RouterLink to="/" class="flex items-center text-white">
+                            <RouterLink to="/visas" class="flex items-center text-white">
                                 <span>
                                     <svg width="8" height="11" viewBox="0 0 8 11" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +68,7 @@
                                 </span>
 
                                 <p class="text-base font-normal ml-3">
-                                    Visa
+                                    {{ $t("header.links.visa") }}
                                 </p>
                             </RouterLink>
                         </div>
@@ -74,7 +76,7 @@
 
                     <div class="col">
                         <h3 class=" text-[22px] mb-[30px] font-bold">
-                            Social media
+                            {{ $t("footer.socialMedia") }}
                         </h3>
 
                         <div class="flex items-center gap-[15px]">
@@ -197,7 +199,7 @@
                 </div>
 
                 <p class="py-[30px] text-center text-white font-normal text-base mt-[50px]">
-                    © 2024 Jahankeshde. All Rights Reserved
+                    {{ $t("footer.copyright") }}
                 </p>
             </div>
         </div>

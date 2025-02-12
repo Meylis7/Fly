@@ -36,7 +36,9 @@
                     fill="#223A60" />
             </svg>
         </span>
-        Go back
+        <p>
+            {{ $t("goBack") }}
+        </p>
     </RouterLink>
 </template>
 

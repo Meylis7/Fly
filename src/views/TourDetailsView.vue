@@ -150,7 +150,7 @@
                 </a>
 
                 <div class="relative !mt-[100px]">
-                    <Tour title="Tours" />
+                    <Tour title="$t('searchForm.header.links.tour')"  />
                 </div>
 
                 <div class="block relative my-[60px]">

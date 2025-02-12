@@ -94,7 +94,7 @@ const toggleDetails = (index) => {
 
                                 <div class="block mx-3">
                                     <p class="text-base font-semibold text-center mb-2">
-                                        {{ flight.Outward.Duration.Hours }}hr {{ flight.Outward.Duration.Minutes }}min
+                                        {{ flight.Outward.Duration.Hours }}{{ $t("ticket.hour") }} {{ flight.Outward.Duration.Minutes }}{{ $t("ticket.minute") }}
                                     </p>
 
                                     <span class="flex items-center gap-[10px]">
@@ -105,14 +105,13 @@ const toggleDetails = (index) => {
 
                                     <p class="text-sm font-semibold text-center mt-2">
                                         <template v-if="!flight.Outward.Stops || flight.Outward.Stops.length === 0">
-                                            Nonstop
+                                            {{ $t("ticket.nonstop") }}
                                         </template>
                                         <template v-else>
                                             <span v-for="(stop, index) in flight.Outward.Stops" :key="index"
                                                 class="block">
-                                                {{ (stop.Duration.Hours || 0) + 'h ' + (stop.Duration.Minutes || 0) +
-                                                    'min '
-                                                    + stop.Location.Airport.en }}
+                                                {{ (stop.Duration.Hours || 0) + $t("ticket.hour") + (stop.Duration.Minutes || 0) +
+                                                    $t("ticket.minute") + stop.Location.Airport.en }}
                                             </span>
                                         </template>
                                     </p>
@@ -162,7 +161,7 @@ const toggleDetails = (index) => {
                                     </span>
                                     <p class="text-sm font-semibold text-center mt-2">
                                         <template v-if="!flight.Return.Stops || flight.Return.Stops.length === 0">
-                                            Nonstop
+                                            {{ $t("ticket.nonstop") }}
                                         </template> <template v-else>
                                             <span v-for="(stop, index) in flight.Return.Stops" :key="index"
                                                 class="block">
@@ -197,14 +196,14 @@ const toggleDetails = (index) => {
 
                         <button @click="goToBookingPage"
                             class="block text-base font-normal text-white text-center py-4 w-[200px] bg-prime-color rounded-lg cursor-pointer">
-                            Book now
+                            {{ $t("ticket.bookNow") }}
                         </button>
                     </div>
 
                     <button type="button" class="details cursor-pointer flex items-center mt-5"
                         @click.stop="toggleDetails(index)">
                         <p class="text-sm font-normal mr-1">
-                            Details
+                            {{ $t("ticket.details") }}
                         </p>
 
                         <span :class="['transition-all', openIndex === index ? '-rotate-180' : '']" class="block">
@@ -224,7 +223,7 @@ const toggleDetails = (index) => {
             class="details-info block p-5 mt-2 relative z-20 rounded-lg bg-white border border-solid border-[#223a604d]">
             <div class="Departure block">
                 <h4 class="text-base font-bold text-center">
-                    Departure
+                    {{ $t("ticket.departure") }}
                 </h4>
 
                 <div v-for="(segment, index) in flight.Outward.Segments" :key="segment.FlightNumber"
@@ -236,7 +235,7 @@ const toggleDetails = (index) => {
 
             <div class="Return block mt-4 pt-4 border-dashed border-0 border-t border-t-[#223A60]" v-if="flight.Return">
                 <h4 class="text-base font-bold text-center">
-                    Return
+                    {{ $t("ticket.return") }}
                 </h4>
 
                 <div v-for="(segment, index) in flight.Return.Segments" :key="segment.FlightNumber"

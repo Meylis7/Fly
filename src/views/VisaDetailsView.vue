@@ -115,7 +115,7 @@
                 </div>
 
                 <div class="relative !mt-[100px]">
-                    <Visa title="Visas" />
+                    <Visa :title="$t('searchForm.header.links.visa')" />
                 </div>
             </div>
         </div>

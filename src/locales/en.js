@@ -6,9 +6,10 @@ export default {
       visa: "Visa",
     },
     signup: "Sign up",
+    signin: "Sign in",
   },
   heroTitle:
-    "Start your adventure with Fly-Ashgabatwhere your perfect trip begins.",
+    "Start your adventure with Fly-Ashgabat where your perfect trip begins.",
 
   searchForm: {
     tabs: {
@@ -33,6 +34,7 @@ export default {
       obratno: "Return date",
     },
     passengers: {
+      label: "Passenger",
       placeholder: "Passengers",
       value: "1 passenger",
     },
@@ -69,19 +71,19 @@ export default {
       {
         id: "adults_count",
         title: "Adults",
-        text: "over 12 years old at the time of flight",
+        text: "Over 12 years old at the time of flight",
         value: 1,
       },
       {
         id: "childs_count",
         title: "Children",
-        text: "from 2 to 12 years old at the time of the flight",
+        text: "From 2 to 12 years old at the time of the flight",
         value: 0,
       },
       {
         id: "infant_count",
         title: "Infants",
-        text: "up to 2 years (without a seat, in the arms of an adult)",
+        text: "Up to 2 years (without a seat, in the arms of an adult)",
         value: 0,
       },
     ],
@@ -97,17 +99,18 @@ export default {
     title: "Explore the Tours",
     text: "Planning a getaway or heading home? Our travel tools make every journey seamless.",
   },
-  tour: {
+  visa: {
     title: "Unlock the World with Your Visa",
     text: "Wherever you're headed, our tools ensure a smooth and stress-free journey.",
   },
   seeMore: "See All",
   viewMore: "View More",
   footer: {
+    title: "Fly-Ashgabat",
     text: "Fly-Ashgabat– Your trusted partner in seamless travel and unforgettable adventures.",
     usefullLink: "Useful Link",
     socialMedia: "Social media",
-    copyright: "© 2024 Jahankeshde. All Rights Reserved",
+    copyright: "© 2024 Fly-Ashgabat. All Rights Reserved",
   },
   goBack: "Go back",
   loadMore: "Load more",
@@ -127,6 +130,7 @@ export default {
       val_1: "2 stop",
     },
     baggage: {
+      title: "Baggage",
       val_1: "Include luggage",
     },
     departTime: {
@@ -148,10 +152,23 @@ export default {
   },
 
   ticket: {
-    hour: "hr",
-    minute: "min",
+    hour: "hr ",
+    minute: "min ",
     bookNow: "Book Now",
+    details: "Details",
+    nonstop: "Nonstop",
     travelClass: "Travel Class",
+    departure: "Departure",
+    return: "Return",
+    
+    flightDuration: "Flight Duration",
+    baggage: "Baggage",
+    cabinBag: "Cabin bag",
+    change: "Change",
+    cancellation: "Cancellation",
+    notInclude: "Not included",
+    waitingDuration: "Waiting duration",
+    duration: "Duration",
   },
 
   booking: {

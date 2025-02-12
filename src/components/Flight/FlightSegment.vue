@@ -69,9 +69,9 @@ defineProps({
                     </svg>
                 </span>
                 <p class="text-sm font-normal">
-                    <span class="font-semibold"> Flight Duration: </span> {{ segment.Duration.Hours }}
-                    Hr.
-                    {{ segment.Duration.Min }} Min.
+                    <span class="font-semibold">{{ $t("ticket.flightDuration") }}: </span> {{ segment.Duration.Hours }}
+                    {{ $t("ticket.hour") }}
+                    {{ segment.Duration.Min }}  {{ $t("ticket.minute") }}
                 </p>
             </div>
 
@@ -91,9 +91,9 @@ defineProps({
                     </svg>
                 </span>
                 <p class="text-sm font-normal">
-                    <span class="font-semibold">Baggage: </span>
+                    <span class="font-semibold">{{ $t("ticket.baggage") }}: </span>
                     <span v-if="segment.Features.HoldBag"> {{ segment.Features.HoldBag.Value }}</span>
-                    <span v-else>Not included</span>
+                    <span v-else>{{ $t("ticket.notInclude") }}</span>
                 </p>
             </div>
 
@@ -116,7 +116,7 @@ defineProps({
                     </span>
                 </span>
                 <p class="text-sm font-normal">
-                    <span class="font-semibold">Cabin bag: </span>
+                    <span class="font-semibold">{{ $t("ticket.cabinBag") }}: </span>
                     <span v-if="segment.Features.SmallCabinBag">
                         {{ segment.Features.SmallCabinBag.Value }}
                     </span>
@@ -124,7 +124,7 @@ defineProps({
                         {{ segment.Features.LargeCabinBag.Value }}
                     </span>
                     <span v-else>
-                        Not included
+                        {{ $t("ticket.notInclude") }}
                     </span>
                 </p>
             </div>
@@ -145,9 +145,9 @@ defineProps({
                     </svg>
                 </span>
                 <p class="text-sm font-normal">
-                    <span class="font-semibold">Change: </span>
+                    <span class="font-semibold">  {{ $t("ticket.change") }}: </span>
                     <span v-if="segment.Features.FlightChange"> {{ segment.Features.FlightChange.Value }}</span>
-                    <span v-else>Not included</span>
+                    <span v-else>{{ $t("ticket.notInclude") }}</span>
                 </p>
             </div>
 
@@ -168,9 +168,9 @@ defineProps({
                     </svg>
                 </span>
                 <p class="text-sm font-normal">
-                    <span class="font-semibold">Cancellation: </span>
+                    <span class="font-semibold">{{ $t("ticket.cancellation") }}: </span>
                     <span v-if="segment.Features.Cancellation"> {{ segment.Features.Cancellation.Value }}</span>
-                    <span v-else>Not included</span>
+                    <span v-else>{{ $t("ticket.notInclude") }}</span>
                 </p>
             </div>
         </div>
@@ -178,13 +178,13 @@ defineProps({
 
     <div v-if="stops && stops[index]" class="stopover bg-[#E8F0FE] py-3 mt-3 rounded">
         <p class="text-sm font-bold text-[#223A60] text-center ">
-            Waiting duration:
+            {{ $t("ticket.waitingDuration") }}:
             <span class="font-normal">
                 <span class="font-semibold">{{ stops[index].Location.Airport.en
                     }}</span>,
                 {{ stops[index].Location.Country.en }}
-                (Duration: {{ stops[index].Duration.Hours }}h {{
-                    stops[index].Duration.Minutes }}m)
+                ({{ stops[index].Duration.Hours }} {{ $t("ticket.hour") }} {{
+                    stops[index].Duration.Minutes }} {{ $t("ticket.minute") }})
             </span>
         </p>
     </div>

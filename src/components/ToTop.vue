@@ -26,7 +26,7 @@
 <template>
     <div>
         <button v-if="showScrollToTop" @click="scrollToTop" class="scroll-to-top">
-            Scroll to Top
+            {{ $t("scrollTop") }}
         </button>
     </div>
 </template>

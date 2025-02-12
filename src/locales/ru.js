@@ -6,6 +6,7 @@ export default {
       visa: "Виза",
     },
     signup: "Зарегистрироваться",
+    signin: "Войти",
   },
   heroTitle:
     "Начните свое приключение с Fly-Ashgabat, где начинается ваше идеальное путешествие.",
@@ -33,6 +34,7 @@ export default {
       obratno: "Дата возвращения",
     },
     passengers: {
+      label: "Пассажир",
       placeholder: "Пассажиры",
       value: "1 пассажир",
     },
@@ -57,19 +59,19 @@ export default {
       {
         id: "adults_count",
         title: "Взрослые",
-        text: "старше 12 лет на момент полета",
+        text: "Старше 12 лет на момент полета",
         value: 1,
       },
       {
         id: "childs_count",
         title: "Дети",
-        text: "от 2 до 12 лет на момент полета",
+        text: "От 2 до 12 лет на момент полета",
         value: 0,
       },
       {
         id: "infant_count",
         title: "Младенцы",
-        text: "до 2 лет (без места, на руках у взрослого)",
+        text: "До 2 лет (без места, на руках у взрослого)",
         value: 0,
       },
     ],
@@ -92,10 +94,11 @@ export default {
   seeMore: "Смотреть все",
   viewMore: "Посмотреть больше",
   footer: {
+    title: "Fly-Ashgabat",
     text: "Fly-Ashgabat — Ваш надежный партнер в путешествиях и незабываемых приключениях.",
     usefullLink: "Полезные ссылки",
     socialMedia: "Социальные сети",
-    copyright: "© 2024 Jahankeshde. Все права защищены",
+    copyright: "© 2024 Fly-Ashgabat. Все права защищены",
   },
   goBack: "Вернуться назад",
   loadMore: "Загрузить еще",
@@ -115,6 +118,7 @@ export default {
       val_3: "2 пересадки",
     },
     baggage: {
+      title: "Багаж",
       val_1: "Включен багаж",
     },
     departTime: {
@@ -122,9 +126,9 @@ export default {
       val_1: "Утро",
       val_2: "После обеда",
       val_3: "Вечер",
-      text_1: "(05:00 am - 11:59 am)",
-      text_2: "(12:00 pm - 05:59 pm)",
-      text_3: "(06:00 pm - 11:59 pm)",
+      text_1: "(05:00 - 11:59)",
+      text_2: "(12:00 - 17:59)",
+      text_3: "(18:00 - 23:59)",
     },
     arriveTime: {
       title: "Время прибытия",
@@ -136,10 +140,23 @@ export default {
   },
 
   ticket: {
-    hour: "ч.",
-    minute: "мин.",
-    bookNow: "Забронировать сейчас",
+    hour: "ч. ",
+    minute: "мин. ",
+    bookNow: "Забронировать",
+    details: "Подробности",
+    nonstop: "Без пересадок",
     travelClass: "Класс путешествия",
+    departure: "Вылет",
+    return: "Возвращение",
+
+    flightDuration: "Продолжительность полёта",
+    baggage: "Багаж",
+    cabinBag: "Ручная кладь",
+    change: "Изменение",
+    cancellation: "Отмена",
+    notInclude: "Не включено",
+    waitingDuration: "Время ожидания",
+    duration: "Продолжительность",
   },
 
   booking: {

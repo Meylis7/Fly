@@ -61,7 +61,7 @@
 <template>
     <button v-if="displayedItems.length < totalItems && !loadingMore" @click="loadMore"
         class="bg-prime-color text-white block px-6 py-2 mx-auto rounded-lg mt-10">
-        Load More
+        {{ $t("loadMore") }}
     </button>
     <div v-if="loadingMore" class="flex justify-center w-full my-10">
         <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />

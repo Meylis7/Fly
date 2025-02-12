@@ -14,10 +14,10 @@
       <div class="auto_container">
         <div class="wrapper relative">
           <h2 class=" text-[32px] text-prime-color font-semibold mb-4">
-            Explore the Tours
+            {{ $t("tour.title") }}
           </h2>
           <p class="text-base">
-            Planning a getaway or heading home? Our travel tools make every journey seamless.
+            {{ $t("tour.text") }}
           </p>
 
           <Tour :Btn="true" />
@@ -30,10 +30,10 @@
       <div class="auto_container">
         <div class="wrapper relative">
           <h2 class=" text-[32px] text-prime-color font-semibold mb-4">
-            Unlock the World with Your Visa
+            {{ $t("visa.title") }}
           </h2>
           <p class="text-base">
-            Wherever you're headed, our tools ensure a smooth and stress-free journey.
+            {{ $t("visa.text") }}
           </p>
 
           <Visa :Btn="true" />
