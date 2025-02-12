@@ -63,15 +63,16 @@ const changeLocale = () => {
 
                 <div class="flex items-center gap-4">
                     <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
-                        class="text-base text-white bg-[#223A60] rounded-lg py-3 px-6 hover:bg-[#1B2E50] transition">
+                        class="text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
                         {{ userDisplayName }}
                     </button>
 
                     <!-- Show Sign in if not logged in -->
                     <RouterLink v-else to="/signin"
-                        class="text-base text-white bg-[#223A60] rounded-lg py-3 px-6 hover:bg-[#1B2E50] transition">
+                        class="text-base text-white bg-[#223A60] rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
                         Sign in
                     </RouterLink>
+
                     <!-- Custom Locale Selector -->
                     <div class="relative">
                         <select v-model="selectedLocale" @change="changeLocale"

@@ -60,7 +60,9 @@ const apiService = {
 
     fetchAirports(query) {
         return apiRequest('get', `/search/airports?query=${encodeURIComponent(query)}`);
-    }
+    },
+
+    
 };
 
 export default apiService;

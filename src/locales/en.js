@@ -7,7 +7,7 @@ export default {
     },
     signup: "Sign up",
   },
-  herTitle:
+  heroTitle:
     "Start your adventure with Fly-Ashgabatwhere your perfect trip begins.",
 
   searchForm: {
@@ -109,5 +109,174 @@ export default {
     socialMedia: "Social media",
     copyright: "© 2024 Jahankeshde. All Rights Reserved",
   },
-  
+  goBack: "Go back",
+  loadMore: "Load more",
+  scrollTop: "Scroll to Top",
+
+  filter: {
+    title: "Filter By",
+    sort: {
+      val_1: "Cheaper first",
+      val_1: "First the fast ones",
+      val_1: "By departure time",
+    },
+    stops: {
+      title: "Stop",
+      val_1: "Nonstop",
+      val_1: "1 stop",
+      val_1: "2 stop",
+    },
+    baggage: {
+      val_1: "Include luggage",
+    },
+    departTime: {
+      title: "Departure time",
+      val_1: "Morning",
+      val_1: "Afternoon",
+      val_1: "Evening",
+      text_1: "(05:00 am - 11:59 am)",
+      text_2: "(12:00 am - 05:59 am)",
+      text_3: "(06:00 am - 11:59 am)",
+    },
+    arriveTime: {
+      title: "Arrival time",
+    },
+    airlines: {
+      title: "Airlines",
+    },
+    btn: "Reset",
+  },
+
+  ticket: {
+    hour: "hr",
+    minute: "min",
+    bookNow: "Book Now",
+    travelClass: "Travel Class",
+  },
+
+  booking: {
+    contact: {
+      title: "Contact information",
+      text: "We will send a ticket to the specified contact, send notifications about changes in the flight or in case of other emergency situations.",
+      firstName: {
+        label: "Firstname",
+        placeholder: "e.g. Aman",
+      },
+      lastname: {
+        label: "Lastname",
+        placeholder: "e.g. Amanow",
+      },
+      eamil: {
+        label: "Email",
+        placeholder: "e.g. Aman@gmial.com",
+      },
+      number: {
+        label: "Phone number",
+        placeholder: "Phone number",
+      },
+      gender: {
+        label: "Gender",
+        val_1: "Male",
+        val_2: "Female",
+      },
+      country: {
+        label: "Address Country",
+        placeholder: "Select country",
+      },
+      city: {
+        label: "City",
+        placeholder: "e.g. Apt 101, 123, Main St",
+      },
+      street: {
+        label: "Street",
+        placeholder: "e.g. Apt 101, 123, Main St",
+      },
+    },
+    passenger: {
+      title: "Passenger",
+      text: "Please enter your details as indicated in your travel document.",
+      personal: "Personal data",
+      documents: "Documents",
+      firstName: {
+        label: "Firstname",
+        placeholder: "e.g. Aman",
+      },
+      lastname: {
+        label: "Lastname",
+        placeholder: "e.g. Amanow",
+      },
+      birth: {
+        label: "Date of birth",
+        placeholder: "e.g. 02-10-2000",
+      },
+      gender: {
+        label: "Gender",
+        val_1: "Male",
+        val_2: "Female",
+      },
+      passportCountry: {
+        label: "Passport Country",
+        placeholder: "Select country",
+      },
+      citizenship: {
+        label: "Citizenship",
+        placeholder: "Select country",
+      },
+      passportSeries: {
+        label: "Series and number",
+        placeholder: "e.g. AE010101",
+      },
+      passportExpire: {
+        label: "Passport expiration date",
+        placeholder: "e.g. 09-11-2029",
+      },
+    },
+    payment: {
+      title: "Select payment method",
+      val_1: "Pay with balance",
+    },
+    submit: "Submit",
+  },
+
+  profile: {
+    tabs: {
+      tab_1: "Account",
+      tab_2: "Flights",
+      tab_3: "Stays",
+      tab_4: "Log out",
+    },
+
+    accaunt: {
+      firstName: {
+        label: "Firstname",
+        placeholder: "e.g. Aman",
+      },
+      lastname: {
+        label: "Lastname",
+        placeholder: "e.g. Amanow",
+      },
+      eamil: {
+        label: "Email",
+        placeholder: "e.g. Aman@gmial.com",
+      },
+      password: {
+        label: "Password",
+        placeholder: "********",
+      },
+      edit: "Edit",
+    },
+  },
+
+  loadingBooking: "Loading... Please wait.",
+  BookingTicket: {
+    title: "Booking completed successfully!",
+    subTitle: "Booking Number:",
+    goHome: "Go Home",
+    form: {
+      title: "Tickets",
+      text: "A copy of your tickets has been sent to the contact email you provided.",
+      passenger: "Passenger",
+      download: "Download",
+    },
+  },
 };

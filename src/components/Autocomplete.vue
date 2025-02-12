@@ -1,6 +1,7 @@
 <script setup>
     import { ref, reactive, watch, onMounted, onUnmounted, defineProps } from 'vue';
-    import axios from 'axios';
+    import apiService from "@/services/apiService";
+
 
     const props = defineProps({
         placeholder: {
@@ -49,9 +50,8 @@
         }
 
         try {
-            const url = `https://www.flyashgabat.com:4443/api/search/airports?query=${encodeURIComponent(searchQuery.value)}`;
-            const response = await axios.get(url);
-            state.flights = response.data.data;
+            const data = await apiService.fetchAirports(searchQuery.value);
+            state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
         } catch (error) {
             console.error("Error fetching airports:", error);
             state.flights = {};
