@@ -116,6 +116,52 @@ export default {
   loadMore: "Load more",
   scrollTop: "Scroll to Top",
 
+  login: "Login",
+  signIn: {
+    title: "Login",
+    text: "Login to access your Golobe account",
+    email: {
+      label: "Email",
+      placeholder: "Aman{@}gmail.com",
+    },
+    password: {
+      label: "Password",
+      placeholder: "**********",
+    },
+    forget: "Forgot password",
+    accountText: "Don’t have an account?",
+  },
+  signUp: {
+    title: "Sign up",
+    text: "Login to access your Golobe account",
+    name: {
+      label: "First name",
+      placeholder: "Aman",
+    },
+    lastName: {
+      label: "Last name",
+      placeholder: "Amanov",
+    },
+    email: {
+      label: "Email",
+      placeholder: "Aman{@}gmail.com",
+    },
+    company: {
+      label: "Company name",
+      placeholder: "DH HJ",
+    },
+    password: {
+      label: "Password",
+      placeholder: "**********",
+    },
+    confirmPass: {
+      label: "Confirm password",
+      placeholder: "**********",
+    },
+    createAccount: "Create account",
+    accountText: "Already have an account?",
+  },
+
   filter: {
     title: "Filter By",
     sort: {
@@ -160,7 +206,7 @@ export default {
     travelClass: "Travel Class",
     departure: "Departure",
     return: "Return",
-    
+
     flightDuration: "Flight Duration",
     baggage: "Baggage",
     cabinBag: "Cabin bag",
@@ -183,9 +229,9 @@ export default {
         label: "Lastname",
         placeholder: "e.g. Amanow",
       },
-      eamil: {
+      gmail: {
         label: "Email",
-        placeholder: "e.g. Aman@gmial.com",
+        placeholder: "e.g. Aman{'@'}gmail.com",
       },
       number: {
         label: "Phone number",
@@ -255,6 +301,8 @@ export default {
     submit: "Submit",
   },
 
+  loading: "Loading",
+
   profile: {
     tabs: {
       tab_1: "Account",
@@ -274,7 +322,7 @@ export default {
       },
       eamil: {
         label: "Email",
-        placeholder: "e.g. Aman@gmial.com",
+        placeholder: "e.g. Aman{@}gmail.com",
       },
       password: {
         label: "Password",

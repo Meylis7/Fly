@@ -104,6 +104,52 @@ export default {
   loadMore: "Ýene görkez",
   scrollTop: "Başyna gitmek",
 
+  login: "Giriş",
+  signIn: {
+    title: "Giriş",
+    text: "Golobe hasabyňyza girmek üçin giriş ediň",
+    email: {
+      label: "E-poçta",
+      placeholder: "Aman{@}gmail.com",
+    },
+    password: {
+      label: "Açarsöz",
+      placeholder: "**********",
+    },
+    forget: "Açarsözi ýatdan çykardyňyzmy?",
+    accountText: "Hasabyňyz ýokmy؟",
+  },
+  signUp: {
+    title: "Hasap döret",
+    text: "Golobe hasabyňyza girmek üçin hasap dörediň",
+    name: {
+      label: "Ady",
+      placeholder: "Aman",
+    },
+    lastName: {
+      label: "Familiýasy",
+      placeholder: "Amanow",
+    },
+    email: {
+      label: "E-poçta",
+      placeholder: "Aman{@}gmail.com",
+    },
+    company: {
+      label: "Kompaniýanyň ady",
+      placeholder: "DH HJ",
+    },
+    password: {
+      label: "Açarsöz",
+      placeholder: "**********",
+    },
+    confirmPass: {
+      label: "Açarsözi tassyklaň",
+      placeholder: "**********",
+    },
+    createAccount: "Hasap döret",
+    accountText: "Hasabyňyz barmy?",
+  },
+
   filter: {
     title: "Süzgüçler",
     sort: {
@@ -165,15 +211,15 @@ export default {
       text: "Görkezilen habara bilet iberilýär, uçuşdaky üýtgeşmeler ýa-da beýleki adatdan daşary ýagdaýlar barada habar berilýär.",
       firstName: {
         label: "Ady",
-        placeholder: "mysal üçin, Aman",
+        placeholder: "Aman",
       },
       lastname: {
         label: "Familiýasy",
-        placeholder: "mysal üçin, Amanow",
+        placeholder: "Amanow",
       },
-      eamil: {
+      gmail: {
         label: "E-poçta",
-        placeholder: "mysal üçin, Aman@gmail.com",
+        placeholder: "Aman{'@'}gmail.com",
       },
       number: {
         label: "Telefon belgisi",
@@ -190,11 +236,11 @@ export default {
       },
       city: {
         label: "Şäher",
-        placeholder: "mysal üçin, Apt 101, 123, Baş köçe",
+        placeholder: "Apt 101, 123, Baş köçe",
       },
       street: {
         label: "Köçe",
-        placeholder: "mysal üçin, Apt 101, 123, Baş köçe",
+        placeholder: "Apt 101, 123, Baş köçe",
       },
     },
     passenger: {
@@ -204,15 +250,15 @@ export default {
       documents: "Resminamalar",
       firstName: {
         label: "Ady",
-        placeholder: "mysal üçin, Aman",
+        placeholder: "Aman",
       },
       lastname: {
         label: "Familiýasy",
-        placeholder: "mysal üçin, Amanow",
+        placeholder: "Amanow",
       },
       birth: {
         label: "Doglan senesi",
-        placeholder: "mysal üçin, 02-10-2000",
+        placeholder: "02-10-2000",
       },
       gender: {
         label: "Jynsy",
@@ -229,11 +275,11 @@ export default {
       },
       passportSeries: {
         label: "Seriýasy we belgisi",
-        placeholder: "mysal üçin, AE010101",
+        placeholder: "AE010101",
       },
       passportExpire: {
         label: "Pasportyň möhleti",
-        placeholder: "mysal üçin, 09-11-2029",
+        placeholder: "09-11-2029",
       },
     },
     payment: {
@@ -242,6 +288,8 @@ export default {
     },
     submit: "Ugrat",
   },
+
+  loading: "Ýüklenýär",
 
   profile: {
     tabs: {
@@ -254,15 +302,15 @@ export default {
     accaunt: {
       firstName: {
         label: "Ady",
-        placeholder: "mysal üçin, Aman",
+        placeholder: "Aman",
       },
       lastname: {
         label: "Familiýasy",
-        placeholder: "mysal üçin, Amanow",
+        placeholder: "Amanow",
       },
       eamil: {
         label: "E-poçta",
-        placeholder: "mysal üçin, Aman@gmail.com",
+        placeholder: "Aman{@}gmail.com",
       },
       password: {
         label: "Parol",

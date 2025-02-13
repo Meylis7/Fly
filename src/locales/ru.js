@@ -104,6 +104,52 @@ export default {
   loadMore: "Загрузить еще",
   scrollTop: "Прокрутить наверх",
 
+  login: "Войти",
+  signIn: {
+    title: "Вход",
+    text: "Войдите, чтобы получить доступ к своей учетной записи Golobe",
+    email: {
+      label: "Электронная почта",
+      placeholder: "Aman{@}gmail.com",
+    },
+    password: {
+      label: "Пароль",
+      placeholder: "**********",
+    },
+    forget: "Забыли пароль?",
+    accountText: "Нет учетной записи?",
+  },
+  signUp: {
+    title: "Регистрация",
+    text: "Зарегистрируйтесь, чтобы получить доступ к своей учетной записи Golobe",
+    name: {
+      label: "Имя",
+      placeholder: "Аман",
+    },
+    lastName: {
+      label: "Фамилия",
+      placeholder: "Аманов",
+    },
+    email: {
+      label: "Электронная почта",
+      placeholder: "Aman{@}gmail.com",
+    },
+    company: {
+      label: "Название компании",
+      placeholder: "DH HJ",
+    },
+    password: {
+      label: "Пароль",
+      placeholder: "**********",
+    },
+    confirmPass: {
+      label: "Подтвердите пароль",
+      placeholder: "**********",
+    },
+    createAccount: "Создать учетную запись",
+    accountText: "Уже есть учетная запись?",
+  },
+
   filter: {
     title: "Фильтровать по",
     sort: {
@@ -171,9 +217,9 @@ export default {
         label: "Фамилия",
         placeholder: "например, Аманов",
       },
-      eamil: {
+      gmail: {
         label: "Email",
-        placeholder: "например, Aman@gmial.com",
+        placeholder: "например, Aman{'@'}gmail.com",
       },
       number: {
         label: "Телефон",
@@ -243,6 +289,8 @@ export default {
     submit: "Отправить",
   },
 
+  loading: "Загрузка",
+
   profile: {
     tabs: {
       tab_1: "Аккаунт",
@@ -262,7 +310,7 @@ export default {
       },
       eamil: {
         label: "Email",
-        placeholder: "например, Aman@gmial.com",
+        placeholder: "например, Aman{@}gmail.com",
       },
       password: {
         label: "Пароль",

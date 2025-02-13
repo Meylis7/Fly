@@ -10,6 +10,8 @@
     import { Vue3Lottie } from 'vue3-lottie'
     import LoadingJson from '@/assets/btn-load.json'
     import Back from '@/components/Back.vue';
+    import apiService from "@/services/apiService";
+
 
 
     const router = useRouter();
@@ -53,29 +55,29 @@
         paymentMethod: 'balance'
     });
 
-    // Fetch country list
     onMounted(async () => {
         try {
-            const response = await axios.get('https://www.flyashgabat.com:4443/api/nationalities');
-            states.country = response.data.data;
+            const response = await apiService.fetchCountries();
 
-            console.log(bookingData)
+            states.country = response.data;
+
+            console.log(bookingData);
 
             const passengersCount = bookingData.travellers_count || 1;
 
             // Initialize passengers array
             state.passengers = Array.from({ length: passengersCount }, () => ({
-                firstname: '',
-                lastname: '',
-                birthdate: '',
-                passport_country: '',
-                passport_expiry_date: '',
-                passport_number: '',
-                nationality: '',
-                gender: 'male',
+                firstname: "",
+                lastname: "",
+                birthdate: "",
+                passport_country: "",
+                passport_expiry_date: "",
+                passport_number: "",
+                nationality: "",
+                gender: "male",
             }));
         } catch (error) {
-            console.error("Error loading countries:", error);
+            console.error("Error loading countries:", error.message);
         }
     });
 
@@ -84,37 +86,31 @@
     const submitForm = async () => {
         loading.value = true;
         try {
-            // console.log('State before submit:', JSON.stringify(state, null, 2));
-
             const payload = {
-                'routing_id': bookingData.routing_id,
-                'outward_id': bookingData.outward_id,
-                'return_id': bookingData.return_id,
-                'contact_details': state.contact_details,
-                'travellers': state.passengers,
+                routing_id: bookingData.routing_id,
+                outward_id: bookingData.outward_id,
+                return_id: bookingData.return_id,
+                contact_details: state.contact_details,
+                travellers: state.passengers,
                 // paymentMethod: state.paymentMethod
             };
 
-            const response = await axios.post('https://www.flyashgabat.com:4443/api/book/tfusion', payload);
-            console.log('Form submitted successfully:', response.data);
+            const response = await apiService.bookFlight(payload);
+            console.log("Form submitted successfully:", response);
 
-            toast.success('Booking submitted successfully!', {
-                autoClose: 1000,
-            });
+            toast.success("Booking submitted successfully!", { autoClose: 1000 });
 
             router.push({
-                path: '/flight/book/' + response.data.data.book_id,
+                path: `/flight/book/${response.data.book_id}`,
             });
         } catch (error) {
-            toast.error(error.message, {
-                autoClose: 1000,
-            });
-            // console.error('Error submitting form:', error);
-            // alert('Failed to submit the form. Please try again.');
+            toast.error(error.message || "Failed to submit the form. Please try again.", { autoClose: 1000 });
+            console.error("Error submitting form:", error);
         } finally {
             loading.value = false;
         }
     };
+
 
 </script>
 
@@ -124,56 +120,58 @@
         <div class="auto_container">
             <div class="wrapper">
                 <Back />
-
-                <p>
-                    <!-- {{ state.country }} -->
-                </p>
-
                 <form @submit.prevent="submitForm" class="flex items-start mt-[30px] gap-x-[20px]">
                     <div class="flex flex-col w-[calc(100%-480px)] gap-y-[30px]">
                         <!-- Contact Information -->
                         <div
                             class="block rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d] gap-y-[30px]">
                             <h4 class="text-2xl font-semibold mb-5">
-                                Contact information
+                                {{ $t("booking.contact.title") }}
                             </h4>
                             <p class="text-base font-normal mb-5">
-                                We will send a ticket to the specified contact, send notifications about changes in the
-                                flight or in case of other emergency situations.
+                                {{ $t("booking.contact.text") }}
                             </p>
 
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Firstname</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.firstName.label") }}
+                                    </label>
                                     <input v-model="state.contact_details.firstname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Aman">
+                                        :placeholder="$t('booking.contact.firstName.placeholder')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Lastname</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.lastname.label") }}
+                                    </label>
                                     <input v-model="state.contact_details.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Amanov">
+                                        :placeholder="$t('booking.contact.lastname.placeholder')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Email</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.gmail.label") }}
+                                    </label>
                                     <input v-model="state.contact_details.email" required type="email"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Aman@gmail.com">
+                                        :placeholder="$t('booking.contact.gmail.placeholder')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Phone number</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.number.label") }}
+                                    </label>
                                     <input v-model="state.contact_details.phone.number" required type="number" min="8"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. +993 65 123456">
+                                        :placeholder="$t('booking.contact.number.placeholder')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <h6 class="text-sm font-normal mb-2 block">
-                                        Gender
+                                        {{ $t("booking.contact.gender.label") }}
                                     </h6>
 
                                     <div class="flex items-center bg-[#F2F2F2] py-3 px-3 rounded-lg w-fit gap-[10px]">
@@ -194,7 +192,7 @@
                                                     </svg>
                                                 </span>
 
-                                                Male
+                                                {{ $t("booking.contact.gender.val_1") }}
                                             </label>
                                         </div>
 
@@ -214,7 +212,7 @@
                                                     </svg>
                                                 </span>
 
-                                                Female
+                                                {{ $t("booking.contact.gender.val_2") }}
                                             </label>
                                         </div>
                                     </div>
@@ -224,10 +222,14 @@
                                 <br>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Address Country:</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.country.label") }}
+                                    </label>
                                     <select v-model="state.contact_details.address.country_code"
                                         class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
-                                        <option value="" disabled>Select a country</option>
+                                        <option value="" disabled>
+                                            {{ $t("booking.contact.country.placeholder") }}
+                                        </option>
                                         <option v-for="country in states.country" :key="country.key"
                                             :value="country.key" class="text-base text-black">
                                             {{ country.country_en }}
@@ -236,17 +238,21 @@
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">City</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.city.label") }}
+                                    </label>
                                     <input v-model="state.contact_details.address.city" required="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Apt 101, 123, Main St">
+                                        :placeholder="$t('booking.contact.city.label')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Street</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.contact.street.label") }}
+                                    </label>
                                     <input v-model="state.contact_details.address.street" required="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Apt 101, 123, Main St">
+                                        :placeholder="$t('booking.contact.street.label')">
                                 </div>
                             </div>
                         </div>
@@ -255,40 +261,46 @@
                         <div v-for="(passenger, index) in state.passengers" :key="index"
                             class="block rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d] gap-y-[30px]">
                             <h4 class="text-2xl font-semibold mb-5">
-                                Passenger {{ index + 1 }}
+                                {{ $t("booking.passenger.title") }} {{ index + 1 }}
                             </h4>
                             <p class="text-base font-normal mb-5">
-                                Please enter your details as indicated in your travel document.
+                                {{ $t("booking.passenger.text") }}
                             </p>
                             <h6 class=" text-xl font-semibold mb-5">
-                                Personal data
+                                {{ $t("booking.passenger.personal") }}
                             </h6>
 
                             <div class="flex flex-wrap gap-x-5 gap-y-4 mb-4">
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Firstname</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.firstName.label") }}
+                                    </label>
                                     <input v-model="passenger.firstname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Aman">
+                                        :placeholder="$t('booking.passenger.firstName.label')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Lastname</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.lastname.label") }}
+                                    </label>
                                     <input v-model="passenger.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. Amanov">
+                                        :placeholder="$t('booking.passenger.lastname.label')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)] relative">
-                                    <label class="text-sm font-normal mb-2 block">Date of birth</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.birth.label") }}
+                                    </label>
                                     <input v-model="passenger.birthdate" required type="date"
                                         class="text-base font-normal w-full !py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. 21.10.2002">
+                                        :placeholder="$t('booking.passenger.birth.label')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
                                     <h6 class="text-sm font-normal mb-2 block">
-                                        Gender
+                                        {{ $t("booking.passenger.gender.label") }}
                                     </h6>
 
                                     <div class="flex items-center bg-[#F2F2F2] py-3 px-3 rounded-lg w-fit gap-[10px]">
@@ -308,7 +320,7 @@
                                                     </svg>
                                                 </span>
 
-                                                Male
+                                                {{ $t("booking.passenger.gender.val_1") }}
                                             </label>
                                         </div>
 
@@ -328,7 +340,7 @@
                                                     </svg>
                                                 </span>
 
-                                                Female
+                                                {{ $t("booking.passenger.gender.val_2") }}
                                             </label>
                                         </div>
                                     </div>
@@ -337,15 +349,19 @@
                             </div>
 
                             <h6 class=" text-xl font-semibold mb-5">
-                                Documents
+                                {{ $t("booking.passenger.documents") }}
                             </h6>
 
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Passport Country:</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.passportCountry.label") }}
+                                    </label>
                                     <select v-model="passenger.passport_country"
                                         class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
-                                        <option value="" disabled>Select a country</option>
+                                        <option value="" disabled>
+                                            {{ $t("booking.passenger.passportCountry.placeholder") }}
+                                        </option>
                                         <option v-for="country in states.country" :key="country.key"
                                             :value="country.key" class="text-base text-black">
                                             {{ country.country_en }}
@@ -354,10 +370,14 @@
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
-                                    <label class="text-sm font-normal mb-2 block">Citizenship</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.citizenship.label") }}
+                                    </label>
                                     <select v-model="passenger.nationality"
                                         class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
-                                        <option value="" disabled>Select a country</option>
+                                        <option value="" disabled>
+                                            {{ $t("booking.passenger.citizenship.placeholder") }}
+                                        </option>
                                         <option v-for="country in states.country" :key="country.key"
                                             :value="country.key" class="text-base text-black">
                                             {{ country.country_en }}
@@ -366,17 +386,21 @@
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)] relative">
-                                    <label class="text-sm font-normal mb-2 block">Series and number</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.passportSeries.label") }}
+                                    </label>
                                     <input v-model="passenger.passport_number" type="text"
                                         class="text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g. A0000000">
+                                        :placeholder="$t('booking.passenger.passportSeries.label')">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)] relative">
-                                    <label class="text-sm font-normal mb-2 block">Passport expiration date</label>
+                                    <label class="text-sm font-normal mb-2 block">
+                                        {{ $t("booking.passenger.passportExpire.label") }}
+                                    </label>
                                     <input v-model="passenger.passport_expiry_date" type="date"
                                         class="text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        placeholder="e.g 01.01.2026">
+                                        :placeholder="$t('booking.passenger.passportExpire.placeholder')">
                                 </div>
                             </div>
                         </div>
@@ -384,11 +408,11 @@
                         <button type="submit" :disabled="loading"
                             class="bg-prime-color text-white flex items-center gap-2  mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <div v-if="loading" class="flex items-center pl-6 py-0">
-                                Loading
+                                {{ $t("loading") }}
                                 <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
                             </div>
                             <p v-else class="px-6 py-2">
-                                Submit
+                                {{ $t("booking.submit") }}
                             </p>
                         </button>
 
@@ -398,19 +422,19 @@
                         <div class=" block rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d]
                             gap-y-[30px]">
                             <h4 class="text-2xl font-semibold mb-5">
-                                Select payment method
+                                {{ $t("booking.payment.title") }}
                             </h4>
 
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
-                                <div class="payment input w-[calc(50%-10px)]">
+                                <div class="payment input w-full">
                                     <input v-model="state.paymentMethod" required type="radio" class="peer hidden"
                                         name="method" id="balance" checked>
                                     <label for="balance">
-                                        Paywith balance
+                                        {{ $t("booking.payment.val_1") }}
                                     </label>
                                 </div>
 
-                                <!-- <div class="payment input w-[calc(50%-10px)]">
+                                <!-- <div class="payment input w-full">
                                     <input v-model="state.paymentMethod" required type="radio" class="peer hidden"
                                         name="method" id="visa" disabled>
                                     <label for="visa" class=" opacity-65">

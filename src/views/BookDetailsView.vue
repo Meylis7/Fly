@@ -1,52 +1,53 @@
 <script setup>
-import { reactive, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { Vue3Lottie } from 'vue3-lottie';
-import Load_3 from '@/assets/loading-3.json';
+    import { reactive, onMounted } from 'vue';
+    import { useRoute } from 'vue-router';
+    import { Vue3Lottie } from 'vue3-lottie';
+    import { RouterLink } from 'vue-router';
+    import Load_3 from '@/assets/loading-3.json';
 
-import apiService from '@/services/apiService';
+    import apiService from '@/services/apiService';
 
-const route = useRoute();
+    const route = useRoute();
 
-const state = reactive({
-    loading: true,
-    status: '',
-    bookId: route.params.id,
-    tickets: [],
-});
+    const state = reactive({
+        loading: true,
+        status: '',
+        bookId: route.params.id,
+        tickets: [],
+    });
 
 
 
-const checkBookingStatus = async () => {
-  const data = await apiService.getBookingStatus(state.bookId);
+    const checkBookingStatus = async () => {
+        const data = await apiService.getBookingStatus(state.bookId);
 
-  if (data.data) {
-    state.status = data.data.status;
+        if (data.data) {
+            state.status = data.data.status;
 
-    if (state.status === 'BookingInProgress') {
-      setTimeout(checkBookingStatus, 5000);
-    } else {
-      state.loading = false;
-      if (state.status === 'Succeeded') {
-        await fetchBookingDetails();
-      }
-    }
-  } else {
-    state.status = 'Failed';
-    state.loading = false;
-  }
-};
+            if (state.status === 'BookingInProgress') {
+                setTimeout(checkBookingStatus, 5000);
+            } else {
+                state.loading = false;
+                if (state.status === 'Succeeded') {
+                    await fetchBookingDetails();
+                }
+            }
+        } else {
+            state.status = 'Failed';
+            state.loading = false;
+        }
+    };
 
-const fetchBookingDetails = async () => {
-  const data = await apiService.getBookingDetails(state.bookId);
-  if (data.data?.success) {
-    state.tickets = data.data.tickets;
-  }
-};
+    const fetchBookingDetails = async () => {
+        const data = await apiService.getBookingDetails(state.bookId);
+        if (data.data?.success) {
+            state.tickets = data.data.tickets;
+        }
+    };
 
-onMounted(() => {
-    checkBookingStatus();
-});
+    onMounted(() => {
+        checkBookingStatus();
+    });
 </script>
 
 <template>
@@ -58,26 +59,26 @@ onMounted(() => {
                 <div v-if="state.loading">
                     <Vue3Lottie :animationData="Load_3" class="!w-full !h-[300px]" />
                     <p class="text-base font-normal text-center mt-5">
-                        Loading... Please wait.
+                        {{ $t("loadingBooking") }}
                     </p>
                 </div>
 
                 <!-- Success state -->
                 <div v-else-if="state.status === 'Succeeded'">
                     <h4 class="text-xl font-normal text-center mb-4">
-                        Booking completed successfully!
+                        {{ $t("BookingTicket.title") }}
                     </h4>
                     <p class="text-base font-normal text-center">
-                        Booking Number: {{ state.bookId }}
+                        {{ $t("BookingTicket.subTitle") }} {{ state.bookId }}
                     </p>
 
                     <div
                         class="mt-[30px] mx-auto p-10 max-w-[650px] rounded-lg bg-white border border-solid border-[#223a604d]">
                         <h5 class="text-xl font-bold">
-                            Tickets
+                            {{ $t("BookingTicket.form.title") }}
                         </h5>
                         <p class="text-sm font-normal my-[10px]">
-                            A copy of your tickets has been sent to the contact email you provided.
+                            {{ $t("BookingTicket.form.text") }}
                         </p>
 
                         <div v-for="ticket in state.tickets" :key="ticket.ticket_url"
@@ -86,18 +87,21 @@ onMounted(() => {
                                 <h6 class="text-base font-semibold mb-1">
                                     {{ ticket.name }}
                                 </h6>
-                                <p class="text-sm font-normal">Passenger</p>
+                                <p class="text-sm font-normal">
+                                    {{ $t("BookingTicket.form.passenger") }}
+                                </p>
                             </div>
 
                             <a :href="ticket.ticket_url" target="_blank"
                                 class="flex items-center text-sm font-medium text-prime-color">
-                                <span class="block mr-[10px]">⬇️</span> Download
+                                <span class="block mr-[10px]">⬇️</span>
+                                {{ $t("BookingTicket.form.download") }}
                             </a>
                         </div>
                     </div>
 
 
-                    <a href="#"
+                    <RouterLink to="/"
                         class="w-40 cursor-pointer flex items-center justify-center bg-prime-color text-white py-4 mx-auto mt-10 rounded-lg text-sm font-medium">
                         <span class="block mr-[10px]">
                             <svg width="20" height="18" viewBox="0 0 20 18" fill="none"
@@ -111,8 +115,8 @@ onMounted(() => {
                             </svg>
                         </span>
 
-                        Go home
-                    </a>
+                        {{ $t("BookingTicket.goHome") }}
+                    </RouterLink>
                 </div>
             </div>
         </div>
