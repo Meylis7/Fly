@@ -4,13 +4,12 @@ import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import logo from "@/assets/images/logo.png";
 
+import { useI18n } from "vue-i18n";
+const { locale } = useI18n(); 
 const router = useRouter();
 const userStore = useUserStore();
 
-// Ensure Header updates when user logs in or out
-onMounted(() => {
-    userStore.loadUser();
-});
+
 
 // Computed user name
 const userDisplayName = computed(() => {
@@ -22,11 +21,31 @@ const userDisplayName = computed(() => {
 
 // Locale selection
 const selectedLocale = ref(localStorage.getItem('locale') || 'en');
+const dropdownVisible = ref(false);
 
-const changeLocale = () => {
-    localStorage.setItem('locale', selectedLocale.value);
-    location.reload();
+const localeLabels = {
+    en: "English",
+    ru: "Russian",
+    tk: "Turkmen",
 };
+
+const toggleDropdown = () => {
+    dropdownVisible.value = !dropdownVisible.value;
+};
+
+const changeLocale = (newLocale) => {
+    selectedLocale.value = newLocale;
+    localStorage.setItem('locale', newLocale);
+    locale.value = newLocale; // Update Vue I18n
+    dropdownVisible.value = false; // Close dropdown
+};
+
+// Ensure Header updates when user logs in or out
+onMounted(() => {
+    userStore.loadUser();
+    locale.value = selectedLocale.value;
+});
+
 </script>
 
 
@@ -74,13 +93,26 @@ const changeLocale = () => {
                     </RouterLink>
 
                     <!-- Custom Locale Selector -->
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <select v-model="selectedLocale" @change="changeLocale"
                             class="py-2 px-4 border border-[#223A60] text-base text-center rounded-lg bg-white text-[#223A60] cursor-pointer appearance-none">
                             <option value="en">English</option>
                             <option value="ru">Russian</option>
                             <option value="tk">Turkmen</option>
                         </select>
+                    </div> -->
+                    <div class="relative">
+                        <button @click="toggleDropdown"
+                            class="py-2 px-4 border border-[#223A60] text-base text-center rounded-lg bg-white text-[#223A60] cursor-pointer">
+                            {{ localeLabels[selectedLocale] }}
+                        </button>
+                        <ul v-if="dropdownVisible"
+                            class="absolute left-0 mt-2 w-full bg-white border border-[#223A60] rounded-lg shadow-md">
+                            <li v-for="(label, locale) in localeLabels" :key="locale" @click="changeLocale(locale)"
+                                class="p-2 text-center cursor-pointer hover:bg-gray-200">
+                                {{ label }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
