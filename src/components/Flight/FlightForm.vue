@@ -274,12 +274,14 @@
         <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl ">
             <div class="flex items-center mb-5">
                 <div class="air-type">
-                    <input type="radio" name="type" checked id="one-way" value="one-way" v-model="tripType">
+                    <input type="radio" name="type" checked id="one-way" @change="handleTripTypeChange" value="one-way"
+                        v-model="tripType">
                     <label for="one-way">{{ $t("searchForm.flightType.oneWay") }}</label>
                 </div>
 
                 <div class="air-type">
-                    <input type="radio" name="type" id="round" value="round-trip" v-model="tripType">
+                    <input type="radio" name="type" id="round" @change="handleTripTypeChange" value="round-trip"
+                        v-model="tripType">
                     <label for="round">{{ $t("searchForm.flightType.RoundTrip") }}</label>
                 </div>
             </div>
@@ -304,7 +306,12 @@
                         </label>
 
                         <input type="text" v-model="departureCity" :placeholder="$t('searchForm.routeFrom.placeholder')"
-                            class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
+                            :class="['bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color',
+                                { 'border-red-500 border': errors.departureCity }]">
+
+                        <p v-if="errors.departureCity" class="text-red-500 text-sm mt-1">
+                            {{ errors.departureCity }}
+                        </p>
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
                             @airport-selected="handleDepartureAirportSelected" />
@@ -341,7 +348,12 @@
                         </label>
 
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
-                            class="bg-[#F2F3F4] text-base font-medium pl-6 p-3 rounded-md focus:ring-1 focus:ring-prime-color">
+                            :class="['bg-[#F2F3F4] text-base font-medium pl-6 p-3 rounded-md focus:ring-1 focus:ring-prime-color',
+                                { 'border-red-500 border': errors.arrivalCity }]">
+
+                        <p v-if="errors.arrivalCity" class="text-red-500 text-sm mt-1">
+                            {{ errors.arrivalCity }}
+                        </p>
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
                             @airport-selected="handleArrivalAirportSelected" />
@@ -356,9 +368,13 @@
                     </label>
 
                     <input type="text" :value="departureDate ? departureDate.toLocaleDateString() : ''"
-                        :placeholder="$t('searchForm.datePicker.placeholder')"
-                        class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
-                        @focus="openDepartureCalendar" ref="departureInput" />
+                        :placeholder="$t('searchForm.datePicker.placeholder')" :class="['bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color',
+                            { 'border-red-500 border': errors.departureDate }]" @focus="openDepartureCalendar"
+                        ref="departureInput" />
+
+                    <p v-if="errors.departureDate" class="text-red-500 text-sm mt-1">
+                        {{ errors.departureDate }}
+                    </p>
 
                     <VDatePicker v-model="departureDate" mode="single" placeholder="Choose Dates" :min-date="minDate"
                         :day-class="(day) => (isPastDay(day) ? 'not-allowed' : '')" v-if="departureCalendarVisible"
@@ -378,9 +394,13 @@
                     </label>
 
                     <input type="text" :value="returnDate ? returnDate.toLocaleDateString() : ''"
-                        :placeholder="$t('searchForm.datePicker.placeholder')"
-                        class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
-                        @focus="openReturnCalendar" ref="returnInput" />
+                        :placeholder="$t('searchForm.datePicker.placeholder')" :class="['bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color',
+                            { 'border-red-500 border': errors.returnDate }]" @focus="openReturnCalendar"
+                        ref="returnInput" :disabled="tripType === 'one-way'" />
+
+                    <p v-if="errors.returnDate" class="text-red-500 text-sm mt-1">
+                        {{ errors.returnDate }}
+                    </p>
 
                     <VDatePicker v-model="returnDate" mode="single" placeholder="Choose Dates"
                         :min-date="departureDate || minDate" :day-class="(day) => (isPastDay(day) ? 'not-allowed' : '')"

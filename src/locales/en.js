@@ -90,6 +90,12 @@ export default {
     directFlights: {
       placeholder: "Direct flights only",
     },
+    errors: {
+      departureRequired: "Departure city is required",
+      arrivalRequired: "Arrival city is required",
+      departureDateRequired: "Departure date is required",
+      returnDateRequired: "Return date is required for round trips"
+    },
     searchButton: {
       flightText: "Search Flights",
       hotelText: "Search Hotels",
