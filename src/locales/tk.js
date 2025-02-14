@@ -86,6 +86,7 @@ export default {
   tour: {
     title: "Syýahatlary Öwreniň",
     text: "Dynç almaga ýa-da öýe gaýdyp barýarsyňyzmy? Biziň syýahat gurallarymyz her syýahaty aňsat edýär.",
+    btn: "Tura ýazylmak",
   },
   visa: {
     title: "Wizaňyz bilen Dünýäni Açyň",
@@ -103,6 +104,10 @@ export default {
   goBack: "Yza Dolanmak",
   loadMore: "Ýene görkez",
   scrollTop: "Başyna gitmek",
+  banner: {
+    title:
+      "Uçuşlar, myhmanhanalar we eksklýuziw teklipler – diňe bir gezek basmak bilen elýeterli! B2B teklipler üçin 24/7 biziň bilen habarlaşyň.",
+  },
 
   login: "Giriş",
   signIn: {

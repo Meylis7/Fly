@@ -98,6 +98,7 @@ export default {
   tour: {
     title: "Explore the Tours",
     text: "Planning a getaway or heading home? Our travel tools make every journey seamless.",
+    btn: "Book Tour",
   },
   visa: {
     title: "Unlock the World with Your Visa",
@@ -115,6 +116,11 @@ export default {
   goBack: "Go back",
   loadMore: "Load more",
   scrollTop: "Scroll to Top",
+
+  banner: {
+    title:
+      "Flights, Hotels, and Exclusive Deals – Just a click Away! Contact us 24/7 for B2B Offers.",
+  },
 
   login: "Login",
   signIn: {

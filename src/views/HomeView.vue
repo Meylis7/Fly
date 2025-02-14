@@ -12,10 +12,9 @@
     <section class="banner mt-60 ">
       <div class="auto_container">
         <div class="wrapper">
-          <div class="block bg-[url('@/assets/images/banner.png')] py-16 rounded-[20px]">
+          <div class="block bg-[url('@/assets/images/banner.png')] bg-no-repeat bg-cover py-16 rounded-[20px]">
             <h4 class="text-3xl font-extrabold text-white text-center max-w-[950px] mx-auto mb-5">
-              Flights, Hotels, and Exclusive Deals – Just a click Away!
-              Contact us 24/7 for B2B Offers.
+              {{ $t("banner.title") }}
             </h4>
             <div class="flex items-center justify-center gap-[10px]">
               <div class="flex items-center">

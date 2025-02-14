@@ -76,7 +76,7 @@ const changeLocale = () => {
                     <!-- Custom Locale Selector -->
                     <div class="relative">
                         <select v-model="selectedLocale" @change="changeLocale"
-                            class="py-2 px-4 border border-[#223A60] text-center rounded-lg bg-white text-[#223A60] cursor-pointer appearance-none">
+                            class="py-2 px-4 border border-[#223A60] text-base text-center rounded-lg bg-white text-[#223A60] cursor-pointer appearance-none">
                             <option value="en">English</option>
                             <option value="ru">Russian</option>
                             <option value="tk">Turkmen</option>
