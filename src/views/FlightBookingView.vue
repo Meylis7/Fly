@@ -81,9 +81,44 @@
         }
     });
 
+    const errors = ref({})
+
+
+    const validateForm = () => {
+        errors.value = {} // Clear previous errors
+
+        // Contact Details
+        if (!state.contact_details.firstname?.trim()) errors.value.firstname = true
+        if (!state.contact_details.lastname?.trim()) errors.value.lastname = true
+        if (!state.contact_details.email?.trim()) errors.value.email = true
+        if (!state.contact_details.address.country_code?.trim()) errors.value.country_code = true
+        // if (!state.contact_details.phone?.number?.trim()) errors.value.phone = true
+        if (!String(state.contact_details.phone?.number || "").trim()) errors.value.phone = true
+
+        if (!state.contact_details.address?.city?.trim()) errors.value.city = true
+        if (!state.contact_details.address?.street?.trim()) errors.value.street = true
+
+        // Passengers
+        state.passengers.forEach((passenger, index) => {
+            if (!passenger.firstname?.trim()) errors.value[`passenger${index}firstname`] = true
+            if (!passenger.lastname?.trim()) errors.value[`passenger${index}lastname`] = true
+            if (!passenger.birthdate) errors.value[`passenger${index}birthdate`] = true
+            if (!passenger.passport_country?.trim()) errors.value[`passenger${index}passportCountry`] = true
+            if (!passenger.passport_number?.trim()) errors.value[`passenger${index}passportNumber`] = true
+            if (!passenger.nationality?.trim()) errors.value[`passenger${index}nationality`] = true
+            if (!passenger.passport_expiry_date?.trim()) errors.value[`passenger${index}expiryDate`] = true
+        })
+
+        return Object.keys(errors.value).length === 0
+    }
+
 
     // Submit form
     const submitForm = async () => {
+        const isValid = validateForm()
+        console.log('Validation errors:', errors.value) // Add this to debug
+        if (!isValid) return
+
         loading.value = true;
         try {
             const payload = {
@@ -139,6 +174,7 @@
                                     </label>
                                     <input v-model="state.contact_details.firstname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.firstname ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.firstName.placeholder')">
                                 </div>
 
@@ -148,6 +184,7 @@
                                     </label>
                                     <input v-model="state.contact_details.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.lastname ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.lastname.placeholder')">
                                 </div>
 
@@ -157,6 +194,7 @@
                                     </label>
                                     <input v-model="state.contact_details.email" required type="email"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.email ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.gmail.placeholder')">
                                 </div>
 
@@ -166,6 +204,7 @@
                                     </label>
                                     <input v-model="state.contact_details.phone.number" required type="number" min="8"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.phone ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.number.placeholder')">
                                 </div>
 
@@ -226,7 +265,8 @@
                                         {{ $t("booking.contact.country.label") }}
                                     </label>
                                     <select v-model="state.contact_details.address.country_code"
-                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
+                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.country_code ? 'border-red-500' : '']">
                                         <option value="" disabled>
                                             {{ $t("booking.contact.country.placeholder") }}
                                         </option>
@@ -243,6 +283,7 @@
                                     </label>
                                     <input v-model="state.contact_details.address.city" required="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.city ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.city.label')">
                                 </div>
 
@@ -252,6 +293,7 @@
                                     </label>
                                     <input v-model="state.contact_details.address.street" required="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors.street ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.street.label')">
                                 </div>
                             </div>
@@ -277,6 +319,7 @@
                                     </label>
                                     <input v-model="passenger.firstname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}firstname`] ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.passenger.firstName.label')">
                                 </div>
 
@@ -286,6 +329,7 @@
                                     </label>
                                     <input v-model="passenger.lastname" required type="text"
                                         class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}lastname`] ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.passenger.lastname.label')">
                                 </div>
 
@@ -295,6 +339,7 @@
                                     </label>
                                     <input v-model="passenger.birthdate" required type="date"
                                         class="text-base font-normal w-full !py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}birthdate`] ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.passenger.birth.label')">
                                 </div>
 
@@ -358,7 +403,8 @@
                                         {{ $t("booking.passenger.passportCountry.label") }}
                                     </label>
                                     <select v-model="passenger.passport_country"
-                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
+                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}passportCountry`] ? 'border-red-500' : '']">
                                         <option value="" disabled>
                                             {{ $t("booking.passenger.passportCountry.placeholder") }}
                                         </option>
@@ -374,7 +420,8 @@
                                         {{ $t("booking.passenger.citizenship.label") }}
                                     </label>
                                     <select v-model="passenger.nationality"
-                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
+                                        class=" text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}nationality`] ? 'border-red-500' : '']">
                                         <option value="" disabled>
                                             {{ $t("booking.passenger.citizenship.placeholder") }}
                                         </option>
@@ -391,6 +438,7 @@
                                     </label>
                                     <input v-model="passenger.passport_number" type="text"
                                         class="text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}passportNumber`] ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.passenger.passportSeries.label')">
                                 </div>
 
@@ -400,12 +448,13 @@
                                     </label>
                                     <input v-model="passenger.passport_expiry_date" type="date"
                                         class="text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        :class="[errors[`passenger${index}expiryDate`] ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.passenger.passportExpire.placeholder')">
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" :disabled="loading"
+                        <button type="submit" :disabled="loading" @click="validateForm"
                             class="bg-prime-color text-white flex items-center gap-2  mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <div v-if="loading" class="flex items-center pl-6 py-0">
                                 {{ $t("loading") }}
@@ -539,4 +588,5 @@
 
     // .btn-primary {
     //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
-    // }</style>
+    // }
+</style>

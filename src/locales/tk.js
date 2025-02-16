@@ -78,12 +78,6 @@ export default {
     directFlights: {
       placeholder: "Diňe göni uçuşlar",
     },
-    errors: {
-      departureRequired: "Uçuş şäheri hökmany",
-      arrivalRequired: "Baryş şäheri hökmany",
-      departureDateRequired: "Uçuş senesi hökmany",
-      returnDateRequired: "Iki taraplaýyn syýahat üçin gaýdyş senesi hökmany"
-    },
     searchButton: {
       flightText: "Uçuşlary Gözle",
       hotelText: "Myhmanhanalary Gözle",

@@ -78,12 +78,6 @@ export default {
     directFlights: {
       placeholder: "Только прямые рейсы",
     },
-    errors: {
-      departureRequired: "Укажите город вылета",
-      arrivalRequired: "Укажите город прилета",
-      departureDateRequired: "Укажите дату вылета",
-      returnDateRequired: "Укажите дату возврата для билетов туда и обратно"
-    },
     searchButton: {
       flightText: "Поиск рейсов",
       hotelText: "Поиск отелей",
