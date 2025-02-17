@@ -12,10 +12,10 @@
     import Back from '@/components/Back.vue';
     import apiService from "@/services/apiService";
 
-
-
     const router = useRouter();
+    const processLoading = ref(false);
     const loading = ref(false);
+    const token = ref(null);
 
     const bookingData = history.state?.updatedSearchData || {};
 
@@ -52,11 +52,27 @@
                 street: ''
             }
         },
-        paymentMethod: 'balance'
+        payment_type: 'post-pay'
     });
 
     onMounted(async () => {
         try {
+            const token = localStorage.getItem("authToken");
+
+            const payload = {
+                routing_id: bookingData.routing_id,
+                outward_id: bookingData.outward_id,
+                return_id: bookingData.return_id
+            };
+
+            // TODO dont show ui unless this completes and success true is retrieved
+            const processDetailsResponse = await apiService.processDetails(payload);
+
+            if(processDetailsResponse.data.success){
+                processLoading.value = true;
+            }
+            console.log("Process details success", processDetailsResponse);
+
             const response = await apiService.fetchCountries();
 
             states.country = response.data;
@@ -127,7 +143,7 @@
                 return_id: bookingData.return_id,
                 contact_details: state.contact_details,
                 travellers: state.passengers,
-                // paymentMethod: state.paymentMethod
+                payment_type: state.payment_type
             };
 
             const response = await apiService.bookFlight(payload);
@@ -136,7 +152,7 @@
             toast.success("Booking submitted successfully!", { autoClose: 1000 });
 
             router.push({
-                path: `/flight/book/${response.data.book_id}`,
+                path: `/flight/book/${response.data.booking_reference}`,
             });
         } catch (error) {
             toast.error(error.message || "Failed to submit the form. Please try again.", { autoClose: 1000 });
@@ -155,7 +171,7 @@
         <div class="auto_container">
             <div class="wrapper">
                 <Back />
-                <form @submit.prevent="submitForm" class="flex items-start mt-[30px] gap-x-[20px]">
+                <form @submit.prevent="submitForm" class="flex items-start mt-[30px] gap-x-[20px]"  v-if="processLoading">
                     <div class="flex flex-col w-[calc(100%-480px)] gap-y-[30px]">
                         <!-- Contact Information -->
                         <div
@@ -476,24 +492,28 @@
 
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="payment input w-full">
-                                    <input v-model="state.paymentMethod" required type="radio" class="peer hidden"
-                                        name="method" id="balance" checked>
+                                    <input v-model="state.payment_type" required type="radio" class="peer hidden"
+                                        name="method" id="post-pay" checked>
+                                    <label for="post-pay">
+                                        Post pay
+                                    </label>
+                                </div> 
+
+                                <div class="payment input w-full" v-if="token">
+                                    <input v-model="state.payment_type" required type="radio" class="peer hidden"
+                                        name="method" id="balance" >
                                     <label for="balance">
                                         {{ $t("booking.payment.val_1") }}
                                     </label>
                                 </div>
-
-                                <!-- <div class="payment input w-full">
-                                    <input v-model="state.paymentMethod" required type="radio" class="peer hidden"
-                                        name="method" id="visa" disabled>
-                                    <label for="visa" class=" opacity-65">
-                                        Visacard
-                                    </label>
-                                </div> -->
                             </div>
                         </div>
                     </div>
                 </form>
+
+                <div v-else>
+                    Loading
+                </div>
             </div>
         </div>
     </section>

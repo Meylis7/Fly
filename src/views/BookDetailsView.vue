@@ -13,23 +13,25 @@
         loading: true,
         status: '',
         bookId: route.params.id,
+        booking: null,
         tickets: [],
     });
 
-
-
-    const checkBookingStatus = async () => {
-        const data = await apiService.getBookingStatus(state.bookId);
+    const fetchBookingDetails = async () => {
+        const data = await apiService.getBookingDetails(state.bookId);
 
         if (data.data) {
             state.status = data.data.status;
-
-            if (state.status === 'BookingInProgress') {
-                setTimeout(checkBookingStatus, 5000);
+            state.booking = data.data;
+            if(state.booking.payment_type === 'post-pay'){
+                state.loading = false;
+            }
+            else if (state.status === 'pending' || state.status === 'in-progress' ) {
+                setTimeout(fetchBookingDetails, 5000);
             } else {
                 state.loading = false;
-                if (state.status === 'Succeeded') {
-                    await fetchBookingDetails();
+                if (state.status === 'approved') {
+                    state.tickets = data.data.tickets;
                 }
             }
         } else {
@@ -38,15 +40,8 @@
         }
     };
 
-    const fetchBookingDetails = async () => {
-        const data = await apiService.getBookingDetails(state.bookId);
-        if (data.data?.success) {
-            state.tickets = data.data.tickets;
-        }
-    };
-
     onMounted(() => {
-        checkBookingStatus();
+        fetchBookingDetails();
     });
 </script>
 
@@ -64,16 +59,25 @@
                 </div>
 
                 <!-- Success state -->
-                <div v-else-if="state.status === 'Succeeded'">
+                <div v-else-if="state.status === 'approved' || state.booking.payment_type === 'post-pay' ">
                     <h4 class="text-xl font-normal text-center mb-4">
-                        {{ $t("BookingTicket.title") }}
+                        <span v-if="state.booking.payment_type != 'post-pay'">{{ $t("BookingTicket.title") }}</span>
+                        <span v-if="state.booking.payment_type === 'post-pay'">{{ $t("BookingTicket.title2") }}</span>
                     </h4>
                     <p class="text-base font-normal text-center">
                         {{ $t("BookingTicket.subTitle") }} {{ state.bookId }}
                     </p>
+                    
+                    <p class="text-base font-normal text-center" v-if=" state.booking.payment_type === 'post-pay'">
+                        {{ $t("BookingTicket.contact_admin") }}
+                    </p>
+                    
+                    <a href="tel:+99365000000" class=" block text-base font-normal text-center" v-if=" state.booking.payment_type === 'post-pay'">
+                        +993 65 00 00 00
+                    </a>
 
                     <div
-                        class="mt-[30px] mx-auto p-10 max-w-[650px] rounded-lg bg-white border border-solid border-[#223a604d]">
+                        class="mt-[30px] mx-auto p-10 max-w-[650px] rounded-lg bg-white border border-solid border-[#223a604d]" v-if="state.tickets.length">
                         <h5 class="text-xl font-bold">
                             {{ $t("BookingTicket.form.title") }}
                         </h5>

@@ -76,9 +76,15 @@ const apiService = {
     return apiRequest("get", `/nationalities`);
   },
 
+  // Process flight details
+  processDetails(payload) {
+    return apiRequest("post", `/tfusion/process/flights`, payload);
+  },
+  
+
   //Booking flight
   bookFlight(payload) {
-    return apiRequest("post", `/book/tfusion`, payload);
+    return apiRequest("post", `/tfusion/book/flights`, payload);
   },
 };
 

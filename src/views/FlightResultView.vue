@@ -13,7 +13,7 @@ import FlightResultItem from '@/components/Flight/FlightResultItem.vue';
 import LoadMore from '@/components/LoadMore.vue'
 import ToTop from '@/components/ToTop.vue'
 
-const API_BASE_URL = 'https://www.flyashgabat.com:4443/api/search/tfusion/flights'
+const API_BASE_URL = 'http://localhost:8080/api/tfusion/search/flights'
 const API_TOKEN = '123' // Use environment variables in production
 
 const route = useRoute()

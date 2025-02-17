@@ -328,6 +328,8 @@ export default {
   loadingBooking: "Ýüklenýär... Garaşyň.",
   BookingTicket: {
     title: "Sargyt üstünlikli tamamlandy!",
+    title2: "Sargyt üstünlikli ýerleşdirildi!",
+    contact_admin: "Sargydy tamamlamak üçin administrasiýa bilen habarlaşyň",
     subTitle: "Sargyt Belgisi:",
     goHome: "Baş Sahypa",
     form: {

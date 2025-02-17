@@ -341,6 +341,8 @@ export default {
   loadingBooking: "Loading... Please wait.",
   BookingTicket: {
     title: "Booking completed successfully!",
+    title2: "Booking placed successfully!",
+    contact_admin: "Contact administration for booking completion",
     subTitle: "Booking Number:",
     goHome: "Go Home",
     form: {
