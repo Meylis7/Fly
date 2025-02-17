@@ -15,7 +15,7 @@
     const router = useRouter();
     const processLoading = ref(false);
     const loading = ref(false);
-    const token = ref(null);
+    const token = ref('');
 
     const bookingData = history.state?.updatedSearchData || {};
 
@@ -57,7 +57,7 @@
 
     onMounted(async () => {
         try {
-            const token = localStorage.getItem("authToken");
+            token.value = localStorage.getItem("authToken");
 
             const payload = {
                 routing_id: bookingData.routing_id,
@@ -493,7 +493,7 @@
                             <div class="flex flex-wrap gap-x-5 gap-y-4">
                                 <div class="payment input w-full">
                                     <input v-model="state.payment_type" required type="radio" class="peer hidden"
-                                        name="method" id="post-pay" checked>
+                                        name="method" id="post-pay" value="post-pay" checked>
                                     <label for="post-pay">
                                         Post pay
                                     </label>
@@ -501,7 +501,7 @@
 
                                 <div class="payment input w-full" v-if="token">
                                     <input v-model="state.payment_type" required type="radio" class="peer hidden"
-                                        name="method" id="balance" >
+                                        name="method" id="balance" value="balance" >
                                     <label for="balance">
                                         {{ $t("booking.payment.val_1") }}
                                     </label>
