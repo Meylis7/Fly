@@ -6,15 +6,13 @@ import LoadAnimationJSON from '@/assets/ticket-loading.json'
 import NotFoundJson from '@/assets/not-found.json'
 import axios from 'axios'
 
+import apiService from "@/services/apiService";
 
 import Filter from '@/components/Flight/Filter.vue';
 import FlightForm from '@/components/Flight/FlightForm.vue';
 import FlightResultItem from '@/components/Flight/FlightResultItem.vue';
 import LoadMore from '@/components/LoadMore.vue'
 import ToTop from '@/components/ToTop.vue'
-
-const API_BASE_URL = 'http://localhost:8080/api/tfusion/search/flights'
-const API_TOKEN = '123' // Use environment variables in production
 
 const route = useRoute()
 const displayedFlights = ref([]);
@@ -59,15 +57,12 @@ const searchFlights = async (params) => {
       queryParams.arrival_date = formatDate(params.returnDate)
     }
 
-    const response = await axios.get(API_BASE_URL, {
-      params: queryParams,
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${API_TOKEN}`
-      }
-    })
+    // Convert queryParams to query string
+    const queryString = new URLSearchParams(queryParams).toString();
 
-    return response.data
+    const searchResponse = await apiService.searchFlight(queryString);
+
+    return searchResponse.data
   } catch (error) {
     console.error('Flight search error:', error)
     throw error
@@ -91,7 +86,9 @@ onMounted(async () => {
 
     // Perform flight search
     const results = await searchFlights(searchParams)
-    flights.value = results.data.flights
+
+    console.log(results);
+    flights.value = results.flights
 
     const travellersCount = searchParams.adults + searchParams.children + searchParams.infants;
     const routingId = results.data.routing_id;
@@ -100,7 +97,7 @@ onMounted(async () => {
       travellers_count: travellersCount,
       routing_id: routingId
     };
-    
+
 
     // Initialize displayed flights
     displayedFlights.value = flights.value.slice(0, itemsPerPage.value);
@@ -174,13 +171,8 @@ const setActiveTab = (tab) => {
             </div> -->
 
             <div>
-              <FlightResultItem
-               v-for="(flight, index) in displayedFlights"
-                :key="flight.id" 
-                :flight="flight"
-                :searchData="searchData"
-                :index="index"
-                class="last:mb-0" />
+              <FlightResultItem v-for="(flight, index) in displayedFlights" :key="flight.id" :flight="flight"
+                :searchData="searchData" :index="index" class="last:mb-0" />
             </div>
 
             <LoadMore v-if="displayedFlights.length < flights.length" :items="flights" :itemsPerPage="itemsPerPage"

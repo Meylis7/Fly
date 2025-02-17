@@ -80,7 +80,12 @@ const apiService = {
   processDetails(payload) {
     return apiRequest("post", `/tfusion/process/flights`, payload);
   },
-  
+
+  // Search flights
+  searchFlight(payload) {
+    return apiRequest("get", `/tfusion/search/flights?${payload}`);
+  },
+
 
   //Booking flight
   bookFlight(payload) {
