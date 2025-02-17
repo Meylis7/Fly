@@ -9,6 +9,8 @@
 
     import { Vue3Lottie } from 'vue3-lottie'
     import LoadingJson from '@/assets/btn-load.json'
+    import Booking_loading from '@/assets/booking-loading.json';
+
     import Back from '@/components/Back.vue';
     import apiService from "@/services/apiService";
 
@@ -42,7 +44,7 @@
             lastname: '',
             email: '',
             phone: {
-                code: '993',
+                code: '',
                 number: ''
             },
             gender: 'male',
@@ -99,7 +101,6 @@
 
     const errors = ref({})
 
-
     const validateForm = () => {
         errors.value = {} // Clear previous errors
 
@@ -127,7 +128,6 @@
 
         return Object.keys(errors.value).length === 0
     }
-
 
     // Submit form
     const submitForm = async () => {
@@ -214,14 +214,16 @@
                                         :placeholder="$t('booking.contact.gmail.placeholder')">
                                 </div>
 
-                                <div class="input w-[calc(50%-10px)]">
+                                <div class="input relative w-[calc(50%-10px)] overflow-hidden">
                                     <label class="text-sm font-normal mb-2 block">
                                         {{ $t("booking.contact.number.label") }}
                                     </label>
                                     <input v-model="state.contact_details.phone.number" required type="number" min="8"
-                                        class="text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                        class="text-base font-normal w-full py-[14px] pr-3 pl-[80px] placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                         :class="[errors.phone ? 'border-red-500' : '']"
                                         :placeholder="$t('booking.contact.number.placeholder')">
+
+                                       <input type="number" v-model="state.contact_details.phone.code" class="absolute left-[0.7px] bottom-[0.7px] text-base font-normal w-[70px] text-center py-[14px] border-solid border-0 border-r border-[#A1B0CC] rounded-l" placeholder="993">
                                 </div>
 
                                 <div class="input w-[calc(50%-10px)]">
@@ -511,8 +513,8 @@
                     </div>
                 </form>
 
-                <div v-else>
-                    Loading
+                <div v-else class="flex items-center pl-6 py-0">
+                    <Vue3Lottie :animationData="Booking_loading" class="!w-[200px] !h-[200px]" />
                 </div>
             </div>
         </div>

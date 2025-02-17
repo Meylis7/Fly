@@ -172,14 +172,14 @@ export default {
     title: "Filter By",
     sort: {
       val_1: "Cheaper first",
-      val_1: "First the fast ones",
-      val_1: "By departure time",
+      val_2: "First the fast ones",
+      val_3: "By departure time",
     },
     stops: {
       title: "Stop",
       val_1: "Nonstop",
-      val_1: "1 stop",
-      val_1: "2 stop",
+      val_2: "1 stop",
+      val_3: "2 stop",
     },
     baggage: {
       title: "Baggage",
@@ -188,8 +188,8 @@ export default {
     departTime: {
       title: "Departure time",
       val_1: "Morning",
-      val_1: "Afternoon",
-      val_1: "Evening",
+      val_2: "Afternoon",
+      val_3: "Evening",
       text_1: "(05:00 am - 11:59 am)",
       text_2: "(12:00 am - 05:59 am)",
       text_3: "(06:00 am - 11:59 am)",

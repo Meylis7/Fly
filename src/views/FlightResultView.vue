@@ -91,7 +91,7 @@ onMounted(async () => {
     flights.value = results.flights
 
     const travellersCount = searchParams.adults + searchParams.children + searchParams.infants;
-    const routingId = results.data.routing_id;
+    const routingId = results.routing_id;
 
     searchData.value = {
       travellers_count: travellersCount,
