@@ -43,7 +43,7 @@ defineProps({
                         <p class="text-sm font-semibold mr-2">{{ segment.DepartDate.Time }}</p>
                         <p class="text-sm font-semibold">{{ segment.DepartDate.Date }}</p>
                     </div>
-                    <h5 class="text-sm font-normal">{{ segment.Origin.Airport.en }}</h5>
+                    <h5 class="text-sm font-normal">{{ segment.Origin.Airport }}</h5>
                 </div>
             </div>
             <div
@@ -53,7 +53,7 @@ defineProps({
                         <p class="text-sm font-semibold mr-2">{{ segment.ArriveDate.Time }}</p>
                         <p class="text-sm font-semibold">{{ segment.ArriveDate.Date }}</p>
                     </div>
-                    <h5 class="text-sm font-normal">{{ segment.Destination.Airport.en }}</h5>
+                    <h5 class="text-sm font-normal">{{ segment.Destination.Airport }}</h5>
                 </div>
             </div>
         </div>
@@ -180,9 +180,9 @@ defineProps({
         <p class="text-sm font-bold text-[#223A60] text-center ">
             {{ $t("ticket.waitingDuration") }}:
             <span class="font-normal">
-                <span class="font-semibold">{{ stops[index].Location.Airport.en
+                <span class="font-semibold">{{ stops[index].Location.Airport
                     }}</span>,
-                {{ stops[index].Location.Country.en }}
+                {{ stops[index].Location.Country }}
                 ({{ stops[index].Duration.Hours }} {{ $t("ticket.hour") }} {{
                     stops[index].Duration.Minutes }} {{ $t("ticket.minute") }})
             </span>

@@ -1,118 +1,116 @@
 <script setup>
-    import { ref, reactive, watch, onMounted, onUnmounted, defineProps } from 'vue';
-    import apiService from "@/services/apiService";
+import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed  } from 'vue';
+import apiService from "@/services/apiService";
+import { useI18n } from 'vue-i18n';
+
+const { locale } = useI18n(); 
+
+const currentLocale = computed(() => ['en', 'ru', 'tk'].includes(locale.value) ? locale.value : 'en');
 
 
-    const props = defineProps({
-        placeholder: {
-            type: String,
-            default: 'Enter city or airport',
-        },
-        modelValue: String
-    })
+const props = defineProps({
+    placeholder: {
+        type: String,
+        default: 'Enter city or airport',
+    },
+    modelValue: String
+})
 
-    const isSelecting = ref(false); // Add this line
+const isSelecting = ref(false); // Add this line
 
-    const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
+const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
 
-    const searchQuery = ref(props.modelValue || '');
-    const state = reactive({
-        flights: {},
-    });
-    const autocompleteContainer = ref(null);
+const searchQuery = ref(props.modelValue || '');
+const state = reactive({
+    flights: {},
+});
+const autocompleteContainer = ref(null);
 
-    watch(() => props.modelValue, (newValue) => {
-        searchQuery.value = newValue || '';
-    });
+watch(() => props.modelValue, (newValue) => {
+    searchQuery.value = newValue || '';
+});
 
-    watch(searchQuery, (newValue) => {
-        if (!isSelecting.value) { // Add this check
-            emit('update:modelValue', newValue);
-            debouncedFetchAirports();
-        }
-        isSelecting.value = false; // Reset the flag
-    });
+watch(searchQuery, (newValue) => {
+    if (!isSelecting.value) { // Add this check
+        emit('update:modelValue', newValue);
+        debouncedFetchAirports();
+    }
+    isSelecting.value = false; // Reset the flag
+});
 
-    const debounce = (func, delay) => {
-        let timeoutId;
-        return (...args) => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                func(...args);
-            }, delay);
-        };
+const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func(...args);
+        }, delay);
     };
+};
 
-    const fetchAirports = async () => {
-        if (searchQuery.value.length < 3) {
-            state.flights = {};
-            return;
-        }
-
-        try {
-            const data = await apiService.fetchAirports(searchQuery.value);
-            state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
-        } catch (error) {
-            console.error("Error fetching airports:", error);
-            state.flights = {};
-        }
-    };
-
-    const debouncedFetchAirports = debounce(fetchAirports, 300);
-
-    const selectCity = (city, cityData, country) => {
-        isSelecting.value = true;
-        searchQuery.value = city;
+const fetchAirports = async () => {
+    if (searchQuery.value.length < 3) {
         state.flights = {};
-        emit('update:modelValue', city);
-        emit('city-selected', {
-            city,
-            cityData,
-            country,
-            cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
-        });
-    };
+        return;
+    }
 
-    // const selectCity = (city, cityData, country) => {
-    //     isSelecting.value = true; // Add this line
-    //     searchQuery.value = city;
-    //     state.flights = {};
-    //     emit('update:modelValue', city);
-    //     emit('city-selected', { city, cityData, country });
-    // };
-
-
-    const selectAirport = (airport) => {
-        isSelecting.value = true;
-        searchQuery.value = `${airport.name.ru}`;
+    try {
+        const data = await apiService.fetchAirports(searchQuery.value);
+        state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
+    } catch (error) {
+        console.error("Error fetching airports:", error);
         state.flights = {};
-        emit('update:modelValue', `${airport.name.ru}`);
-        emit('airport-selected', {
-            airport,
-            airportCode: airport.code
-        });
-    };
-    // const selectAirport = (airport) => {
-    //     isSelecting.value = true; // Add this line
-    //     searchQuery.value = `${airport.name.ru}`; //${airport.name.ru} (${airport.code})
-    //     state.flights = {};
-    //     emit('update:modelValue', `${airport.name.ru}`); //${airport.name.ru} (${airport.code})
-    //     emit('airport-selected', { airport });
-    // };
+    }
+};
 
-    const handleClickOutside = (event) => {
-        if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
-            state.flights = {};
-        }
-    };
+const debouncedFetchAirports = debounce(fetchAirports, 300);
 
-    onMounted(() => {
-        document.addEventListener('click', handleClickOutside);
+const selectCity = (city, cityData, country) => {
+    isSelecting.value = true;
+    searchQuery.value = city;
+    state.flights = {};
+    emit('update:modelValue', city);
+    emit('city-selected', {
+        city,
+        cityData,
+        country,
+        cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
     });
+};
 
-    onUnmounted(() => {
-        document.removeEventListener('click', handleClickOutside);
+// const selectCity = (city, cityData, country) => {
+//     isSelecting.value = true; // Add this line
+//     searchQuery.value = city;
+//     state.flights = {};
+//     emit('update:modelValue', city);
+//     emit('city-selected', { city, cityData, country });
+// };
+
+
+const selectAirport = (airport) => {
+    isSelecting.value = true;
+    searchQuery.value = airport.name[currentLocale.value] ?? airport.name.en;
+    state.flights = {};
+    emit('update:modelValue', airport.name[currentLocale.value] ?? airport.name.en);
+    emit('airport-selected', {
+        airport,
+        airportCode: airport.code
     });
+};
+
+const handleClickOutside = (event) => {
+    if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
+        state.flights = {};
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
@@ -136,8 +134,9 @@
                         </span>
                         {{ city }}
                         <span v-if="cityData.country" class="text-base font-normal">
-                            {{ cityData.country.en }}
+                            {{ cityData.country[$i18n.locale] ?? cityData.country.en }}
                         </span>
+
                     </h3>
                     <p class="text-sm font-semibold capitalize text-[#84889B]">
                         {{ cityData.citycode || (cityData.airports && cityData.airports[0] &&
@@ -159,7 +158,7 @@
                                     </svg>
                                 </span>
                                 <span v-if="airport && airport.name">
-                                    {{ airport.name.ru }}
+                                    {{ airport.name[$i18n.locale] ?? airport.name.en }}
                                 </span>
                             </h6>
                             <p v-if="airport">{{ airport.code }}</p>
@@ -173,12 +172,12 @@
 
 
 <style scoped>
-    .autocomplete {
-        position: relative;
-        width: 100%;
-    }
+.autocomplete {
+    position: relative;
+    width: 100%;
+}
 
-    .flights {
-        z-index: 10;
-    }
+.flights {
+    z-index: 10;
+}
 </style>

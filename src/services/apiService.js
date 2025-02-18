@@ -91,6 +91,12 @@ const apiService = {
   bookFlight(payload) {
     return apiRequest("post", `/tfusion/book/flights`, payload);
   },
+
+
+  //Booking flight
+  fetchMyFlightBookings() {
+    return apiRequest("get", `/bookings`);
+  },
 };
 
 export default apiService;

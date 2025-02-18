@@ -89,7 +89,7 @@ const toggleDetails = (index) => {
                                     <p class="text-lg font-semibold my-1">
                                         {{ flight.Outward.DepartDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.en }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport }}</h6>
                                 </div>
 
                                 <div class="block mx-3">
@@ -111,7 +111,7 @@ const toggleDetails = (index) => {
                                             <span v-for="(stop, index) in flight.Outward.Stops" :key="index"
                                                 class="block">
                                                 {{ (stop.Duration.Hours || 0) + $t("ticket.hour") + (stop.Duration.Minutes || 0) +
-                                                    $t("ticket.minute") + stop.Location.Airport.en }}
+                                                    $t("ticket.minute") + stop.Location.Airport }}
                                             </span>
                                         </template>
                                     </p>
@@ -122,7 +122,7 @@ const toggleDetails = (index) => {
                                     <p class="text-lg font-semibold my-1">
                                         {{ flight.Outward.ArriveDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Destination.Airport.en }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Destination.Airport }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@ const toggleDetails = (index) => {
                                     <p class="text-base font-semibold mb-1">
                                         {{ flight.Return.DepartDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Destination.Airport.en }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Destination.Airport }}</h6>
                                 </div>
 
                                 <div class="block mx-3">
@@ -167,7 +167,7 @@ const toggleDetails = (index) => {
                                                 class="block">
                                                 {{ (stop.Duration.Hours || 0) + 'h ' + (stop.Duration.Minutes || 0) +
                                                     'min '
-                                                    + stop.Location.Airport.en }}
+                                                    + stop.Location.Airport }}
                                             </span>
                                         </template>
                                     </p>
@@ -178,7 +178,7 @@ const toggleDetails = (index) => {
                                     <p class="text-lg font-semibold my-1">
                                         {{ flight.Return.ArriveDate.Time }}
                                     </p>
-                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport.en }}</h6>
+                                    <h6 class="text-base font-normal">{{ flight.Origin.Airport }}</h6>
                                 </div>
                             </div>
                         </div>
