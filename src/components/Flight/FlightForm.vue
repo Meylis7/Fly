@@ -306,7 +306,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
 <template>
     <form class="w-full relative z-10" @submit.prevent="handleSubmit">
-        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl ">
+        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl">
             <div class="flex items-center mb-5">
                 <div class="air-type">
                     <input type="radio" name="type" checked id="one-way" value="one-way" v-model="tripType">
@@ -319,9 +319,9 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                 </div>
             </div>
 
-            <div class="flex items-center justify-between">
-                <div class="flex items-end relative gap-[22px]">
-                    <div class="relative">
+            <div class="flex flex-wrap 1xl:flex-nowrap items-center justify-between">
+                <div class="flex items-end relative gap-[22px] w-full 1xl:w-auto mb-5 1xl:mb-0">
+                    <div class="relative w-1/2 1xl:w-full">
                         <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                             {{ $t("searchForm.routeFrom.label") }}
 
@@ -339,7 +339,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                         </label>
 
                         <input type="text" v-model="departureCity" :placeholder="$t('searchForm.routeFrom.placeholder')"
-                            class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
+                            class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''">
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
@@ -347,7 +347,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                     </div>
 
                     <button @click="swapCities" type="button"
-                        class="cursor-pointer block absolute left-[49%] translate-x-[-50%] bottom-1">
+                        class="cursor-pointer block absolute left-[50%] translate-x-[-50%] bottom-1 z-10">
                         <svg :class="{ 'rotate-animation': isRotating }" class="pointer-events-none" width="40"
                             height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="40" height="40" rx="20" fill="#223A60" />
@@ -359,7 +359,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                         </svg>
                     </button>
 
-                    <div>
+                    <div class="relative w-1/2 1xl:w-full">
                         <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                             {{ $t("searchForm.routeTo.label") }}
 
@@ -377,7 +377,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                         </label>
 
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
-                            class="bg-[#F2F3F4] text-base font-medium pl-6 p-3 rounded-md focus:ring-1 focus:ring-prime-color"
+                            class="bg-[#F2F3F4] w-full text-base font-medium pl-6 p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''">
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
@@ -385,16 +385,16 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                     </div>
                 </div>
 
-                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded block"></span>
+                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden 1xl:block"></span>
 
-                <div class="dates relative">
+                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-auto">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.datePicker.tuda") }}
                     </label>
 
                     <input type="text" :value="departureDate ? departureDate.toLocaleDateString() : ''"
                         :placeholder="$t('searchForm.datePicker.placeholder')"
-                        class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
+                        class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                         :class="errors.departureDate ? 'border-red-500 border-solid border' : ''"
                         @focus="openDepartureCalendar" ref="departureInput" />
 
@@ -408,16 +408,16 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                     </span>
                 </div>
 
-                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded block"></span>
+                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden md:block"></span>
 
-                <div class="dates relative" :class="{ 'disabled': tripType === 'one-way' }">
+                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-auto" :class="{ 'disabled': tripType === 'one-way' }">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.datePicker.obratno") }}
                     </label>
 
                     <input type="text" :value="returnDate ? returnDate.toLocaleDateString() : ''"
                         :placeholder="$t('searchForm.datePicker.placeholder')"
-                        class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
+                        class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                         :class="errors.returnDate ? 'border-red-500 border-solid border' : ''"
                         @focus="openReturnCalendar" ref="returnInput" />
 
@@ -431,15 +431,15 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                     </span>
                 </div>
 
-                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded block"></span>
+                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden md:block"></span>
 
-                <div>
+                <div class=" w-full md:w-[calc(33.33%-15px)] 1xl:w-auto">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.passengers.label") }}
                     </label>
 
                     <input type="text" id="passengers-input" :value="passengerDisplay"
-                        class="bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color cursor-pointer"
+                        class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color cursor-pointer"
                         readonly @click="toggleModal" ref="passengerInput" />
                 </div>
             </div>

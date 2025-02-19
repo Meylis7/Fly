@@ -19,7 +19,7 @@
             <div class="wrapper pt-[160px]">
                 <div class="max-w-[1200px] m-auto">
                     <h1
-                        class="mb-6 text-[38px] max-w-[950px] mx-auto leading-snug font-bold text-prime-color text-center">
+                        class="mb-6 text-base md:text-2xl 1xl:text-[38px] max-w-[950px] mx-auto leading-snug font-bold text-prime-color text-center">
                         {{ $t("heroTitle") }}
                     </h1>
                     <!-- <p class="text-lg font-medium opacity-60 text-center">
@@ -28,9 +28,9 @@
                     </p> -->
                 </div>
 
-                <div class="tabs mt-24 flex items-center bg-white rounded-t-3xl w-fit px-6 py-5 gap-5">
+                <div class="tabs mt-20 lg:mt-24 flex items-center bg-white rounded-t-3xl w-fit px-3 lg:px-6 py-3 lg:py-5 gap-2 lg:gap-5">
                     <button @click="setActiveTab('flights')" :class="[
-                        'tab-item flex items-center py-3 cursor-pointer px-8 gap-4 rounded-[10px]',
+                        'tab-item flex items-center py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px]',
                         activeTab === 'flights' ? 'bg-prime-color text-white' : ''
                     ]">
                         <span>
@@ -50,7 +50,7 @@
                             </svg>
                         </span>
 
-                        <p class="text-base font-bold">
+                        <p class="text-sm md:text-base font-bold">
                             {{ $t("searchForm.tabs.flights") }}
                         </p>
                     </button>
@@ -58,7 +58,7 @@
                     <span class="bg-[#D4D7D9] w-[3px] h-[30px] rounded"></span>
 
                     <button @click="setActiveTab('hotels')" :class="[
-                        'tab-item flex items-center py-3 cursor-pointer px-8 gap-4 rounded-[10px]',
+                        'tab-item flex items-center py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px]',
                         activeTab === 'hotels' ? 'bg-prime-color text-white' : ''
                     ]">
                         <span>
@@ -77,7 +77,7 @@
                             </svg>
                         </span>
 
-                        <p class="text-base font-bold">
+                        <p class="text-sm md:text-base font-bold">
                             {{ $t("searchForm.tabs.hotels") }}
                         </p>
                     </button>

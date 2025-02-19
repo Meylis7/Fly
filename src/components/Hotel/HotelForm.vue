@@ -6,8 +6,8 @@
 <template>
     <form class="w-full relative z-10">
         <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl">
-            <div class="flex items-center justify-between">
-                <div class="w-[22%]">
+            <div class="flex flex-wrap items-center justify-between gap-y-4">
+                <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         Departure date
                     </label>
@@ -16,9 +16,9 @@
                         class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
                 </div>
 
-                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded block"></span>
+                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden sm:block lg:block"></span>
 
-                <div class="w-[22%]">
+                <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         Departure date
                     </label>
@@ -27,9 +27,9 @@
                         class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
                 </div>
 
-                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded block"></span>
+                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden lg:block"></span>
 
-                <div class="w-[22%]">
+                <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         Return date
                     </label>
@@ -38,14 +38,15 @@
                         class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
                 </div>
 
-                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded block"></span>
+                <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden sm:block lg:block"></span>
 
-                <div class="w-[22%]">
+                <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         Passangers
                     </label>
 
-                    <input type="text" value="1 Adult" class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
+                    <input type="text" value="1 Adult"
+                        class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color">
                 </div>
             </div>
         </div>

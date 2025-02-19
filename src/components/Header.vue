@@ -1,56 +1,56 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/userStore';
-import logo from "@/assets/images/logo.png";
-import apiService from '@/services/apiService';
+    import { ref, onMounted } from 'vue';
+    import { RouterLink, useRouter } from 'vue-router';
+    import { useUserStore } from '@/stores/userStore';
+    import logo from "@/assets/images/logo.png";
+    import apiService from '@/services/apiService';
 
-import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
-const router = useRouter();
-const userStore = useUserStore();
+    import { useI18n } from "vue-i18n";
+    const { locale } = useI18n();
+    const router = useRouter();
+    const userStore = useUserStore();
 
-// Locale selection
-const selectedLocale = ref(localStorage.getItem('locale') || 'en');
-const dropdownVisible = ref(false);
+    // Locale selection
+    const selectedLocale = ref(localStorage.getItem('locale') || 'en');
+    const dropdownVisible = ref(false);
 
-const localeLabels = {
-    en: "English",
-    ru: "Russian",
-    tk: "Turkmen",
-};
+    const localeLabels = {
+        en: "English",
+        ru: "Russian",
+        tk: "Turkmen",
+    };
 
-const toggleDropdown = () => {
-    dropdownVisible.value = !dropdownVisible.value;
-};
+    const toggleDropdown = () => {
+        dropdownVisible.value = !dropdownVisible.value;
+    };
 
-const changeLocale = (newLocale) => {
-    selectedLocale.value = newLocale;
-    localStorage.setItem('locale', newLocale);
-    locale.value = newLocale; // Update Vue I18n
-    dropdownVisible.value = false; // Close dropdown
-};
+    const changeLocale = (newLocale) => {
+        selectedLocale.value = newLocale;
+        localStorage.setItem('locale', newLocale);
+        locale.value = newLocale; // Update Vue I18n
+        dropdownVisible.value = false; // Close dropdown
+    };
 
-const user = ref('')
+    const user = ref('')
 
-// Ensure Header updates when user logs in or out
-onMounted(async () => {
+    // Ensure Header updates when user logs in or out
+    onMounted(async () => {
 
-    userStore.loadUser();
-    locale.value = selectedLocale.value;
+        userStore.loadUser();
+        locale.value = selectedLocale.value;
 
-    if (userStore.user) {
-        try {
-            const response = await apiService.getUser();
-            user.value = response.data;
+        if (userStore.user) {
+            try {
+                const response = await apiService.getUser();
+                user.value = response.data;
 
-            userStore.updateUser(response.data);
+                userStore.updateUser(response.data);
 
-        } catch (error) {
-            console.error('Error fetching user', error);
+            } catch (error) {
+                console.error('Error fetching user', error);
+            }
         }
-    }
-});
+    });
 
 
 </script>
@@ -67,7 +67,8 @@ onMounted(async () => {
                     </span>
                 </RouterLink>
 
-                <nav>
+                <!-- <nav class="fixed top-0 left-0 z-20 bg-white w-4/5 h-screen lg:block lg:static"> -->
+                <nav class="fixed top-0 left-0 z-20 bg-white w-4/5 h-screen lg:block lg:static">
                     <ul class="flex items-center gap-12">
                         <li>
                             <RouterLink to="/" class="text-base">{{ $t("header.links.flightHotel") }}</RouterLink>
@@ -125,9 +126,9 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.inner {
-    background: linear-gradient(90.12deg, rgba(234, 240, 240, 0.3) 0%, rgba(234, 240, 240, 0.2) 100%);
-    backdrop-filter: blur(5.5px);
-    border-radius: 14px;
-}
+    .inner {
+        background: linear-gradient(90.12deg, rgba(234, 240, 240, 0.3) 0%, rgba(234, 240, 240, 0.2) 100%);
+        backdrop-filter: blur(5.5px);
+        border-radius: 14px;
+    }
 </style>

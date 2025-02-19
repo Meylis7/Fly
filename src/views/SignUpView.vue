@@ -1,95 +1,96 @@
 <script setup>
-import { ref } from 'vue';
-import { useUserStore } from '@/stores/userStore';
-import LoginSlider from '@/components/LoginSlider.vue';
-import router from '@/router';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import apiService from '@/services/apiService';
+    import { ref } from 'vue';
+    import { useUserStore } from '@/stores/userStore';
+    import { RouterLink } from 'vue-router';
+    import { Vue3Lottie } from 'vue3-lottie'
+    import router from '@/router';
+    import { toast } from 'vue3-toastify';
+    import 'vue3-toastify/dist/index.css';
 
-import { Vue3Lottie } from 'vue3-lottie'
-import LoadingJson from '@/assets/btn-load.json'
+    import LoginSlider from '@/components/LoginSlider.vue';
+    import apiService from '@/services/apiService';
+    import LoadingJson from '@/assets/btn-load.json'
 
-const userStore = useUserStore();
-const loading = ref(false);
+    const userStore = useUserStore();
+    const loading = ref(false);
 
-const form = ref({
-    firstname: '',
-    lastname: '',
-    email: '',
-    company: '',
-    password: '',
-    password_confirmation: '',
-    terms: false
-});
+    const form = ref({
+        firstname: '',
+        lastname: '',
+        email: '',
+        company: '',
+        password: '',
+        password_confirmation: '',
+        terms: false
+    });
 
-const errors = ref({});
+    const errors = ref({});
 
-const validateForm = () => {
-    errors.value = {};
+    const validateForm = () => {
+        errors.value = {};
 
-    if (!form.value.firstname) errors.value.firstname = "First name is required";
-    if (!form.value.lastname) errors.value.lastname = "Last name is required";
-    if (!form.value.email) {
-        errors.value.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
-        errors.value.email = "Invalid email format";
-    }
-    if (!form.value.company) errors.value.company = "Company name is required";
-    if (!form.value.password) errors.value.password = "Password is required";
-    if (form.value.password.length < 6) errors.value.password = "Password must be at least 6 characters";
-    if (form.value.password !== form.value.password_confirmation) {
-        errors.value.password_confirmation = "Passwords do not match";
-    }
-    // if (!form.value.terms) errors.value.terms = "You must agree to the terms and policies";
+        if (!form.value.firstname) errors.value.firstname = "First name is required";
+        if (!form.value.lastname) errors.value.lastname = "Last name is required";
+        if (!form.value.email) {
+            errors.value.email = "Email is required";
+        } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+            errors.value.email = "Invalid email format";
+        }
+        if (!form.value.company) errors.value.company = "Company name is required";
+        if (!form.value.password) errors.value.password = "Password is required";
+        if (form.value.password.length < 6) errors.value.password = "Password must be at least 6 characters";
+        if (form.value.password !== form.value.password_confirmation) {
+            errors.value.password_confirmation = "Passwords do not match";
+        }
+        // if (!form.value.terms) errors.value.terms = "You must agree to the terms and policies";
 
-    return Object.keys(errors.value).length === 0;
-};
+        return Object.keys(errors.value).length === 0;
+    };
 
-const register = async () => {
+    const register = async () => {
 
-    if (!validateForm()) return;
+        if (!validateForm()) return;
 
-    loading.value = true;
-    try {
-        const userData = {
-            firstname: form.value.firstname,
-            lastname: form.value.lastname,
-            email: form.value.email,
-            company: form.value.company,
-            password: form.value.password,
-            password_confirmation: form.value.password_confirmation
-        };
+        loading.value = true;
+        try {
+            const userData = {
+                firstname: form.value.firstname,
+                lastname: form.value.lastname,
+                email: form.value.email,
+                company: form.value.company,
+                password: form.value.password,
+                password_confirmation: form.value.password_confirmation
+            };
 
-        const data = await apiService.registerUser(userData);
+            const data = await apiService.registerUser(userData);
 
-        // ✅ Use Pinia to set user data
-        userStore.setUser(data.data.user, data.data.token);
+            // ✅ Use Pinia to set user data
+            userStore.setUser(data.data.user, data.data.token);
 
-        // Show success message
-        toast.success("Registration successful!", { autoClose: 3000 });
+            // Show success message
+            toast.success("Registration successful!", { autoClose: 3000 });
 
-        router.push({
-            name: 'home',
-            force: true
-        })
+            router.push({
+                name: 'home',
+                force: true
+            })
 
-    } catch (error) {
-        const errorMessage = error.message || "Registration failed";
-        toast.error(errorMessage, { autoClose: 3000 });
-    } finally {
-        loading.value = false;
-    }
-};
+        } catch (error) {
+            const errorMessage = error.message || "Registration failed";
+            toast.error(errorMessage, { autoClose: 3000 });
+        } finally {
+            loading.value = false;
+        }
+    };
 </script>
 
 <template>
     <section class="bg-[#F9F9F9] min-h-screen pt-[70px]">
         <div class="auto_container">
             <div class="wrapper">
-                <a href="#" class="logo block mb-[30px]">
+                <RouterLink to="/" class="logo block mb-[30px]">
                     <img src="@/assets/images/logo.png" alt="logo">
-                </a>
+                </RouterLink>
 
                 <div class="flex items-center justify-between">
                     <LoginSlider class="w-[calc(50%-10px)]" />
@@ -104,7 +105,7 @@ const register = async () => {
 
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                {{ $t("signUp.name.label") }}    
+                                {{ $t("signUp.name.label") }}
                             </label>
                             <input v-model="form.firstname" type="text"
                                 class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
@@ -114,7 +115,7 @@ const register = async () => {
 
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                {{ $t("signUp.lastName.label") }}        
+                                {{ $t("signUp.lastName.label") }}
                             </label>
                             <input v-model="form.lastname" type="text"
                                 class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
@@ -124,7 +125,7 @@ const register = async () => {
 
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                {{ $t("signUp.email.label") }}   
+                                {{ $t("signUp.email.label") }}
                             </label>
                             <input v-model="form.email" type="email"
                                 class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
@@ -134,7 +135,7 @@ const register = async () => {
 
                         <div class="block relative mb-6 w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                {{ $t("signUp.company.label") }}       
+                                {{ $t("signUp.company.label") }}
                             </label>
                             <input v-model="form.company" type="text"
                                 class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
@@ -165,7 +166,7 @@ const register = async () => {
 
                         <div class="block relative mb-6 w-full">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
-                                {{ $t("signUp.confirmPass.label") }}    
+                                {{ $t("signUp.confirmPass.label") }}
                             </label>
                             <input v-model="form.password_confirmation" type="password"
                                 class="w-full !bg-[#F9F9F9] text-base font-normal border border-solid rounded py-[18px] px-4"
@@ -188,18 +189,19 @@ const register = async () => {
                         <button type="submit" :disabled="loading"
                             class="w-full text-center justify-center py-[14px] mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <div v-if="loading" class="flex items-center pl-6 py-0">
-                                {{ $t("loading") }}   
+                                {{ $t("loading") }}
                                 <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
                             </div>
                             <p v-else class="px-6 py-2">
-                                {{ $t("signUp.createAccount") }}    
+                                {{ $t("signUp.createAccount") }}
                             </p>
                         </button>
 
                         <p v-if="errors.api" class="text-red-500 text-center w-full">{{ errors.api }}</p>
 
                         <p class="text-sm font-medium text-[#112211] text-center w-full">
-                            {{ $t("signUp.accountText") }} <RouterLink to="/signin" class="text-[#FF8682]">{{ $t("signIn.title") }}</RouterLink>
+                            {{ $t("signUp.accountText") }} <RouterLink to="/signin" class="text-[#FF8682]">{{
+                                $t("signIn.title") }}</RouterLink>
                         </p>
                     </form>
                 </div>
@@ -210,54 +212,54 @@ const register = async () => {
 
 
 <style lang="scss" scoped>
-.terms {
-    input {
-        display: none;
+    .terms {
+        input {
+            display: none;
 
-        &:checked~label {
+            &:checked~label {
+                &::before {
+                    border-color: #223A60;
+                }
+
+                &::after {
+                    background: #223A60;
+                    opacity: 1;
+                }
+            }
+        }
+
+        label {
+            position: relative;
+            cursor: pointer;
+
             &::before {
-                border-color: #223A60;
+                content: '';
+                display: block;
+                margin-right: 10px;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #112211;
+                border-radius: 3px;
             }
 
             &::after {
-                background: #223A60;
-                opacity: 1;
+                content: '✓';
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: 3px;
+                width: 18px;
+                height: 18px;
+                font-size: 14px;
+                font-weight: 500;
+                color: #fff;
+                opacity: 0;
+                transition: all .2s linear;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
     }
-
-    label {
-        position: relative;
-        cursor: pointer;
-
-        &::before {
-            content: '';
-            display: block;
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-            border: 1px solid #112211;
-            border-radius: 3px;
-        }
-
-        &::after {
-            content: '✓';
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 3px;
-            width: 18px;
-            height: 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #fff;
-            opacity: 0;
-            transition: all .2s linear;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
-}
 </style>

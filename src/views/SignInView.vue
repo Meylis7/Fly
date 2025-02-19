@@ -1,77 +1,79 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import LoginSlider from '@/components/LoginSlider.vue';
-import apiService from '@/services/apiService';
-import { useUserStore } from '@/stores/userStore';
-import { Vue3Lottie } from 'vue3-lottie'
-import LoadingJson from '@/assets/btn-load.json'
+    import { ref } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { RouterLink } from 'vue-router';
+    import { useUserStore } from '@/stores/userStore';
+    import { Vue3Lottie } from 'vue3-lottie'
+    import { toast } from 'vue3-toastify';
 
-const userStore = useUserStore();
-const router = useRouter();
-const loading = ref(false);
+    import LoginSlider from '@/components/LoginSlider.vue';
+    import apiService from '@/services/apiService';
+    import 'vue3-toastify/dist/index.css';
+    import LoadingJson from '@/assets/btn-load.json'
 
-const form = ref({
-    email: '',
-    password: ''
-});
+    const userStore = useUserStore();
+    const router = useRouter();
+    const loading = ref(false);
 
-const errors = ref({});
+    const form = ref({
+        email: '',
+        password: ''
+    });
 
-const validateForm = () => {
-    errors.value = {};
+    const errors = ref({});
 
-    if (!form.value.email) {
-        errors.value.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
-        errors.value.email = "Invalid email format";
-    }
-    if (!form.value.password) {
-        errors.value.password = "Password is required";
-    }
+    const validateForm = () => {
+        errors.value = {};
 
-    return Object.keys(errors.value).length === 0;
-};
+        if (!form.value.email) {
+            errors.value.email = "Email is required";
+        } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+            errors.value.email = "Invalid email format";
+        }
+        if (!form.value.password) {
+            errors.value.password = "Password is required";
+        }
 
-const login = async () => {
-    if (!validateForm()) return;
+        return Object.keys(errors.value).length === 0;
+    };
 
-    loading.value = true;
-    try {
-        const credentials = {
-            email: form.value.email,
-            password: form.value.password
-        };
+    const login = async () => {
+        if (!validateForm()) return;
 
-        const data = await apiService.loginUser(credentials);
+        loading.value = true;
+        try {
+            const credentials = {
+                email: form.value.email,
+                password: form.value.password
+            };
 
-        // ✅ Use Pinia to set user data
-        userStore.setUser(data.data.user, data.data.token);
+            const data = await apiService.loginUser(credentials);
 
-        // Show success message
-        toast.success("Login successful!", { autoClose: 3000 });
+            // ✅ Use Pinia to set user data
+            userStore.setUser(data.data.user, data.data.token);
 
-        // Redirect to home
-        router.push({ name: 'home', force: true });
+            // Show success message
+            toast.success("Login successful!", { autoClose: 3000 });
 
-    } catch (error) {
-        const errorMessage = error.message || "Login failed";
-        toast.error(errorMessage, { autoClose: 3000 });
-    } finally {
-        loading.value = false;
-    }
-};
+            // Redirect to home
+            router.push({ name: 'home', force: true });
+
+        } catch (error) {
+            const errorMessage = error.message || "Login failed";
+            toast.error(errorMessage, { autoClose: 3000 });
+        } finally {
+            loading.value = false;
+        }
+    };
 </script>
 
 <template>
     <section class="bg-[#F9F9F9] min-h-screen pt-[70px]">
         <div class="auto_container">
             <div class="wrapper">
-                <a href="#" class="logo block mb-[30px]">
+                <RouterLink to="/" class="logo block mb-[30px]">
                     <img src="@/assets/images/logo.png" alt="logo">
-                </a>
+                </RouterLink>
 
                 <div class="flex items-center justify-between">
                     <form class="w-[calc(50%-10px)]" @submit.prevent="login">
@@ -132,7 +134,8 @@ const login = async () => {
 
 
                         <p class="text-sm font-medium text-[#112211] text-center w-full">
-                            {{ $t("signIn.accountText") }} <RouterLink to="/signup" class="text-[#FF8682]">{{ $t("signUp.title") }}</RouterLink>
+                            {{ $t("signIn.accountText") }} <RouterLink to="/signup" class="text-[#FF8682]">{{
+                                $t("signUp.title") }}</RouterLink>
                         </p>
                     </form>
 

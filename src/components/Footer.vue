@@ -7,8 +7,8 @@
     <footer class="footer bg-[url('@/assets/images/footer-bg.png')] w-full mt-auto pt-[30px]">
         <div class="auto_container">
             <div class="wrapper">
-                <div class="flex gap-28 text-white">
-                    <div class="col">
+                <div class="flex flex-wrap gap-x-28 gap-y-10 text-white">
+                    <div class="col w-full xl:w-full 1xl:w-auto">
                         <RouterLink to="/" class="flex items-center mb-5">
                             <!-- <img src="@/assets/images/logo.png" alt="logo"> -->
                             <span>
@@ -60,13 +60,13 @@
                             </p>
                         </RouterLink>
 
-                        <p class="text-base font-normal max-w-[300px]">
+                        <p class="text-base font-normal  1xl:max-w-[300px]">
                             {{ $t("footer.text") }}
                         </p>
                     </div>
 
-                    <div class="col">
-                        <h3 class=" text-[22px] mb-[30px] font-bold">
+                    <div class="col w-full xl:w-1/2 1xl:w-auto">
+                        <h3 class=" text-[22px] mb-[15px] font-bold">
                             {{ $t("footer.usefullLink") }}
                         </h3>
 
@@ -118,8 +118,8 @@
                         </div>
                     </div>
 
-                    <div class="col">
-                        <h3 class=" text-[22px] mb-[30px] font-bold">
+                    <div class="col w-full xl:w-1/2 1xl:w-auto">
+                        <h3 class=" text-[22px] mb-[15px] font-bold">
                             {{ $t("footer.socialMedia") }}
                         </h3>
 

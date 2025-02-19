@@ -7,7 +7,10 @@ export default {
         sans: ["Montserrat", "sans-serif"],
       },
       colors: {
-        'prime-color': '#223A60',
+        "prime-color": "#223A60",
+      },
+      screens: {
+        "1xl": "90rem", 
       },
     },
   },
