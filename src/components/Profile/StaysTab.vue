@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="!states.bookings" class="flex items-center w-full px-6 py-8 mb-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
+    <div v-if="states.bookings.length" class="flex items-center w-full px-6 py-8 mb-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
         <div class="block">
             <h4 class="text-xl font-normal mb-2">
                 Five Jumeirah Village Dubai

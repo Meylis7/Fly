@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="!states.bookings" v-for="booking in states.bookings" :key="booking.id"
+    <div v-if="states.bookings.length" v-for="booking in states.bookings" :key="booking.id"
         class="flex flex-col w-full px-6 py-8 mb-5 gap-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
         <div class="flex items-center justify-between border-solid border-0 border-b border-[#eee] pb-2">
             <div class="flex items-center">
