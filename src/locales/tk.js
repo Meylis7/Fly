@@ -249,6 +249,14 @@ export default {
         placeholder: "Apt 101, 123, Baş köçe",
       },
     },
+    options: {
+      title: "Sargyt mümkinçilikleri",
+      HandLuggageOptions: "El goş mümkinçikleri",
+      OutwardLuggageOptions: "Gidiş bagaj mümkinçikleri",
+      ReturnLuggageOptions: "Gaýdyp geliş bagaj mümkinçikleri",
+      LuggageOptions: "Bagaj mümkinçikleri",
+      select_placeholder: "Bir wariant saýlaň"
+    },
     passenger: {
       title: "Ýolagçy",
       text: "Syýahat resminamaňyzda görkezilen maglumatlaryňyzy giriziň.",

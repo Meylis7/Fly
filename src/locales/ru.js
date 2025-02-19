@@ -249,6 +249,14 @@ export default {
         placeholder: "например, кв. 101, 123, ул. Главная",
       },
     },
+    options: {
+      title: "Варианты бронирования",
+      HandLuggageOptions: "Варианты ручной клади",
+      OutwardLuggageOptions: "Варианты багажа в одну сторону",
+      ReturnLuggageOptions: "Варианты обратного багажа",
+      LuggageOptions: "Варианты багажа",
+      select_placeholder: "Выберите вариант"
+    },
     passenger: {
       title: "Пассажир",
       text: "Пожалуйста, укажите данные, как в вашем проездном документе.",
