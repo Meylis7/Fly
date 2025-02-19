@@ -1,35 +1,81 @@
 <script setup>
+import { reactive, onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import apiService from '@/services/apiService';
+
+import axios from 'axios';
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+
+const userStore = useUserStore();
+
+const state = reactive({
+    user: '',
+    userInfo: {
+        firstname: '',
+        lastname: '',
+        company: '',
+    }
+})
+
+
+onMounted(async () => {
+    userStore.loadUser();  // Ensure user data is loaded first
+
+    // Object.assign(state.userInfo.firstname, userStore.user.firstname); // Reactively update
+
+    state.userInfo = userStore.user;
+});
+
+const updateUser = async () => {
+
+    try {
+        const userData = {
+            firstname: state.userInfo.firstname,
+            lastname: state.userInfo.lastname,
+            company: state.userInfo.company
+        };
+
+        const response = await apiService.updateUser(userData);
+
+        // ✅ Use Pinia to set user data
+        userStore.updateUser(response.data);
+
+        // Show success message
+        toast.success("Update successful!", { autoClose: 3000 });
+
+    } catch (error) {
+        const errorMessage = error.message || "Registration failed";
+        toast.error(errorMessage, { autoClose: 3000 });
+    }
+};
 
 </script>
 
 <template>
-    <div class="flex flex-wrap gap-8">
+    <form @submit.prevent="updateUser" class="flex flex-wrap gap-8">
         <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Full Name</label>
-            <input type="text" class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto"
-                placeholder="Amanow Aman" readonly>
+            <label class="text-base font-normal block mb-3">Firstname</label>
+            <input v-model="state.userInfo.firstname" type="text"
+                class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Aman">
         </div>
 
         <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Email</label>
-            <input type="email" class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto"
-                placeholder="Aman@gmail.com" readonly>
+            <label class="text-base font-normal block mb-3">Lastname</label>
+            <input v-model="state.userInfo.lastname" type="text"
+                class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Amanow">
         </div>
 
         <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Password</label>
-            <input type="password" class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto"
-                placeholder="**********************" readonly>
-        </div>
-
-        <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Phone number</label>
-            <input type="number" class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto"
-                placeholder="+993 65 123456" readonly>
+            <label class="text-base font-normal block mb-3">Company name</label>
+            <input v-model="state.userInfo.company" type="text"
+                class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Asuda HJ">
         </div>
 
         <div class="w-full flex justify-end">
-            <button
+            <button type="submit"
                 class="w-40 cursor-pointer flex items-center justify-center bg-prime-color text-white py-4 rounded-lg text-sm font-medium">
                 <span class="block mr-[10px]">
                     <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +91,8 @@
                 Edit
             </button>
         </div>
-    </div>
+    </form>
+
 </template>
 
 <style lang="scss" scoped></style>

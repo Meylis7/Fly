@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
+import { Vue3Lottie } from 'vue3-lottie';
+import NoData from '@/assets/NoData.json';
 
 import apiService from "@/services/apiService";
 
@@ -21,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-for="booking in states.bookings" :key="booking.id"
+    <div v-if="!states.bookings" v-for="booking in states.bookings" :key="booking.id"
         class="flex flex-col w-full px-6 py-8 mb-5 gap-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
         <div class="flex items-center justify-between border-solid border-0 border-b border-[#eee] pb-2">
             <div class="flex items-center">
@@ -322,6 +324,13 @@ onMounted(async () => {
 
             </div>
         </div>
+    </div>
+
+    <div v-else class="py-3 flex flex-col items-center">
+        <Vue3Lottie :animationData="NoData" class="!w-full !h-[200px]" />
+        <h6 class="text-base font-bold text-center mt-3 ml-5">
+            No Booking yet !
+        </h6>
     </div>
 </template>
 

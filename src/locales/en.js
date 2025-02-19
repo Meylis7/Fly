@@ -4,6 +4,7 @@ export default {
       flightHotel: "Flights & Hotels",
       tour: "Tour",
       visa: "Visa",
+      profile: "Profile",
     },
     signup: "Sign up",
     signin: "Sign in",

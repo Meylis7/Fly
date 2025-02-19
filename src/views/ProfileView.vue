@@ -8,7 +8,7 @@ import FlightsTab from '@/components/Profile/FlightsTab.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
-const activeTab = ref('flights');
+const activeTab = ref('account');
 
 const setActiveTab = (tab) => {
     if (tab === 'logout') {
@@ -21,6 +21,8 @@ const setActiveTab = (tab) => {
         activeTab.value = tab;
     }
 };
+
+
 </script>
 
 <template>

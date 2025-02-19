@@ -1,23 +1,14 @@
 <script setup>
-import { computed, ref, watchEffect, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import logo from "@/assets/images/logo.png";
+import apiService from '@/services/apiService';
 
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n(); 
+const { locale } = useI18n();
 const router = useRouter();
 const userStore = useUserStore();
-
-
-
-// Computed user name
-const userDisplayName = computed(() => {
-    if (userStore.user) {
-        return `${userStore.user.firstname} ${userStore.user.lastname.charAt(0)}.`;
-    }
-    return null;
-});
 
 // Locale selection
 const selectedLocale = ref(localStorage.getItem('locale') || 'en');
@@ -40,11 +31,27 @@ const changeLocale = (newLocale) => {
     dropdownVisible.value = false; // Close dropdown
 };
 
+const user = ref('')
+
 // Ensure Header updates when user logs in or out
-onMounted(() => {
+onMounted(async () => {
+
     userStore.loadUser();
     locale.value = selectedLocale.value;
+
+    if (userStore.user) {
+        try {
+            const response = await apiService.getUser();
+            user.value = response.data;
+
+            userStore.updateUser(response.data);
+
+        } catch (error) {
+            console.error('Error fetching user', error);
+        }
+    }
 });
+
 
 </script>
 
@@ -71,19 +78,16 @@ onMounted(() => {
                         <li>
                             <RouterLink to="/visas" class="text-base">{{ $t("header.links.visa") }}</RouterLink>
                         </li>
+                        <li v-if="userStore.user">
+                            <RouterLink to="/profile" class="text-base">{{ $t("header.links.profile") }}</RouterLink>
+                        </li>
                     </ul>
                 </nav>
-
-                <!-- <button>
-                    <RouterLink to="/signin" class="text-base text-white bg-prime-color rounded-lg py-3 px-8">
-                        Sign in
-                    </RouterLink>
-                </button> -->
 
                 <div class="flex items-center gap-4">
                     <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
                         class="text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
-                        {{ userDisplayName }}
+                        {{ userStore.user.balance }}
                     </button>
 
                     <!-- Show Sign in if not logged in -->

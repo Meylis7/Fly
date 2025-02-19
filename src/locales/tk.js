@@ -4,6 +4,7 @@ export default {
       flightHotel: "Uçarlar we Myhmanhanalar",
       tour: "Syýahat",
       visa: "Wiza",
+      profile: "Profile",
     },
     signup: "Agza bolmak",
     signin: "Giriş etmek",

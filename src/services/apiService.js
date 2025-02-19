@@ -60,6 +60,11 @@ const apiService = {
     return apiRequest("post", `/user/register`, userData);
   },
 
+
+  updateUser(userData) {
+    return apiRequest("post", `/user`, userData);
+  },
+
   loginUser(credentials) {
     return apiRequest("post", `/user/login`, credentials);
   },
@@ -92,10 +97,14 @@ const apiService = {
     return apiRequest("post", `/tfusion/book/flights`, payload);
   },
 
-
-  //Booking flight
+  // My Bookings
   fetchMyFlightBookings() {
     return apiRequest("get", `/bookings`);
+  },
+
+  // Get user
+  getUser() {
+    return apiRequest("get", `/user`);
   },
 };
 
