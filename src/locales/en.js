@@ -262,6 +262,16 @@ export default {
         placeholder: "e.g. Apt 101, 123, Main St",
       },
     },
+    options:{
+      title: "Booking options",
+      HandLuggageOptions: "Hand luggage options",
+      OutwardLuggageOptions: "Outward luggage options",
+      ReturnLuggageOptions: "Return luggage options",
+      LuggageOptions: "Luggage options",
+      OutwardLuggageOptions: "Outward luggage options",
+      ReturnLuggageOptions: "Return luggage options",
+      select_placeholder: "Select an option"
+    },
     passenger: {
       title: "Passenger",
       text: "Please enter your details as indicated in your travel document.",
