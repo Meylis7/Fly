@@ -306,7 +306,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
 <template>
     <form class="w-full relative z-10" @submit.prevent="handleSubmit">
-        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl">
+        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
             <div class="flex items-center mb-5">
                 <div class="air-type">
                     <input type="radio" name="type" checked id="one-way" value="one-way" v-model="tripType">
@@ -319,9 +319,9 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                 </div>
             </div>
 
-            <div class="flex flex-wrap 1xl:flex-nowrap items-center justify-between">
-                <div class="flex items-end relative gap-[22px] w-full 1xl:w-auto mb-5 1xl:mb-0">
-                    <div class="relative w-1/2 1xl:w-full">
+            <div class="flex flex-wrap 1xl:flex-nowrap items-center justify-between gap-y-3">
+                <div class="flex items-center xsm:items-end flex-col xsm:flex-row relative gap-x-[22px] w-full 1xl:w-[35%] mb-5 1xl:mb-0">
+                    <div class="relative w-full xsm:w-1/2 1xl:w-full mb-5 xsm:mb-0">
                         <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                             {{ $t("searchForm.routeFrom.label") }}
 
@@ -347,7 +347,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                     </div>
 
                     <button @click="swapCities" type="button"
-                        class="cursor-pointer block absolute left-[50%] translate-x-[-50%] bottom-1 z-10">
+                        class="cursor-pointer block absolute right-0 xsm:right-auto xsm:left-[50%] rotate-90 xsm:rotate-0 xsm:translate-x-[-50%] bottom-[55px] xsm:bottom-1 z-10">
                         <svg :class="{ 'rotate-animation': isRotating }" class="pointer-events-none" width="40"
                             height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="40" height="40" rx="20" fill="#223A60" />
@@ -359,7 +359,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                         </svg>
                     </button>
 
-                    <div class="relative w-1/2 1xl:w-full">
+                    <div class="relative w-full xsm:w-1/2 1xl:w-full">
                         <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                             {{ $t("searchForm.routeTo.label") }}
 
@@ -387,7 +387,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
                 <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden 1xl:block"></span>
 
-                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-auto">
+                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-[20%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.datePicker.tuda") }}
                     </label>
@@ -410,7 +410,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
                 <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden md:block"></span>
 
-                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-auto" :class="{ 'disabled': tripType === 'one-way' }">
+                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-[20%]" :class="{ 'disabled': tripType === 'one-way' }">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.datePicker.obratno") }}
                     </label>
@@ -433,7 +433,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
                 <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden md:block"></span>
 
-                <div class=" w-full md:w-[calc(33.33%-15px)] 1xl:w-auto">
+                <div class=" w-full md:w-[calc(33.33%-15px)] 1xl:w-[20%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.passengers.label") }}
                     </label>
@@ -539,7 +539,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
         </div>
 
         <button type="submit"
-            class="flex items-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px] cursor-pointer">
+            class="flex items-center w-3/4 xsm:w-auto justify-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px] cursor-pointer">
             <p class="text-base font-semibold text-white">
                 {{ $t("searchForm.searchButton.flightText") }}
             </p>

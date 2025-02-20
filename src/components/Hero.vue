@@ -28,9 +28,9 @@
                     </p> -->
                 </div>
 
-                <div class="tabs mt-20 lg:mt-24 flex items-center bg-white rounded-t-3xl w-fit px-3 lg:px-6 py-3 lg:py-5 gap-2 lg:gap-5">
+                <div class="tabs w-full mt-20 lg:mt-24 flex items-center bg-white rounded-t-3xl md:w-fit px-3 lg:px-6 py-3 lg:py-5 gap-2 lg:gap-5">
                     <button @click="setActiveTab('flights')" :class="[
-                        'tab-item flex items-center py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px]',
+                        'tab-item flex items-center justify-center md:justify-start py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px] w-2/4',
                         activeTab === 'flights' ? 'bg-prime-color text-white' : ''
                     ]">
                         <span>
@@ -58,7 +58,7 @@
                     <span class="bg-[#D4D7D9] w-[3px] h-[30px] rounded"></span>
 
                     <button @click="setActiveTab('hotels')" :class="[
-                        'tab-item flex items-center py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px]',
+                        'tab-item flex items-center justify-center md:justify-start py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px] w-2/4',
                         activeTab === 'hotels' ? 'bg-prime-color text-white' : ''
                     ]">
                         <span>

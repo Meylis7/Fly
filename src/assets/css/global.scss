@@ -163,3 +163,9 @@ li {
 ::-webkit-scrollbar-thumb:hover {
     background: #DFDFDF;
 }
+
+@media screen and (max-width: 550px) {
+    .auto_container {
+        padding: 0 15px;
+    }
+}

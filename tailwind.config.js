@@ -10,6 +10,7 @@ export default {
         "prime-color": "#223A60",
       },
       screens: {
+        "xsm": "30rem", 
         "1xl": "90rem", 
       },
     },

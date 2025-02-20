@@ -5,7 +5,7 @@
 
 <template>
     <form class="w-full relative z-10">
-        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-r-3xl rounded-bl-3xl">
+        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
             <div class="flex flex-wrap items-center justify-between gap-y-4">
                 <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
@@ -52,7 +52,7 @@
         </div>
 
         <button type="submit"
-            class="flex items-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px]">
+            class="flex items-center xsm:w-auto justify-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px]">
             <p class="text-base font-semibold text-white">
                 Search Hotels
             </p>
