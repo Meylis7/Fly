@@ -99,8 +99,8 @@ defineProps({
 
             <div class="flex items-center mb-2">
                 <span class="block h-[18px] mr-2">
-                    <span v-if="segment.Features.SmallCabinBag || segment.Features.LargeCabinBag">
-                        <svg v-if="segment.Features.SmallCabinBag" width="18" height="15" viewBox="0 0 18 15"
+                    <span v-if="segment.Features.CabinBag">
+                        <svg width="18" height="15" viewBox="0 0 18 15"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M6.23706 14.3033C5.9728 14.3033 5.73257 14.1832 5.54039 13.991L0.279341 8.3216C-0.105028 7.91321 -0.0810052 7.26458 0.279341 6.85619C0.663709 6.4478 1.26429 6.47182 1.64865 6.85619L6.21304 11.7809L16.3267 0.321922C16.6871 -0.0864698 17.3117 -0.110493 17.6961 0.273876C18.0804 0.658245 18.1044 1.30687 17.7441 1.73928L6.95775 13.991C6.74154 14.1832 6.50131 14.3033 6.23706 14.3033Z"
@@ -117,11 +117,8 @@ defineProps({
                 </span>
                 <p class="text-sm font-normal">
                     <span class="font-semibold">{{ $t("ticket.cabinBag") }}: </span>
-                    <span v-if="segment.Features.SmallCabinBag">
-                        {{ segment.Features.SmallCabinBag.Value }}
-                    </span>
-                    <span v-else-if="segment.Features.LargeCabinBag">
-                        {{ segment.Features.LargeCabinBag.Value }}
+                    <span v-if="segment.Features.CabinBag">
+                        {{ segment.Features.CabinBag.Value }}
                     </span>
                     <span v-else>
                         {{ $t("ticket.notInclude") }}
