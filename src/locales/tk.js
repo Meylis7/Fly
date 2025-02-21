@@ -207,6 +207,7 @@ export default {
     change: "Çalyşmak",
     cancellation: "Ýatyrmak",
     notInclude: "Goşulmady",
+    шnclude: "Goşulan",
     waitingDuration: "Garaşma wagty",
     duration: "Dowamlylyk",
   },

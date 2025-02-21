@@ -5,8 +5,6 @@ import NoData from '@/assets/NoData.json';
 
 import apiService from "@/services/apiService";
 
-const bookingData = history.state?.updatedSearchData || {};
-
 const states = reactive({
     bookings: [],
 });
@@ -23,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="states.bookings.length" v-for="booking in states.bookings" :key="booking.id"
+    <div v-if="states.bookings && states.bookings.length > 0" v-for="booking in states.bookings" :key="booking.id"
         class="flex flex-col w-full px-6 py-8 mb-5 gap-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
         <div class="flex items-center justify-between border-solid border-0 border-b border-[#eee] pb-2">
             <div class="flex items-center">
@@ -77,7 +75,6 @@ onMounted(async () => {
 
                 <div class="flex gap-7">
 
-
                     <div class="block">
                         <div class="flex mb-[10px]">
                             <span class="block w-8 mr-2">
@@ -95,7 +92,14 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Change</h6>
-                                <p class="text-sm font-medium">Not Available</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.outward.features.FlightChange && booking.outward.features.FlightChange.Bundled">
+                                        {{ $t("ticket.include") }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+                                </p>
                             </div>
                         </div>
 
@@ -112,7 +116,14 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Cancellation</h6>
-                                <p class="text-sm font-medium">Not available</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.outward.features.Cancellation && booking.outward.features.Cancellation.Bundled">
+                                        {{ $t("ticket.include") }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -131,7 +142,15 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Bagagge</h6>
-                                <p class="text-sm font-medium">12 kg</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.outward.features.HoldBag && booking.outward.features.HoldBag.Bundled">
+                                        {{ booking.outward.features.HoldBag.Value }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+
+                                </p>
                             </div>
                         </div>
 
@@ -148,7 +167,14 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Handbag</h6>
-                                <p class="text-sm font-medium">7 kg</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.outward.features.CabinBag && booking.outward.features.CabinBag.Bundled">
+                                        {{ booking.outward.features.CabinBag.Value }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -203,7 +229,6 @@ onMounted(async () => {
 
                 <div class="flex gap-7">
 
-
                     <div class="block">
                         <div class="flex mb-[10px]">
                             <span class="block w-8 mr-2">
@@ -221,7 +246,14 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Change</h6>
-                                <p class="text-sm font-medium">Not Available</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.return.features.FlightChange && booking.return.features.FlightChange.Bundled">
+                                        {{ $t("ticket.include") }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+                                </p>
                             </div>
                         </div>
 
@@ -238,7 +270,14 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Cancellation</h6>
-                                <p class="text-sm font-medium">Not available</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.return.features.Cancellation && booking.return.features.Cancellation.Bundled">
+                                        {{ $t("ticket.include") }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -257,7 +296,15 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Bagagge</h6>
-                                <p class="text-sm font-medium">12 kg</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.return.features.HoldBag && booking.return.features.HoldBag.Bundled">
+                                        {{ booking.return.features.HoldBag.Value }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+
+                                </p>
                             </div>
                         </div>
 
@@ -274,7 +321,14 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Handbag</h6>
-                                <p class="text-sm font-medium">7 kg</p>
+                                <p class="text-sm font-medium">
+                                    <span v-if="booking.return.features.CabinBag && booking.return.features.CabinBag.Bundled">
+                                        {{ booking.return.features.CabinBag.Value }}
+                                    </span>
+                                    <span v-else>
+                                        {{ $t("ticket.notInclude") }}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -294,7 +348,7 @@ onMounted(async () => {
 
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Plan</h6>
-                                <p class="text-sm font-medium"></p>
+                                <p class="text-sm font-medium">{{ booking.return.travelClass }}</p>
                             </div>
                         </div>
                     </div>
@@ -306,7 +360,7 @@ onMounted(async () => {
             <h4 class="text-base font-medium mb-[10px] text-[#223A60] opacity-70">
                 Travellers
             </h4>
-            <div class="flex flex-wrap gap-4" >
+            <div class="flex flex-wrap gap-4">
                 <a :href="ticket.ticket_url" v-for="ticket in booking.tickets" :key="ticket.id" target="_blank"
                     class="flex items-center w-fit text-sm font-medium p-4 bg-[#F2F1F1] text-[#84889B] cursor-pointer rounded"
                     :download="ticket.ticket_url">
@@ -319,7 +373,7 @@ onMounted(async () => {
                         </svg>
                     </span>
 
-                    {{ticket.name}}
+                    {{ ticket.name }}
                 </a>
 
             </div>

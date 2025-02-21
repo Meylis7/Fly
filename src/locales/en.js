@@ -220,6 +220,7 @@ export default {
     change: "Change",
     cancellation: "Cancellation",
     notInclude: "Not included",
+    include: "Included",
     waitingDuration: "Waiting duration",
     duration: "Duration",
   },

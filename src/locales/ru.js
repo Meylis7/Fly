@@ -207,6 +207,7 @@ export default {
     change: "Изменение",
     cancellation: "Отмена",
     notInclude: "Не включено",
+    include: "Включено",
     waitingDuration: "Время ожидания",
     duration: "Продолжительность",
   },
