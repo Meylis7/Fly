@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
                         </ul>
                     </nav>
 
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 relative">
                         <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
                             class="text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
                             $ {{ userStore.user.balance }}
@@ -169,7 +169,6 @@ onBeforeUnmount(() => {
 .inner-wrapper {
     position: relative;
     z-index: 1;
-    overflow: hidden;
 
     &::after {
         content: '';
