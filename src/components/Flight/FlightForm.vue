@@ -10,7 +10,6 @@ import calendar from '@/assets/images/svg/calendar.svg'
 import apiService from "@/services/apiService";
 
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
 
 const { locale } = useI18n();
 
@@ -53,6 +52,15 @@ const departureCalendarVisible = ref(false);
 const returnCalendarVisible = ref(false);
 const departureInput = ref(null);
 const returnInput = ref(null);
+
+function formatDate(date) {
+    if (!date) return ''
+    return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    })
+}
 
 const openDepartureCalendar = () => {
     departureCalendarVisible.value = true;
@@ -171,8 +179,8 @@ const handleSubmit = (event) => {
         departureCity: departureCity.value,
         arrivalCityCode: arrivalCityCode.value,
         arrivalCity: arrivalCity.value,
-        departureDate: departureDate.value ? departureDate.value.toISOString().split('T')[0] : '',
-        returnDate: returnDate.value ? returnDate.value.toISOString().split('T')[0] : '',
+        departureDate: departureDate.value,
+        returnDate: returnDate.value,
 
         adults: counts.value.adult,
         children: counts.value.child,
@@ -180,6 +188,8 @@ const handleSubmit = (event) => {
         flightClass: selectedClass.value
     }
 
+    // console.log(departureDate.value)
+    // console.log(departureDate.value.toISOString().split('T')[0])
     // Navigate to results with query parameters
     if (route.name === 'flights') {
         window.location.href = router.resolve({
@@ -306,7 +316,8 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
 <template>
     <form class="w-full relative z-10" @submit.prevent="handleSubmit">
-        <div class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
+        <div
+            class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
             <div class="flex items-center mb-5">
                 <div class="air-type">
                     <input type="radio" name="type" checked id="one-way" value="one-way" v-model="tripType">
@@ -320,7 +331,8 @@ const handleArrivalAirportSelected = (selectedAirport) => {
             </div>
 
             <div class="flex flex-wrap 1xl:flex-nowrap items-center justify-between gap-y-3">
-                <div class="flex items-center xsm:items-end flex-col xsm:flex-row relative gap-x-[22px] w-full 1xl:w-[35%] mb-5 1xl:mb-0">
+                <div
+                    class="flex items-center xsm:items-end flex-col xsm:flex-row relative gap-x-[22px] w-full 1xl:w-[35%] mb-5 1xl:mb-0">
                     <div class="relative w-full xsm:w-1/2 1xl:w-full mb-5 xsm:mb-0">
                         <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                             {{ $t("searchForm.routeFrom.label") }}
@@ -392,7 +404,7 @@ const handleArrivalAirportSelected = (selectedAirport) => {
                         {{ $t("searchForm.datePicker.tuda") }}
                     </label>
 
-                    <input type="text" :value="departureDate ? departureDate.toLocaleDateString() : ''"
+                    <input type="text" :value="formatDate(departureDate)"
                         :placeholder="$t('searchForm.datePicker.placeholder')"
                         class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                         :class="errors.departureDate ? 'border-red-500 border-solid border' : ''"
@@ -410,12 +422,13 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 
                 <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden md:block"></span>
 
-                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-[20%]" :class="{ 'disabled': tripType === 'one-way' }">
+                <div class="dates relative w-full md:w-[calc(33.33%-15px)] 1xl:w-[20%]"
+                    :class="{ 'disabled': tripType === 'one-way' }">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
                         {{ $t("searchForm.datePicker.obratno") }}
                     </label>
 
-                    <input type="text" :value="returnDate ? returnDate.toLocaleDateString() : ''"
+                    <input type="text" :value="formatDate(returnDate)"
                         :placeholder="$t('searchForm.datePicker.placeholder')"
                         class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                         :class="errors.returnDate ? 'border-red-500 border-solid border' : ''"

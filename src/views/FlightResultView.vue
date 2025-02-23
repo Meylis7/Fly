@@ -24,11 +24,24 @@ const searchData = ref({});
 const itemsPerPage = ref(8);
 
 // Helper to format dates to YYYY-MM-DD
-const formatDate = (date) => {
-  if (!date) return null
-  const d = new Date(date)
-  return d.toISOString().split('T')[0]
+function formatDate(dateInput) {
+  // If the input is NOT already a Date, convert it:
+  const dateObj = (dateInput instanceof Date) ? dateInput : new Date(dateInput)
+
+  // If dateObj is invalid, bail out:
+  if (isNaN(dateObj.getTime())) {
+    console.warn('Invalid date:', dateInput)
+    return ''
+  }
+
+  const year = dateObj.getFullYear()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const day = String(dateObj.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
 }
+
+
 
 // Search flights method
 const searchFlights = async (params) => {
