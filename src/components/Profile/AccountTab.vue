@@ -2,9 +2,6 @@
 import { reactive, onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import apiService from '@/services/apiService';
-
-import axios from 'axios';
-
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 

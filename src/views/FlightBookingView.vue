@@ -1,9 +1,6 @@
 <script setup>
-import { ref, onMounted, reactive, toRaw } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router';
-
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
 
 import { Vue3Lottie } from 'vue3-lottie'
 import LoadingJson from '@/assets/btn-load.json'
@@ -11,6 +8,8 @@ import Booking_loading from '@/assets/booking-loading.json';
 
 import Back from '@/components/Back.vue';
 import apiService from "@/services/apiService";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const router = useRouter();
 const processLoading = ref(false);
@@ -68,17 +67,29 @@ const fetchOptions = async () => {
 
         const response = await apiService.processDetails(payload);
 
-        if (response.data.success) {
-            processLoading.value = true;
+        if (!response.data.success) {
+          // If the response indicates failure, notify and go back
+          toast.error("Unable to load options. Returning to previous page.", {
+            autoClose: 3000,
+          });
+          router.go(-1);
+          return; // Ensure no further code is executed here
         }
 
+        // If success is true, proceed
+        processLoading.value = true;
         options.value = response.data.options;
 
         Object.keys(options.value).forEach(key => {
             selectedOptions.value[key] = "";
         });
     } catch (error) {
-        console.error("Error fetching options:", error);
+        const errorMessage = error.message || "An error occurred";
+        toast.error(errorMessage, {
+          autoClose: 3000,
+        });
+        // Optionally go back
+        router.go(-1);
     }
 };
 
@@ -86,7 +97,7 @@ onMounted(async () => {
     try {
         token.value = localStorage.getItem("authToken");
 
-        fetchOptions();
+        await fetchOptions();
 
         const response = await apiService.fetchCountries();
 
@@ -107,9 +118,11 @@ onMounted(async () => {
         }));
     } catch (error) {
         console.error("Error loading countries:", error.message);
+        toast.error("Error loading countries: " + error.message, {
+          autoClose: 2000,
+        });
     }
 });
-
 
 const errors = ref({})
 
