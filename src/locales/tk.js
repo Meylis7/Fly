@@ -88,6 +88,8 @@ export default {
     title: "Syýahatlary Öwreniň",
     text: "Dynç almaga ýa-da öýe gaýdyp barýarsyňyzmy? Biziň syýahat gurallarymyz her syýahaty aňsat edýär.",
     btn: "Tura ýazylmak",
+    days: "gün",
+    book: "Ýazyl",
   },
   visa: {
     title: "Wizaňyz bilen Dünýäni Açyň",
@@ -300,11 +302,13 @@ export default {
     payment: {
       title: "Töleg usulyny saýlaň",
       val_1: "Balans bilen tölemek",
+      val_2: "Soň tölemek",
     },
     submit: "Ugrat",
   },
 
   loading: "Ýüklenýär",
+  notFound: "Maglumat tapylmady.",
 
   profile: {
     tabs: {
@@ -323,6 +327,10 @@ export default {
         label: "Familiýasy",
         placeholder: "Amanow",
       },
+      company: {
+        label: "Kompaniýanyň ady",
+        placeholder: "Aýna HJ",
+      },
       eamil: {
         label: "E-poçta",
         placeholder: "Aman{@}gmail.com",
@@ -333,6 +341,12 @@ export default {
       },
       edit: "Üýtgetmek",
     },
+  },
+
+  404: {
+    title: "404 Tapylmady",
+    subTitle: "Bu sahypa ýok",
+    goHome: "Baş sahypa",
   },
 
   loadingBooking: "Ýüklenýär... Garaşyň.",

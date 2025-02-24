@@ -54,26 +54,32 @@ const updateUser = async () => {
 <template>
     <form @submit.prevent="updateUser" class="flex flex-wrap gap-8">
         <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Firstname</label>
+            <label class="text-base font-normal block mb-3">
+                {{ $t("profile.accaunt.firstName.label") }}
+            </label>
             <input v-model="state.userInfo.firstname" type="text"
                 class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Aman">
         </div>
 
         <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Lastname</label>
+            <label class="text-base font-normal block mb-3">
+                {{ $t("profile.accaunt.lastname.label") }}
+            </label>
             <input v-model="state.userInfo.lastname" type="text"
                 class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Amanow">
         </div>
 
         <div class="block w-[calc(50%-16px)] ">
-            <label class="text-base font-normal block mb-3">Company name</label>
+            <label class="text-base font-normal block mb-3">
+                {{ $t("profile.accaunt.company.label") }}
+            </label>
             <input v-model="state.userInfo.company" type="text"
                 class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Asuda HJ">
         </div>
 
         <div class="w-full flex justify-end">
             <button type="submit"
-                class="w-40 cursor-pointer flex items-center justify-center bg-prime-color text-white py-4 rounded-lg text-sm font-medium">
+                class="min-w-40 cursor-pointer flex items-center justify-center bg-prime-color text-white py-4 rounded-lg text-sm font-medium">
                 <span class="block mr-[10px]">
                     <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -85,7 +91,7 @@ const updateUser = async () => {
                     </svg>
                 </span>
 
-                Edit
+                {{ $t("profile.accaunt.edit") }}
             </button>
         </div>
     </form>

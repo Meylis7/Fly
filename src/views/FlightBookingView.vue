@@ -553,7 +553,7 @@ const submitForm = async () => {
                                     <input v-model="state.payment_type" required type="radio" class="peer hidden"
                                         name="method" id="post-pay" value="post-pay" checked>
                                     <label for="post-pay">
-                                        Post pay
+                                        {{ $t("booking.payment.val_2") }}
                                     </label>
                                 </div>
 

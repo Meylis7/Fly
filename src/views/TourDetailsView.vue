@@ -103,7 +103,7 @@
                             </span>
 
                             <p class="text-sm font-normal">
-                                {{ state.tour.days }} days
+                                {{ state.tour.days }} {{ $t("tour.days") }}
                             </p>
                         </div>
                     </div>

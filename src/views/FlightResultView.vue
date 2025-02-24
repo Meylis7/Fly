@@ -156,7 +156,7 @@ const setActiveTab = (tab) => {
 
         <div v-else-if="noFlightsFound && !loading" class="w-full pt-10 flex flex-col items-center min-h-[700px]">
           <h4 class="text-3xl font-semibold text-center">
-            No flights found.
+            {{ $t("notFound") }}
           </h4>
 
           <Vue3Lottie :animationData="NotFoundJson" class="!w-[400px] !h-[400px]" />

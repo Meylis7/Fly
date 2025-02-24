@@ -9,7 +9,7 @@
             <div class="flex flex-wrap items-center justify-between gap-y-4">
                 <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
-                        Departure date
+                        {{ $t("searchForm.datePicker.tuda") }}
                     </label>
 
                     <input type="text" placeholder="Choose Dates"
@@ -20,7 +20,7 @@
 
                 <div class="w-full sm:w-[calc(50%-15px)] lg:w-[22%]">
                     <label class="flex items-center gap-3 text-base font-bold text-prime-color mb-2">
-                        Departure date
+                        {{ $t("searchForm.datePicker.obratno") }}
                     </label>
 
                     <input type="text" placeholder="Choose Dates"
@@ -54,7 +54,7 @@
         <button type="submit"
             class="flex items-center xsm:w-auto justify-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px]">
             <p class="text-base font-semibold text-white">
-                Search Hotels
+                {{ $t("searchForm.searchButton.hotelText") }}
             </p>
 
             <span>

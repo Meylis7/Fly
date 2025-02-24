@@ -88,10 +88,12 @@ export default {
     title: "Изучите туры",
     text: "Планируете отдых или возвращаетесь домой? Наши инструменты делают каждое путешествие легким.",
     btn: "Забронировать тур",
+    days: "дней",
   },
   visa: {
     title: "Откройте мир с вашей визой",
     text: "Куда бы вы ни направлялись, наши инструменты обеспечат плавное и беззаботное путешествие.",
+    book: "Забронировать",
   },
   seeMore: "Смотреть все",
   viewMore: "Посмотреть больше",
@@ -256,7 +258,7 @@ export default {
       OutwardLuggageOptions: "Варианты багажа в одну сторону",
       ReturnLuggageOptions: "Варианты обратного багажа",
       LuggageOptions: "Варианты багажа",
-      select_placeholder: "Выберите вариант"
+      select_placeholder: "Выберите вариант",
     },
     passenger: {
       title: "Пассажир",
@@ -300,11 +302,13 @@ export default {
     payment: {
       title: "Выберите способ оплаты",
       val_1: "Оплатить с баланса",
+      val_2: "Оплата после",
     },
     submit: "Отправить",
   },
 
   loading: "Загрузка",
+  notFound: "No flights found.",
 
   profile: {
     tabs: {
@@ -323,6 +327,10 @@ export default {
         label: "Фамилия",
         placeholder: "например, Аманов",
       },
+      company: {
+        label: "Название компании",
+        placeholder: "Айна ХД",
+      },
       eamil: {
         label: "Email",
         placeholder: "например, Aman{@}gmail.com",
@@ -333,6 +341,12 @@ export default {
       },
       edit: "Редактировать",
     },
+  },
+
+  404: {
+    title: "404 Не найдено",
+    subTitle: "Эта страница не существует",
+    goHome: "На главную",
   },
 
   loadingBooking: "Загрузка... Пожалуйста, подождите.",
