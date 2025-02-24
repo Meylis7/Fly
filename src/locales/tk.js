@@ -89,11 +89,27 @@ export default {
     text: "Dynç almaga ýa-da öýe gaýdyp barýarsyňyzmy? Biziň syýahat gurallarymyz her syýahaty aňsat edýär.",
     btn: "Tura ýazylmak",
     days: "gün",
-    book: "Ýazyl",
+
+    details: {
+      included: "Goşulan",
+      notIncluded: "Goşulmady",
+      bannerTitle: "Syýahata taýýarmy?",
+      bannerText:
+        "Biz size iň gowy hyzmaty etmäge taýýar, şonuň üçin biziň bilen habarlaşyň.",
+      bannerBtn: "Biziň bilen habarlaşyň",
+    },
   },
   visa: {
+    visa: "Wiza",
     title: "Wizaňyz bilen Dünýäni Açyň",
     text: "Nirä gidýän bolsaňyzam, biziň gurallarymyz rahat we ynjalyksyz syýahaty üpjün edýär.",
+    book: "Ýazyl",
+
+    details: {
+      docs: "Gerekli resminamalar",
+      price: "Baha",
+      days: "Gün",
+    },
   },
   seeMore: "Hemmesini Gör",
   viewMore: "Ählisini Gör",
@@ -258,7 +274,7 @@ export default {
       OutwardLuggageOptions: "Gidiş bagaj mümkinçikleri",
       ReturnLuggageOptions: "Gaýdyp geliş bagaj mümkinçikleri",
       LuggageOptions: "Bagaj mümkinçikleri",
-      select_placeholder: "Bir wariant saýlaň"
+      select_placeholder: "Bir wariant saýlaň",
     },
     passenger: {
       title: "Ýolagçy",

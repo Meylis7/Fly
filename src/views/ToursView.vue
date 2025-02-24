@@ -37,10 +37,10 @@
                 <Back />
 
                 <h2 class=" text-[32px] text-prime-color font-semibold mb-4">
-                    Explore the Tours
+                    {{ $t("tour.title") }}
                 </h2>
                 <p class="text-base">
-                    Planning a getaway or heading home? Our travel tools make every journey seamless.
+                    {{ $t("tour.text") }}
                 </p>
 
                 <div class="flex flex-wrap gap-5 mt-10">

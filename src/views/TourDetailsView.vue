@@ -112,7 +112,7 @@
                 <div class="flex items-start gap-4">
                     <div class="block w-1/2">
                         <h4 class=" text-2xl font-semibold mb-4">
-                            Included
+                            {{ $t("tour.details.included") }}
                         </h4>
 
                         <ul>
@@ -124,7 +124,7 @@
 
                     <div class="block w-1/2">
                         <h4 class=" text-2xl font-semibold mb-4">
-                            Not included
+                            {{ $t("tour.details.notIncluded") }}
                         </h4>
 
                         <ul>
@@ -138,7 +138,7 @@
 
                 <a href="#"
                     class="bg-prime-color flex items-center justify-center text-white text-base font-semibold text-center px-6 py-3 mx-auto rounded-lg mt-10 max-w-[200px]">
-                    Book Now
+                    {{ $t("ticket.bookNow") }}
 
                     <span class="block ml-3">
                         <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,16 +161,16 @@
                     <div
                         class="flex flex-col items-center max-w-[420px] text-center absolute top-[60%] left-2/4 -translate-x-2/4 -translate-y-2/4 ">
                         <h4 class="text-2xl font-semibold">
-                            Feeling ready to travel?
+                            {{ $t("tour.details.bannerTitle") }}
                         </h4>
 
                         <p class="text-xl font-normal my-[14px]">
-                            We're ready to provide you with the best service, so please contact us.
+                            {{ $t("tour.details.bannerText") }}
                         </p>
 
                         <RouterLink to="/"
                             class="text-sm font-medium bg-prime-color text-white block px-6 py-2 rounded-lg">
-                            Contact us
+                            {{ $t("tour.details.bannerBtn") }}
                         </RouterLink>
                     </div>
                 </div>

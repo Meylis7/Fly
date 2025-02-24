@@ -60,14 +60,14 @@
                 <div
                     class="flex items-center justify-center bg-[url('@/assets/images/visa-bg.png')] bg-cover overflow-hidden rounded-3xl h-[230px]">
                     <h6 class="text-[40px] font-semibold text-white">
-                        Visa
+                        {{ $t("visa.visa") }}
                     </h6>
                 </div>
 
                 <div class="flex gap-5 mt-5">
                     <div class="block w-1/2 border border-solid border-[#D6D6D6] rounded-[20px] p-9">
                         <h4 class="text-xl font-medium mb-5">
-                            Required documents <span class="text-red">*</span>
+                            {{ $t("visa.details.docs") }} <span class="text-red">*</span>
                         </h4>
 
                         <ul>
@@ -88,10 +88,10 @@
                             {{ state.visa?.location }}
                         </h5>
                         <p class="text-base font-normal text-[#111111] mb-3">
-                            Price: {{ state.visa?.price }} $
+                            {{ $t("visa.details.price") }}: {{ state.visa?.price }} $
                         </p>
                         <p class="text-base font-normal text-[#111111] mb-3">
-                            Days: {{ state.visa?.days }}
+                            {{ $t("visa.details.days") }}: {{ state.visa?.days }}
                         </p>
 
                         <p class="text-base font-normal mb-5">
@@ -100,7 +100,7 @@
 
                         <a href="#"
                             class="bg-prime-color flex items-center justify-center text-white text-base font-semibold text-center px-6 py-3 rounded-lg">
-                            Book Now
+                            {{ $t("ticket.bookNow") }}
 
                             <span class="block ml-3">
                                 <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
