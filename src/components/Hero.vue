@@ -14,7 +14,7 @@
 </script>
 
 <template>
-    <section class="hero h-screen w-full bg-[url('@/assets/images/hero-bg.png')] bg-no-repeat bg-cover relative">
+    <section class="hero min-h-screen w-full bg-[url('@/assets/images/hero-bg.png')] bg-no-repeat bg-cover relative">
         <div class="auto_container">
             <div class="wrapper pt-[160px]">
                 <div class="max-w-[1200px] m-auto">
@@ -28,9 +28,9 @@
                     </p> -->
                 </div>
 
-                <div class="tabs w-full mt-20 lg:mt-24 flex items-center bg-white rounded-t-3xl md:w-fit px-3 lg:px-6 py-3 lg:py-5 gap-2 lg:gap-5">
+                <div class="tabs w-full mt-20 lg:mt-24 flex items-center flex-col vsm:flex-row bg-white rounded-t-3xl md:w-fit px-3 lg:px-6 py-3 lg:py-5 gap-2 lg:gap-5">
                     <button @click="setActiveTab('flights')" :class="[
-                        'tab-item flex items-center justify-center md:justify-start py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px] w-2/4',
+                        'tab-item flex items-center justify-center w-full vsm:w-auto md:justify-start py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px] min-w-2/4',
                         activeTab === 'flights' ? 'bg-prime-color text-white' : ''
                     ]">
                         <span>
@@ -55,10 +55,10 @@
                         </p>
                     </button>
 
-                    <span class="bg-[#D4D7D9] w-[3px] h-[30px] rounded"></span>
+                    <span class="bg-[#D4D7D9] w-[3px] h-[30px] rounded hidden vsm:block"></span>
 
                     <button @click="setActiveTab('hotels')" :class="[
-                        'tab-item flex items-center justify-center md:justify-start py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px] w-2/4',
+                        'tab-item flex items-center justify-center w-full vsm:w-auto md:justify-start py-3 cursor-pointer px-4 lg:px-8 gap-4 rounded-[10px] min-w-2/4',
                         activeTab === 'hotels' ? 'bg-prime-color text-white' : ''
                     ]">
                         <span>
@@ -81,6 +81,8 @@
                             {{ $t("searchForm.tabs.hotels") }}
                         </p>
                     </button>
+
+                    <span class="bg-[#D4D7D9] w-[100px] h-[3px] rounded vsm:hidden"></span>
                 </div>
 
                 <FlightForm v-if="activeTab === 'flights'" />
@@ -88,7 +90,7 @@
             </div>
         </div>
 
-        <div class="clouds w-full absolute bottom-[-120px] left-0 pointer-events-none user-select-none">
+        <div class="clouds w-full absolute bottom-[-55px] xl:bottom-[-120px] left-0 pointer-events-none user-select-none">
             <img class="w-full" :src="clouds" alt="clouds">
         </div>
     </section>

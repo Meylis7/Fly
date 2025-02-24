@@ -93,46 +93,46 @@ onBeforeUnmount(() => {
             <div class="inner-wrapper">
                 <div class="inner p-5 flex items-center justify-between">
                     <RouterLink to="/">
-                        <span>
-                            <img :src="logo" alt="logo">
+                        <span class="block min-w-[55px]">
+                            <img :src="logo" class="block object-contain" alt="logo">
                         </span>
                     </RouterLink>
 
                     <nav
-                        :class="['fixed top-0 z-90 bg-[rgba(0,0,0,.5)] w-full h-screen lg:block lg:static lg:w-auto lg:h-auto lg:bg-transparent transition-all', { '-left-full': !menuOpen, 'left-0': menuOpen }]">
+                        :class="['fixed top-0 z-50 bg-[rgba(0,0,0,.5)] w-full h-screen lg:block lg:static lg:w-auto lg:h-auto lg:bg-transparent transition-all', { '-left-full': !menuOpen, 'left-0': menuOpen }]">
                         <ul ref="menuRef"
-                            class="flex items-center justify-center flex-col lg:flex-row gap-12 bg-white lg:bg-transparent w-3/5 lg:w-auto h-full rounded-br-xl rounded-tr-xl">
+                            class="flex items-center justify-center flex-col lg:flex-row gap-y-6 sm:gap-12 bg-white lg:bg-transparent w-3/4 sm:w-3/5 lg:w-auto h-full rounded-br-xl rounded-tr-xl">
                             <li>
-                                <RouterLink to="/" class="text-2xl lg:text-base">{{ $t("header.links.flightHotel") }}</RouterLink>
+                                <RouterLink to="/" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.flightHotel") }}</RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/tours" class="text-2xl lg:text-base">{{ $t("header.links.tour") }}</RouterLink>
+                                <RouterLink to="/tours" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.tour") }}</RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/visas" class="text-2xl lg:text-base">{{ $t("header.links.visa") }}</RouterLink>
+                                <RouterLink to="/visas" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.visa") }}</RouterLink>
                             </li>
                             <li v-if="userStore.user">
-                                <RouterLink to="/profile" class="text-2xl lg:text-base">{{ $t("header.links.profile") }}
+                                <RouterLink to="/profile" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.profile") }}
                                 </RouterLink>
                             </li>
                         </ul>
                     </nav>
 
-                    <div class="flex items-center gap-4 relative">
+                    <div class="flex items-center gap-2 xsm:gap-4 relative">
                         <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
-                            class="text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
+                            class="text-sm sm:text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
                             $ {{ userStore.user.balance }}
                         </button>
 
                         <!-- Show Sign in if not logged in -->
                         <RouterLink v-else to="/signin"
-                            class="text-base text-white bg-[#223A60] rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
+                            class="text-sm sm:text-base text-white bg-[#223A60] rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
                             {{ $t("header.signin") }}
                         </RouterLink>
 
                         <div class="block">
                             <button @click="toggleDropdown"
-                                class="py-2 px-4 border border-[#223A60] text-base text-center rounded-lg bg-white text-[#223A60] cursor-pointer">
+                                class="py-2 px-4 border border-[#223A60] text-sm sm:text-base text-center rounded-lg bg-white text-[#223A60] cursor-pointer">
                                 {{ localeLabels[selectedLocale] }}
                             </button>
                             <ul v-if="dropdownVisible"
@@ -144,7 +144,7 @@ onBeforeUnmount(() => {
                             </ul>
                         </div>
 
-                        <button @click="toggleMenu" class="burger block lg:hidden ml-4">
+                        <button @click="toggleMenu" class="burger block lg:hidden xsm:ml-4">
                             <svg class="block object-contain" width="24" height="18" viewBox="0 0 24 18" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path

@@ -53,7 +53,7 @@
 
         <button type="submit"
             class="flex items-center xsm:w-auto justify-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px]">
-            <p class="text-base font-semibold text-white">
+            <p class="text-sm md:text-base font-semibold text-white">
                 {{ $t("searchForm.searchButton.hotelText") }}
             </p>
 
