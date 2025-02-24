@@ -586,6 +586,7 @@
 
         input {
             display: none;
+            appearance: none;
 
             &:checked~label {
                 background: v.$main-color;
