@@ -103,23 +103,29 @@ onBeforeUnmount(() => {
                         <ul ref="menuRef"
                             class="flex items-center justify-center flex-col lg:flex-row gap-y-6 sm:gap-12 bg-white lg:bg-transparent w-3/4 sm:w-3/5 lg:w-auto h-full rounded-br-xl rounded-tr-xl">
                             <li>
-                                <RouterLink to="/" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.flightHotel") }}</RouterLink>
+                                <RouterLink to="/" class="text-base text-center w-full block sm:text-2xl lg:text-base">
+                                    {{ $t("header.links.flightHotel") }}</RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/tours" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.tour") }}</RouterLink>
+                                <RouterLink to="/tours"
+                                    class="text-base text-center w-full block sm:text-2xl lg:text-base">{{
+                                        $t("header.links.tour") }}</RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/visas" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.visa") }}</RouterLink>
+                                <RouterLink to="/visas"
+                                    class="text-base text-center w-full block sm:text-2xl lg:text-base">{{
+                                        $t("header.links.visa") }}</RouterLink>
                             </li>
                             <li v-if="userStore.user">
-                                <RouterLink to="/profile" class="text-base text-center w-full block sm:text-2xl lg:text-base">{{ $t("header.links.profile") }}
+                                <RouterLink to="/profile"
+                                    class="text-base text-center w-full block sm:text-2xl lg:text-base">{{
+                                        $t("header.links.profile") }}
                                 </RouterLink>
                             </li>
                         </ul>
                     </nav>
 
                     <div class="flex items-center gap-2 xsm:gap-4 relative">
-                    <div class="flex items-center gap-4 relativeq">
                         <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
                             class="text-sm sm:text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
                             $ {{ userStore.user.balance }}

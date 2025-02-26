@@ -1,251 +1,249 @@
 <script setup>
-    import { ref, onMounted, reactive, onBeforeUnmount, nextTick } from 'vue'
-    import { useRouter } from 'vue-router';
+import { ref, onMounted, reactive, onBeforeUnmount, nextTick } from 'vue'
+import { useRouter } from 'vue-router';
 
-    import { Vue3Lottie } from 'vue3-lottie'
-    import LoadingJson from '@/assets/btn-load.json'
-    import Booking_loading from '@/assets/booking-loading.json';
+import { Vue3Lottie } from 'vue3-lottie'
+import LoadingJson from '@/assets/btn-load.json'
+import Booking_loading from '@/assets/booking-loading.json';
 
-    import Back from '@/components/Back.vue';
-    import apiService from "@/services/apiService";
-    import { toast } from 'vue3-toastify';
-    import 'vue3-toastify/dist/index.css';
+import Back from '@/components/Back.vue';
+import apiService from "@/services/apiService";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
-    import calendar from '@/assets/images/svg/calendar.svg'
+const router = useRouter();
+const processLoading = ref(false);
+const loading = ref(false);
+const token = ref('');
 
+const bookingData = history.state?.updatedSearchData || {};
 
-    const router = useRouter();
-    const processLoading = ref(false);
-    const loading = ref(false);
-    const token = ref('');
+const states = reactive({
+    country: [],
+});
 
-    const bookingData = history.state?.updatedSearchData || {};
+const options = ref({});
+const selectedOptions = ref({});
 
-    const states = reactive({
-        country: [],
-    });
+const birthdayCalendarVisible = ref(false);
+const expireDateCalendarVisible = ref(false);
+const birthdayInput = ref(null);
+const expireDateInput = ref(null);
 
-    const options = ref({});
-    const selectedOptions = ref({});
+const openBirthdayCalendar = async () => {
+    birthdayCalendarVisible.value = true;
+    expireDateCalendarVisible.value = false; // Close other calendar
+    await nextTick();
+};
 
-    const birthdayCalendarVisible = ref(false);
-    const expireDateCalendarVisible = ref(false);
-    const birthdayInput = ref(null);
-    const expireDateInput = ref(null);
+const openExpireDateCalendar = async () => {
+    expireDateCalendarVisible.value = true;
+    birthdayCalendarVisible.value = false; // Close other calendar
+    await nextTick();
+};
 
-    const openBirthdayCalendar = async () => {
-        birthdayCalendarVisible.value = true;
-        expireDateCalendarVisible.value = false; // Close other calendar
-        await nextTick();
-    };
+const onBirthdaySelect = () => {
+    birthdayCalendarVisible.value = false;
+};
 
-    const openExpireDateCalendar = async () => {
-        expireDateCalendarVisible.value = true;
-        birthdayCalendarVisible.value = false; // Close other calendar
-        await nextTick();
-    };
+const onExpireDateSelect = () => {
+    expireDateCalendarVisible.value = false;
+};
 
-    const onBirthdaySelect = () => {
-        birthdayCalendarVisible.value = false;
-    };
-
-    const onExpireDateSelect = () => {
-        expireDateCalendarVisible.value = false;
-    };
-
-    const handleClickOutside = (event) => {
-        if (event.target.closest('.vc-container')) {
-            return;
-        }
-        if (birthdayInput.value && birthdayInput.value.$el && !birthdayInput.value.$el.contains(event.target)) {
-            birthdayCalendarVisible.value = false;
-        }
-        if (expireDateInput.value && expireDateInput.value.$el && !expireDateInput.value.$el.contains(event.target)) {
-            expireDateCalendarVisible.value = false;
-        }
-    };
-
-    function formatDate(date) {
-        if (!date) return "";
-        return new Date(date).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        });
+const handleClickOutside = (event) => {
+    if (event.target.closest('.vc-container')) {
+        return;
     }
+    if (birthdayInput.value && birthdayInput.value.$el && !birthdayInput.value.$el.contains(event.target)) {
+        birthdayCalendarVisible.value = false;
+    }
+    if (expireDateInput.value && expireDateInput.value.$el && !expireDateInput.value.$el.contains(event.target)) {
+        expireDateCalendarVisible.value = false;
+    }
+};
 
-    const state = reactive({
-        passengers: [
-            {
-                firstname: '',
-                lastname: '',
-                birthdate: 'null',
-                passport_country: '',
-                nationality: '',
-                gender: 'male',
-                passport_number: '',
-                passport_expiry_date: '',
-            }
-        ],
+function formatDate(date) {
+    if (!date) return "";
+    return new Date(date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+}
 
-        contact_details: {
+const state = reactive({
+    passengers: [
+        {
             firstname: '',
             lastname: '',
-            email: '',
-            phone: {
-                code: '',
-                number: ''
-            },
+            birthdate: 'null',
+            passport_country: '',
+            nationality: '',
             gender: 'male',
-            address: {
-                country_code: '',
-                city: '',
-                street: ''
-            }
+            passport_number: '',
+            passport_expiry_date: '',
+        }
+    ],
+
+    contact_details: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: {
+            code: '',
+            number: ''
         },
-        payment_type: 'post-pay'
-    });
+        gender: 'male',
+        address: {
+            country_code: '',
+            city: '',
+            street: ''
+        }
+    },
+    payment_type: 'post-pay'
+});
 
 
 
-    const fetchOptions = async () => {
-        try {
-            const payload = {
-                routing_id: bookingData.routing_id,
-                outward_id: bookingData.outward_id,
-                return_id: bookingData.return_id
-            };
+const fetchOptions = async () => {
+    try {
+        const payload = {
+            routing_id: bookingData.routing_id,
+            outward_id: bookingData.outward_id,
+            return_id: bookingData.return_id
+        };
 
-            const response = await apiService.processDetails(payload);
+        const response = await apiService.processDetails(payload);
 
-            if (!response.data.success) {
-                // If the response indicates failure, notify and go back
-                toast.error("Unable to load options. Returning to previous page.", {
-                    autoClose: 3000,
-                });
-                router.go(-1);
-                return; // Ensure no further code is executed here
-            }
-
-            // If success is true, proceed
-            processLoading.value = true;
-            options.value = response.data.options;
-
-            Object.keys(options.value).forEach(key => {
-                selectedOptions.value[key] = "";
-            });
-        } catch (error) {
-            const errorMessage = error.message || "An error occurred";
-            toast.error(errorMessage, {
+        if (!response.data.success) {
+            // If the response indicates failure, notify and go back
+            toast.error("Unable to load options. Returning to previous page.", {
                 autoClose: 3000,
             });
-            // Optionally go back
             router.go(-1);
+            return; // Ensure no further code is executed here
         }
-    };
 
-    onMounted(async () => {
-        document.addEventListener("click", handleClickOutside);
+        // If success is true, proceed
+        processLoading.value = true;
+        options.value = response.data.options;
 
-        try {
-            token.value = localStorage.getItem("authToken");
-
-            await fetchOptions();
-
-            const response = await apiService.fetchCountries();
-
-            states.country = response.data;
-
-            const passengersCount = bookingData.travellers_count || 1;
-
-            // Initialize passengers array
-            state.passengers = Array.from({ length: passengersCount }, () => ({
-                firstname: "",
-                lastname: "",
-                birthdate: "",
-                passport_country: "",
-                passport_expiry_date: "",
-                passport_number: "",
-                nationality: "",
-                gender: "male",
-            }));
-        } catch (error) {
-            console.error("Error loading countries:", error.message);
-            toast.error("Error loading countries: " + error.message, {
-                autoClose: 2000,
-            });
-        }
-    });
-
-    onBeforeUnmount(() => {
-        document.removeEventListener("click", handleClickOutside);
-    });
-
-    const errors = ref({})
-
-    const validateForm = () => {
-        errors.value = {} // Clear previous errors
-
-        // Contact Details
-        if (!state.contact_details.firstname?.trim()) errors.value.firstname = true
-        if (!state.contact_details.lastname?.trim()) errors.value.lastname = true
-        if (!state.contact_details.email?.trim()) errors.value.email = true
-        if (!state.contact_details.address.country_code?.trim()) errors.value.country_code = true
-        // if (!state.contact_details.phone?.number?.trim()) errors.value.phone = true
-        if (!String(state.contact_details.phone?.number || "").trim()) errors.value.phone = true
-
-        if (!state.contact_details.address?.city?.trim()) errors.value.city = true
-        if (!state.contact_details.address?.street?.trim()) errors.value.street = true
-
-        // Passengers
-        state.passengers.forEach((passenger, index) => {
-            if (!passenger.firstname?.trim()) errors.value[`passenger${index}firstname`] = true
-            if (!passenger.lastname?.trim()) errors.value[`passenger${index}lastname`] = true
-            if (!passenger.birthdate) errors.value[`passenger${index}birthdate`] = true
-            if (!passenger.passport_country?.trim()) errors.value[`passenger${index}passportCountry`] = true
-            if (!passenger.passport_number?.trim()) errors.value[`passenger${index}passportNumber`] = true
-            if (!passenger.nationality?.trim()) errors.value[`passenger${index}nationality`] = true
-            // if (!passenger.passport_expiry_date?.trim()) errors.value[`passenger${index}expiryDate`] = true
-        })
-
-        return Object.keys(errors.value).length === 0
+        Object.keys(options.value).forEach(key => {
+            selectedOptions.value[key] = "";
+        });
+    } catch (error) {
+        const errorMessage = error.message || "An error occurred";
+        toast.error(errorMessage, {
+            autoClose: 3000,
+        });
+        // Optionally go back
+        router.go(-1);
     }
+};
 
-    // Submit form
-    const submitForm = async () => {
-        const isValid = validateForm()
-        console.log('Validation errors:', errors.value) // Add this to debug
-        if (!isValid) return
+onMounted(async () => {
+    document.addEventListener("click", handleClickOutside);
 
-        loading.value = true;
-        try {
+    try {
+        token.value = localStorage.getItem("authToken");
 
-            const payload = {
-                routing_id: bookingData.routing_id,
-                outward_id: bookingData.outward_id,
-                return_id: bookingData.return_id,
-                contact_details: state.contact_details,
-                travellers: state.passengers,
-                payment_type: state.payment_type,
-                options: selectedOptions.value
-            };
+        await fetchOptions();
 
-            console.log(payload);
-            const response = await apiService.bookFlight(payload);
-            console.log("Form submitted successfully:", response);
+        const response = await apiService.fetchCountries();
 
-            toast.success("Booking submitted successfully!", { autoClose: 1000 });
+        states.country = response.data;
 
-            router.push({
-                path: `/flight/book/${response.data.booking_reference}`,
-            });
-        } catch (error) {
-            toast.error(error.message || "Failed to submit the form. Please try again.", { autoClose: 1000 });
-            console.error("Error submitting form:", error);
-        } finally {
-            loading.value = false;
-        }
+        const passengersCount = bookingData.travellers_count || 1;
+
+        // Initialize passengers array
+        state.passengers = Array.from({ length: passengersCount }, () => ({
+            firstname: "",
+            lastname: "",
+            birthdate: "",
+            passport_country: "",
+            passport_expiry_date: "",
+            passport_number: "",
+            nationality: "",
+            gender: "male",
+        }));
+    } catch (error) {
+        console.error("Error loading countries:", error.message);
+        toast.error("Error loading countries: " + error.message, {
+            autoClose: 2000,
+        });
+    }
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+
+const errors = ref({})
+
+const validateForm = () => {
+    errors.value = {} // Clear previous errors
+
+    // Contact Details
+    if (!state.contact_details.firstname?.trim()) errors.value.firstname = true
+    if (!state.contact_details.lastname?.trim()) errors.value.lastname = true
+    if (!state.contact_details.email?.trim()) errors.value.email = true
+    if (!state.contact_details.address.country_code?.trim()) errors.value.country_code = true
+    // if (!state.contact_details.phone?.number?.trim()) errors.value.phone = true
+    if (!String(state.contact_details.phone?.number || "").trim()) errors.value.phone = true
+
+    if (!state.contact_details.address?.city?.trim()) errors.value.city = true
+    if (!state.contact_details.address?.street?.trim()) errors.value.street = true
+
+    // Passengers
+    state.passengers.forEach((passenger, index) => {
+        if (!passenger.firstname?.trim()) errors.value[`passenger${index}firstname`] = true
+        if (!passenger.lastname?.trim()) errors.value[`passenger${index}lastname`] = true
+        if (!passenger.birthdate) errors.value[`passenger${index}birthdate`] = true
+        if (!passenger.passport_country?.trim()) errors.value[`passenger${index}passportCountry`] = true
+        if (!passenger.passport_number?.trim()) errors.value[`passenger${index}passportNumber`] = true
+        if (!passenger.nationality?.trim()) errors.value[`passenger${index}nationality`] = true
+        // if (!passenger.passport_expiry_date?.trim()) errors.value[`passenger${index}expiryDate`] = true
+    })
+
+    return Object.keys(errors.value).length === 0
+}
+
+// Submit form
+const submitForm = async () => {
+    const isValid = validateForm()
+    console.log('Validation errors:', errors.value) // Add this to debug
+    if (!isValid) return
+
+    loading.value = true;
+
+    const payload = {
+        routing_id: bookingData.routing_id,
+        outward_id: bookingData.outward_id,
+        return_id: bookingData.return_id,
+        contact_details: state.contact_details,
+        travellers: state.passengers,
+        payment_type: state.payment_type,
+        // options: selectedOptions.value
+        options: Object.fromEntries(
+            Object.entries(selectedOptions.value).filter(([_, v]) => v !== '' && v !== null)
+        )
     };
+
+    console.log(payload.options);
+
+    try {
+        const response = await apiService.bookFlight(payload);
+        toast.success("Booking submitted successfully!", { autoClose: 1000 });
+        router.push({
+            path: `/flight/book/${response.data.booking_reference}`,
+        });
+    } catch (error) {
+        toast.error(error.message || "Failed to submit the form. Please try again.", { autoClose: 1000 });
+        console.error("Error submitting form:", error);
+    } finally {
+        loading.value = false;
+    }
+};
 
 
 </script>
@@ -656,92 +654,92 @@
 </template>
 
 <style lang="scss" scoped>
-    input[type="date"] {
-        position: relative;
-        padding: 10px;
+input[type="date"] {
+    position: relative;
+    padding: 10px;
 
-        &::-webkit-calendar-picker-indicator {
-            color: transparent;
-            background: none;
-            z-index: 1;
-            opacity: 0;
+    &::-webkit-calendar-picker-indicator {
+        color: transparent;
+        background: none;
+        z-index: 1;
+        opacity: 0;
 
-        }
-
-        &:before {
-            content: '';
-            color: transparent;
-            background: none;
-            display: block;
-            width: 24px;
-            height: 24px;
-            position: absolute;
-            top: 14px;
-            right: 12px;
-            background: url('@/assets/images/svg/input-calendar.svg');
-            cursor: pointer;
-        }
     }
 
-    .payment {
-        input {
-            &:checked~label {
-                border-color: #223A60;
+    &:before {
+        content: '';
+        color: transparent;
+        background: none;
+        display: block;
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        top: 14px;
+        right: 12px;
+        background: url('@/assets/images/svg/input-calendar.svg');
+        cursor: pointer;
+    }
+}
 
-                &::before {
-                    border-color: #223A60;
-                }
-
-                &::after {
-                    opacity: 1;
-                    background: #223A60;
-                }
-            }
-        }
-
-        label {
-            position: relative;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid #CDCDCD;
-            border-radius: 6px;
-
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-            padding: 17px;
+.payment {
+    input {
+        &:checked~label {
+            border-color: #223A60;
 
             &::before {
-                content: '';
-                display: block;
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                border: 1px solid #CDCDCD;
-                margin-right: 10px;
+                border-color: #223A60;
             }
 
             &::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                left: 22px;
-                width: 14px;
-                height: 14px;
-                background: #CDCDCD;
-                border-radius: 50%;
-                transition: all .2s linear;
-                opacity: 0;
+                opacity: 1;
+                background: #223A60;
             }
         }
     }
 
-    // .input-field {
-    //     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
-    // }
+    label {
+        position: relative;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid #CDCDCD;
+        border-radius: 6px;
 
-    // .btn-primary {
-    //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
-    // }</style>
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        padding: 17px;
+
+        &::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #CDCDCD;
+            margin-right: 10px;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 22px;
+            width: 14px;
+            height: 14px;
+            background: #CDCDCD;
+            border-radius: 50%;
+            transition: all .2s linear;
+            opacity: 0;
+        }
+    }
+}
+
+// .input-field {
+//     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
+// }
+
+// .btn-primary {
+//     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
+// }</style>
