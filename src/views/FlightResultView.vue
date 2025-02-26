@@ -4,7 +4,6 @@ import { useRoute } from 'vue-router'
 import { Vue3Lottie } from 'vue3-lottie'
 import LoadAnimationJSON from '@/assets/ticket-loading.json'
 import NotFoundJson from '@/assets/not-found.json'
-import axios from 'axios'
 
 import apiService from "@/services/apiService";
 
@@ -13,6 +12,7 @@ import FlightForm from '@/components/Flight/FlightForm.vue';
 import FlightResultItem from '@/components/Flight/FlightResultItem.vue';
 import LoadMore from '@/components/LoadMore.vue'
 import ToTop from '@/components/ToTop.vue'
+import Timer from "@/components/Timer.vue";
 
 const route = useRoute()
 const displayedFlights = ref([]);
@@ -146,6 +146,8 @@ const setActiveTab = (tab) => {
       </div>
     </div>
   </section>
+
+  <Timer />
 
   <section class="relative pt-20 pb-24 bg-[#F9F9F9]">
     <div class="auto_container">

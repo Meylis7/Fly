@@ -11,6 +11,8 @@ import apiService from "@/services/apiService";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
+import Timer from "@/components/Timer.vue";
+
 const router = useRouter();
 const processLoading = ref(false);
 const loading = ref(false);
@@ -194,6 +196,7 @@ const submitForm = async () => {
 </script>
 
 <template>
+    <Timer />
 
     <section class="mt-[150px] pt-[50px] pb-[100px] bg-[#F9F9F9]">
         <div class="auto_container">
