@@ -37,10 +37,10 @@
                 <Back />
 
                 <h2 class=" text-[32px] text-prime-color font-semibold mb-4">
-                    Unlock the World with Your Visa
+                    {{ $t("visa.title") }}
                 </h2>
                 <p class="text-base">
-                    Wherever you're headed, our tools ensure a smooth and stress-free journey.
+                    {{ $t("visa.text") }}
                 </p>
 
                 <div class="flex flex-wrap gap-5 mt-10">

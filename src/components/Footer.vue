@@ -55,22 +55,22 @@
                                         fill="#EEEEEE" fill-opacity="0.933333" />
                                 </svg>
                             </span>
-                            <p class="text-white text-3xl font-bold ml-4">
+                            <p class="text-white text-lg lg:text-3xl font-bold ml-4">
                                 {{ $t("footer.title") }}
                             </p>
                         </RouterLink>
 
-                        <p class="text-base font-normal  1xl:max-w-[300px]">
+                        <p class="text-sm sm:text-base font-normal 1xl:max-w-[300px]">
                             {{ $t("footer.text") }}
                         </p>
                     </div>
 
                     <div class="col w-full xl:w-1/2 1xl:w-auto">
-                        <h3 class=" text-[22px] mb-[15px] font-bold">
+                        <h3 class=" text-sm md:text-[22px] mb-[15px] font-bold">
                             {{ $t("footer.usefullLink") }}
                         </h3>
 
-                        <div class="flex items-center gap-10">
+                        <div class="flex sm:items-center flex-col sm:flex-row gap-y-5 sm:gap-10">
                             <RouterLink to="/" class="flex items-center text-white">
                                 <span>
                                     <svg width="8" height="11" viewBox="0 0 8 11" fill="none"
@@ -81,7 +81,7 @@
                                     </svg>
                                 </span>
 
-                                <p class="text-base font-normal ml-3">
+                                <p class="text-sm md:text-base font-normal ml-3">
                                     {{ $t("header.links.flightHotel") }}
                                 </p>
                             </RouterLink>
@@ -96,7 +96,7 @@
                                     </svg>
                                 </span>
 
-                                <p class="text-base font-normal ml-3">
+                                <p class="text-sm md:text-base font-normal ml-3">
                                     {{ $t("header.links.tour") }}
                                 </p>
                             </RouterLink>
@@ -111,7 +111,7 @@
                                     </svg>
                                 </span>
 
-                                <p class="text-base font-normal ml-3">
+                                <p class="text-sm md:text-base font-normal ml-3">
                                     {{ $t("header.links.visa") }}
                                 </p>
                             </RouterLink>
@@ -119,7 +119,7 @@
                     </div>
 
                     <div class="col w-full xl:w-1/2 1xl:w-auto">
-                        <h3 class=" text-[22px] mb-[15px] font-bold">
+                        <h3 class=" text-sm md:text-[22px] mb-[15px] font-bold">
                             {{ $t("footer.socialMedia") }}
                         </h3>
 
@@ -242,7 +242,7 @@
                     </div>
                 </div>
 
-                <p class="py-[30px] text-center text-white font-normal text-base mt-[50px]">
+                <p class="py-[30px] text-center text-white font-normal text-sm md:text-base mt-[50px]">
                     {{ $t("footer.copyright") }}
                 </p>
             </div>

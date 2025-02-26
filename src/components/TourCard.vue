@@ -66,7 +66,7 @@
                                 fill="white" />
                         </svg>
                     </span>
-                    {{ tour.days }} days
+                    {{ tour.days }}  {{ $t("tour.days") }}
                 </h6>
             </div>
 
@@ -77,7 +77,7 @@
 
                 <RouterLink :to="'/tours/' + tour.id + '/details'"
                     class="block relative text-center py-4 text-sm font-medium mt-4 cursor-pointer bg-[#8DD3BB] rounded">
-                    Book Tour
+                    {{ $t("tour.btn") }}
                 </RouterLink>
             </div>
         </div>

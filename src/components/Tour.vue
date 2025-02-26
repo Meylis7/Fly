@@ -104,7 +104,7 @@
 
     <RouterLink to="/tours" v-if="Btn"
         class="bg-[#223A60] py-5 px-[25px] block w-fit mx-auto mt-5 cursor-pointer rounded-xl">
-        <p class=" text-lg text-white font-semibold flex items-center">
+        <p class="text-sm md:text-lg text-white font-semibold flex items-center">
             {{ $t("seeMore") }}
 
             <span class="block ml-3">

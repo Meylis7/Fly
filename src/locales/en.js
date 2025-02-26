@@ -100,10 +100,28 @@ export default {
     title: "Explore the Tours",
     text: "Planning a getaway or heading home? Our travel tools make every journey seamless.",
     btn: "Book Tour",
+    days: "days",
+
+    details:{
+      included:"Included",
+      notIncluded:"Not included",
+      bannerTitle:"Feeling ready to travel?",
+      bannerText:"We're ready to provide you with the best service, so please contact us.",
+      bannerBtn:"Contact us",
+
+    }
   },
   visa: {
+    visa:"Visa",
     title: "Unlock the World with Your Visa",
     text: "Wherever you're headed, our tools ensure a smooth and stress-free journey.",
+    book: "Book",
+
+    details: {
+      docs: "Required documents",
+      price: "Price",
+      days: "Days",
+    },
   },
   seeMore: "See All",
   viewMore: "View More",
@@ -263,7 +281,7 @@ export default {
         placeholder: "e.g. Apt 101, 123, Main St",
       },
     },
-    options:{
+    options: {
       title: "Booking options",
       HandLuggageOptions: "Hand luggage options",
       OutwardLuggageOptions: "Outward luggage options",
@@ -271,7 +289,7 @@ export default {
       LuggageOptions: "Luggage options",
       OutwardLuggageOptions: "Outward luggage options",
       ReturnLuggageOptions: "Return luggage options",
-      select_placeholder: "Select an option"
+      select_placeholder: "Select an option",
     },
     passenger: {
       title: "Passenger",
@@ -315,11 +333,13 @@ export default {
     payment: {
       title: "Select payment method",
       val_1: "Pay with balance",
+      val_2: "Post pay",
     },
     submit: "Submit",
   },
 
   loading: "Loading",
+  notFound: "No flights found.",
 
   profile: {
     tabs: {
@@ -338,6 +358,10 @@ export default {
         label: "Lastname",
         placeholder: "e.g. Amanow",
       },
+      company: {
+        label: "Company name",
+        placeholder: "e.g. Ayna HJ",
+      },
       eamil: {
         label: "Email",
         placeholder: "e.g. Aman{@}gmail.com",
@@ -348,6 +372,12 @@ export default {
       },
       edit: "Edit",
     },
+  },
+
+  404: {
+    title: "404 Not Found",
+    subTitle: "This page does not exist",
+    goHome: "Go home",
   },
 
   loadingBooking: "Loading... Please wait.",

@@ -13,7 +13,7 @@ import Visa from '@/components/Visa.vue';
       <div class="auto_container">
         <div class="wrapper">
           <div class="block bg-[url('@/assets/images/banner.png')] bg-no-repeat bg-cover py-16 rounded-[20px]">
-            <h4 class="text-lg lg:text-3xl font-extrabold text-white text-center max-w-[950px] mx-auto mb-5 px-10">
+            <h4 class="text-lg lg:text-3xl font-extrabold text-white text-center max-w-[950px] mx-auto mb-5 px-5 md:px-10">
               {{ $t("banner.title") }}
             </h4>
             <div class="flex items-center justify-center flex-col md:flex-row gap-[10px] gap-y-4 md:gap-y-0">

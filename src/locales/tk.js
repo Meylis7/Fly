@@ -88,10 +88,28 @@ export default {
     title: "Syýahatlary Öwreniň",
     text: "Dynç almaga ýa-da öýe gaýdyp barýarsyňyzmy? Biziň syýahat gurallarymyz her syýahaty aňsat edýär.",
     btn: "Tura ýazylmak",
+    days: "gün",
+
+    details: {
+      included: "Goşulan",
+      notIncluded: "Goşulmady",
+      bannerTitle: "Syýahata taýýarmy?",
+      bannerText:
+        "Biz size iň gowy hyzmaty etmäge taýýar, şonuň üçin biziň bilen habarlaşyň.",
+      bannerBtn: "Biziň bilen habarlaşyň",
+    },
   },
   visa: {
+    visa: "Wiza",
     title: "Wizaňyz bilen Dünýäni Açyň",
     text: "Nirä gidýän bolsaňyzam, biziň gurallarymyz rahat we ynjalyksyz syýahaty üpjün edýär.",
+    book: "Ýazyl",
+
+    details: {
+      docs: "Gerekli resminamalar",
+      price: "Baha",
+      days: "Gün",
+    },
   },
   seeMore: "Hemmesini Gör",
   viewMore: "Ählisini Gör",
@@ -256,7 +274,7 @@ export default {
       OutwardLuggageOptions: "Gidiş bagaj mümkinçikleri",
       ReturnLuggageOptions: "Gaýdyp geliş bagaj mümkinçikleri",
       LuggageOptions: "Bagaj mümkinçikleri",
-      select_placeholder: "Bir wariant saýlaň"
+      select_placeholder: "Bir wariant saýlaň",
     },
     passenger: {
       title: "Ýolagçy",
@@ -300,11 +318,13 @@ export default {
     payment: {
       title: "Töleg usulyny saýlaň",
       val_1: "Balans bilen tölemek",
+      val_2: "Soň tölemek",
     },
     submit: "Ugrat",
   },
 
   loading: "Ýüklenýär",
+  notFound: "Maglumat tapylmady.",
 
   profile: {
     tabs: {
@@ -323,6 +343,10 @@ export default {
         label: "Familiýasy",
         placeholder: "Amanow",
       },
+      company: {
+        label: "Kompaniýanyň ady",
+        placeholder: "Aýna HJ",
+      },
       eamil: {
         label: "E-poçta",
         placeholder: "Aman{@}gmail.com",
@@ -333,6 +357,12 @@ export default {
       },
       edit: "Üýtgetmek",
     },
+  },
+
+  404: {
+    title: "404 Tapylmady",
+    subTitle: "Bu sahypa ýok",
+    goHome: "Baş sahypa",
   },
 
   loadingBooking: "Ýüklenýär... Garaşyň.",

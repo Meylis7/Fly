@@ -56,7 +56,7 @@ const setActiveTab = (tab) => {
                             ]">
                                 <span v-if="activeTab === 'account'"
                                     class="block absolute top-0 left-0 w-[3px] h-full bg-[#223A60] rounded-xl"></span>
-                                Account
+                                    {{ $t("profile.tabs.tab_1") }}
                             </h5>
 
                             <h5 @click="setActiveTab('flights')" :class="[
@@ -65,7 +65,7 @@ const setActiveTab = (tab) => {
                             ]">
                                 <span v-if="activeTab === 'flights'"
                                     class="block absolute top-0 left-0 w-[3px] h-full bg-[#223A60] rounded-xl"></span>
-                                Flights
+                                    {{ $t("profile.tabs.tab_2") }}
                             </h5>
 
                             <h5 @click="setActiveTab('stays')" :class="[
@@ -74,15 +74,15 @@ const setActiveTab = (tab) => {
                             ]">
                                 <span v-if="activeTab === 'stays'"
                                     class="block absolute top-0 left-0 w-[3px] h-full bg-[#223A60] rounded-xl"></span>
-                                Stays
+                                    {{ $t("profile.tabs.tab_3") }}
                             </h5>
                             <h5 @click="setActiveTab('logout')" :class="[
-                                'tab-item relative flex items-center text-red-700 cursor-pointer p-5 pl-0 rounded-[10px] text-[#112211] text-base font-semibold transition-all',
+                                'tab-item relative flex items-center text-red-700 cursor-pointer p-5 pl-0 rounded-[10px] text-base font-semibold transition-all',
                                 activeTab === 'logout' ? 'bg-[#F9F9F9] pl-5' : ''
                             ]">
                                 <span v-if="activeTab === 'logout'"
                                     class="block absolute top-0 left-0 w-[3px] h-full bg-[#223A60] rounded-xl"></span>
-                                Logout
+                                    {{ $t("profile.tabs.tab_4") }}
                             </h5>
                         </aside>
 
