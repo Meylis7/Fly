@@ -237,15 +237,15 @@ export default {
       text: "Мы отправим билет на указанный контакт, уведомления о изменениях рейса или в случае других чрезвычайных ситуаций.",
       firstName: {
         label: "Имя",
-        placeholder: "например, Аман",
+        placeholder: "Аман",
       },
       lastname: {
         label: "Фамилия",
-        placeholder: "например, Аманов",
+        placeholder: "Аманов",
       },
       gmail: {
         label: "Email",
-        placeholder: "например, Aman{'@'}gmail.com",
+        placeholder: "Aman{'@'}gmail.com",
       },
       number: {
         label: "Телефон",
@@ -262,11 +262,11 @@ export default {
       },
       city: {
         label: "Город",
-        placeholder: "например, кв. 101, 123, ул. Главная",
+        placeholder: "кв. 101, 123, ул. Главная",
       },
       street: {
         label: "Улица",
-        placeholder: "например, кв. 101, 123, ул. Главная",
+        placeholder: "кв. 101, 123, ул. Главная",
       },
     },
     options: {
@@ -284,15 +284,15 @@ export default {
       documents: "Документы",
       firstName: {
         label: "Имя",
-        placeholder: "например, Аман",
+        placeholder: "Аман",
       },
       lastname: {
         label: "Фамилия",
-        placeholder: "например, Аманов",
+        placeholder: "Аманов",
       },
       birth: {
         label: "Дата рождения",
-        placeholder: "например, 02-10-2000",
+        placeholder: "02-10-2000",
       },
       gender: {
         label: "Пол",
@@ -309,11 +309,11 @@ export default {
       },
       passportSeries: {
         label: "Серия и номер паспорта",
-        placeholder: "например, AE010101",
+        placeholder: "AE010101",
       },
       passportExpire: {
         label: "Срок действия паспорта",
-        placeholder: "например, 09-11-2029",
+        placeholder: "09-11-2029",
       },
     },
     payment: {
@@ -338,11 +338,11 @@ export default {
     accaunt: {
       firstName: {
         label: "Имя",
-        placeholder: "например, Аман",
+        placeholder: "Аман",
       },
       lastname: {
         label: "Фамилия",
-        placeholder: "например, Аманов",
+        placeholder: "Аманов",
       },
       company: {
         label: "Название компании",
@@ -350,7 +350,7 @@ export default {
       },
       eamil: {
         label: "Email",
-        placeholder: "например, Aman{@}gmail.com",
+        placeholder: "Aman{@}gmail.com",
       },
       password: {
         label: "Пароль",
