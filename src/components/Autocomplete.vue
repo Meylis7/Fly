@@ -117,13 +117,13 @@ onUnmounted(() => {
     <div class="autocomplete" ref="autocompleteContainer">
 
         <ul v-if="Object.keys(state.flights).length > 0"
-            class="flights p-1 block absolute top-[calc(100%+5px)] left-0 w-[500px] bg-white rounded-xl shadow-lg overflow-auto max-h-80 z-10">
+            class="flights p-1 block bg-white rounded-xl shadow-lg overflow-auto max-h-96 md:max-h-80 z-10">
             <li v-for="(cityData, city) in state.flights" :key="city">
                 <a href="#"
                     class="flex items-center justify-between p-4 border-b border-b-[#C8C8C8] hover:bg-[#303c8526] transition rounded"
                     @click.prevent="selectCity(city, cityData, cityData.country)">
 
-                    <h3 class="text-base font-semibold flex items-center">
+                    <h3 class="text-sm md:text-base font-semibold flex items-center">
                         <span class="block mr-2">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

@@ -355,7 +355,8 @@
                             :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''">
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
-                            @airport-selected="handleDepartureAirportSelected" />
+                            @airport-selected="handleDepartureAirportSelected"
+                            class="!absolute z-20 top-[calc(100%+5px)] left-0 min-w-full xsm:min-w-80 lg:!min-w-96" />
                     </div>
 
                     <button @click="swapCities" type="button"
@@ -389,11 +390,12 @@
                         </label>
 
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
-                            class="bg-[#F2F3F4] w-full text-base font-medium pl-6 p-3 rounded-md focus:ring-1 focus:ring-prime-color"
+                            class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''">
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
-                            @airport-selected="handleArrivalAirportSelected" />
+                            @airport-selected="handleArrivalAirportSelected"
+                            class="!absolute z-20 top-[calc(100%+5px)] right-0 min-w-full xsm:min-w-80 lg:!min-w-96" />
                     </div>
                 </div>
 

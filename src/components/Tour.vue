@@ -62,14 +62,14 @@
     </h2>
 
     <div v-if="isLoading" class="shimmer-wrapper flex gap-4 h-[420px] overflow-hidden">
-        <Shimmer />
-        <Shimmer />
-        <Shimmer />
-        <Shimmer />
+        <Shimmer class="w-full md:w-[calc(50%-12px)] xxl:w-[calc(25%-12px)]" />
+        <Shimmer class="!hidden md:w-[calc(50%-12px)] md:!flex lg:w-[calc(50%-12px)] xxl:w-[calc(25%-12px)]" />
+        <Shimmer class="!hidden lg:!flex lg:w-[calc(50%-12px)] xxl:w-[calc(25%-12px)]" />
+        <Shimmer class="!hidden xxl:!flex xxl:w-[calc(25%-12px)]" />
     </div>
 
     <div v-else>
-        <div class="arrows">
+        <div class="arrows lg:!flex !hidden">
             <button class="arrow-left">
                 <svg class="pointer-events-none" width="40" height="40" viewBox="0 0 50 50" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -93,8 +93,9 @@
         </div>
 
         <Swiper :modules="[Navigation]" :navigation="{ nextEl: '.arrow-right', prevEl: '.arrow-left' }"
-            :slides-per-view="4" :loop="true" :space-between="20" @swiper="onSwiper" @slideChange="onSlideChange"
-            class="mt-5">
+            :slides-per-view="4" :breakpoints="{
+                '280': { slidesPerView: 1, spaceBetween: 15, }, '768': { slidesPerView: 2, spaceBetween: 20, }, '1024': { slidesPerView: 3, }, '1200': { slidesPerView: 4, },
+            }" :loop="true" :space-between="20" @swiper="onSwiper" @slideChange="onSlideChange" class="mt-5">
 
             <SwiperSlide v-for="tour in state.tours" :key="tour.id">
                 <TourCard :tour="tour" :is-loading="isLoading" />
@@ -158,6 +159,9 @@
 </template>
 
 <style lang="scss">
+    .swiper-button-lock {
+        display: block !important;
+    }
 
     .arrows {
         color: #fff;
@@ -165,7 +169,7 @@
         border-radius: 5px;
         font-size: 16px;
         position: absolute;
-        top: 50px;
+        top: 25px;
         right: 0;
         z-index: 10;
         column-gap: 15px;

@@ -12,22 +12,22 @@
 
 <template>
     <div>
-        <img class="w-full h-[320px] object-cover rounded-[20px]" loading="lazy" :src=visa.main_image alt="visa-img">
+        <img class="w-full h-[250px] md:h-[320px] object-cover rounded-[20px]" loading="lazy" :src=visa.main_image alt="visa-img">
 
         <div
-            class="relative -mt-10 ml-auto p-5 flex items-center justify-between shadow-lg rounded-tl-2xl rounded-br-2xl rounded-bl-2xl rounded-tr-0 bg-white w-[calc(100%-50px)]">
+            class="relative -mt-10 ml-auto p-5 flex items-center justify-between shadow-lg rounded-tl-2xl rounded-br-2xl rounded-bl-2xl rounded-tr-0 bg-white w-full md:w-[calc(100%-50px)]">
             <div>
-                <h4 class="text-xl font-bold">
+                <h4 class="text-base md:text-xl font-bold">
                     {{ visa.location }}
                 </h4>
-                <p class="text-xl text-[#223A60] font-medium">
+                <p class="text-base md:text-xl text-[#223A60] font-medium">
                     {{ visa.price }} $
                 </p>
             </div>
 
             <RouterLink :to="'/visas/' + visa.id + '/details'" class="cursor-pointer">
-                <p class="text-white text-base font-semibold flex items-center p-4 rounded-[20px] bg-[#223A60]">
-                    {{ visa.book }}
+                <p class="text-white text-sm font-semibold flex items-center p-4 py-3 rounded-xl bg-[#223A60]">
+                    {{ $t("visa.book") }}
 
                     <span class="block ml-3">
                         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">

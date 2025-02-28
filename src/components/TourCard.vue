@@ -22,7 +22,7 @@
 
         <div
             class="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 rounded-xl p-3 w-[calc(100%-30px)] h-[calc(100%-30px)] bg-black/[0.3] flex flex-col justify-between">
-            <div class="flex item-center justify-between">
+            <div class="flex flex-col gap-y-3">
                 <h4 class="text-white text-base font-medium flex items-center">
                     <span class="block mr-2">
                         <svg width="18" height="19" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">

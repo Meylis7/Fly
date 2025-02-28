@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="shimmer flex flex-col justify-between w-[calc(25%-12px)]">
+    <div class="shimmer flex flex-col justify-between">
         <div class="shimmer-top flex justify-between items-center p-4">
             <div class="shimmer-line w-1/4 h-4 bg-gray-300 rounded"></div>
             <div class="shimmer-line w-1/4 h-4 bg-gray-300 rounded"></div>

@@ -46,14 +46,14 @@
         {{ title }}
     </h2>
 
-    <div v-if="isLoading" class="shimmer-wrapper flex gap-4 h-[420px] overflow-hidden">
-        <Shimmer class="w-[calc(33.33%-12px)]" />
-        <Shimmer class="w-[calc(33.33%-12px)]" />
-        <Shimmer class="w-[calc(33.33%-12px)]" />
+    <div v-if="isLoading" class="shimmer-wrapper flex flex-wrap gap-4 overflow-hidden">
+        <Shimmer class="min-h-[370px] xxl:min-h-[420px] w-[calc(100%-12px)] md:w-[calc(50%-12px)] xxl:w-[calc(33.33%-12px)]" />
+        <Shimmer class="min-h-[370px] xxl:min-h-[420px] w-[calc(100%-12px)] md:w-[calc(50%-12px)] xxl:w-[calc(33.33%-12px)]" />
+        <Shimmer class="min-h-[370px] xxl:min-h-[420px] !hidden xxl:!flex md:w-[calc(50%-12px)] xxl:w-[calc(33.33%-12px)]" />
     </div>
 
     <div v-else class="flex flex-wrap gap-5 mt-8">
-        <VisaCard v-for="visa in state.visas" :key="visa.id" :visa="visa" class="block w-[calc(33.33%-14px)]" />
+        <VisaCard v-for="visa in state.visas" :key="visa.id" :visa="visa" class="block w-full md:w-[calc(50%-14px)] xxl:w-[calc(33.33%-14px)] last:hidden last:xxl:block" />
     </div>
 
     <RouterLink to="/visas" class="bg-[#223A60] py-5 px-[25px] block w-fit mx-auto mt-5 cursor-pointer rounded-xl">

@@ -12,6 +12,7 @@ export default {
       screens: {
         "vsm": "24rem", // 384
         "xsm": "30rem", // 480
+        "xxl": "75rem", // 1200
         "1xl": "90rem", // 1440
       },
     },
