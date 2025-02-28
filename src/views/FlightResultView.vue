@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, computed, onUnmounted } from 'vue'
+  import { ref, onMounted, computed, nextTick  } from 'vue'
   import { useRoute } from 'vue-router'
   import { Vue3Lottie } from 'vue3-lottie'
   import LoadAnimationJSON from '@/assets/ticket-loading.json'
@@ -138,6 +138,18 @@
 
   // Mobile Filter
   const menuOpen = ref(false);
+  const filterRef = ref(null);
+
+  onMounted(() => {
+    if (window.innerWidth >= 1280) {
+      menuOpen.value = true;
+      nextTick(() => {
+        if (filterRef.value) {
+          filterRef.value.openMenu();
+        }
+      });
+    }
+  });
 </script>
 
 <template>
@@ -155,7 +167,7 @@
     <div class="auto_container">
       <div class="wrapper">
         <div v-if="loading" class="w-full min-h-[700px]">
-          <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-[400px] !h-[400px]" />
+          <Vue3Lottie :animationData="LoadAnimationJSON" class="!w-full md:!w-[400px] !h-[400px]" />
         </div>
 
         <div v-else-if="noFlightsFound && !loading" class="w-full pt-10 flex flex-col items-center min-h-[700px]">
@@ -163,14 +175,15 @@
             {{ $t("notFound") }}
           </h4>
 
-          <Vue3Lottie :animationData="NotFoundJson" class="!w-[400px] !h-[400px]" />
+          <Vue3Lottie :animationData="NotFoundJson" class="w-full md:!w-[400px] !h-[400px]" />
         </div>
-
 
         <!-- class="pointer-events-none" -->
         <div v-else class="flex flex-col xl:flex-row items-start gap-[30px]">
-          <Filter v-if="menuOpen" @close="menuOpen = false"
-            :class="['fixed 1xl:static top-0 -left-full transition-all', { '-left-full': !menuOpen, 'left-0': menuOpen }]" />
+          <Filter @close="menuOpen = false" ref="filterRef"
+            :class="['fixed 1xl:static top-0 transition-all', { '-left-full': !menuOpen, 'left-0': menuOpen },]" />
+
+
 
           <section class="w-full 1xl:w-[calc(100%-380px)] flex flex-col">
             <button @click="menuOpen = !menuOpen"

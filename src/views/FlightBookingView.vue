@@ -614,7 +614,6 @@ const submitForm = async () => {
                                 {{ $t("booking.submit") }}
                             </p>
                         </button>
-
                     </div>
 
                     <div class=" block w-[480px] ">

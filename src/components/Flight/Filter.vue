@@ -343,8 +343,6 @@
 </template>
 
 <style lang="scss" scoped>
-
-
     .filter_check {
         input {
             display: none;
