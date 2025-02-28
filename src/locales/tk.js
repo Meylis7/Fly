@@ -175,6 +175,7 @@ export default {
   },
 
   filter: {
+    filter: "Süzgüç",
     title: "Süzgüçler",
     sort: {
       val_1: "Arzan",

@@ -175,6 +175,7 @@ export default {
   },
 
   filter: {
+    filter: "Фильтр",
     title: "Фильтровать по",
     sort: {
       val_1: "Сначала дешевые",

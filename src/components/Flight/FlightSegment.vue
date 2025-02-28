@@ -1,26 +1,26 @@
 <script setup>
-import { defineProps} from 'vue';
-import CustomImage from '../CustomImage.vue';
-defineProps({
-    segment: {
-        type: Object,
-        required: true
-    },
-    stops: {
-        type: Object,
-        required: true
-    },
-    index: {
-        type: Number, 
-        required: true
-    }
-})
+    import { defineProps } from 'vue';
+    import CustomImage from '../CustomImage.vue';
+    defineProps({
+        segment: {
+            type: Object,
+            required: true
+        },
+        stops: {
+            type: Object,
+            required: true
+        },
+        index: {
+            type: Number,
+            required: true
+        }
+    })
 
 </script>
 
 <template>
-    <div class="flex items-center justify-between">
-        <div class="block">
+    <div class="flex items-center justify-between flex-col md:flex-row">
+        <div class="block w-full md:w-auto">
             <div class="flex items-center my-1">
                 <span class="block h-[35px] mr-2">
                     <CustomImage :url="segment.Operator.Logo" class="block w-full h-full object-contain"
@@ -58,7 +58,7 @@ defineProps({
             </div>
         </div>
 
-        <div class="block">
+        <div class="block w-full md:w-auto mt-6 md:mt-0">
             <div class="flex items-center mb-2">
                 <span class="block h-[18px] mr-2">
                     <svg class="object-contain" width="20" height="20" viewBox="0 0 21 20" fill="none"
@@ -71,7 +71,7 @@ defineProps({
                 <p class="text-sm font-normal">
                     <span class="font-semibold">{{ $t("ticket.flightDuration") }}: </span> {{ segment.Duration.Hours }}
                     {{ $t("ticket.hour") }}
-                    {{ segment.Duration.Min }}  {{ $t("ticket.minute") }}
+                    {{ segment.Duration.Min }} {{ $t("ticket.minute") }}
                 </p>
             </div>
 
@@ -100,8 +100,7 @@ defineProps({
             <div class="flex items-center mb-2">
                 <span class="block h-[18px] mr-2">
                     <span v-if="segment.Features.CabinBag">
-                        <svg width="18" height="15" viewBox="0 0 18 15"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M6.23706 14.3033C5.9728 14.3033 5.73257 14.1832 5.54039 13.991L0.279341 8.3216C-0.105028 7.91321 -0.0810052 7.26458 0.279341 6.85619C0.663709 6.4478 1.26429 6.47182 1.64865 6.85619L6.21304 11.7809L16.3267 0.321922C16.6871 -0.0864698 17.3117 -0.110493 17.6961 0.273876C18.0804 0.658245 18.1044 1.30687 17.7441 1.73928L6.95775 13.991C6.74154 14.1832 6.50131 14.3033 6.23706 14.3033Z"
                                 fill="#223A60" />
@@ -125,7 +124,7 @@ defineProps({
                     </span>
                 </p>
             </div>
-            
+
             <div class="flex items-center mb-2">
                 <span class="block h-[18px] mr-2">
                     <svg v-if="segment.Features.FlightChange" width="18" height="15" viewBox="0 0 18 15" fill="none"
@@ -142,13 +141,13 @@ defineProps({
                     </svg>
                 </span>
                 <p class="text-sm font-normal">
-                    <span class="font-semibold">  {{ $t("ticket.change") }}: </span>
+                    <span class="font-semibold"> {{ $t("ticket.change") }}: </span>
                     <span v-if="segment.Features.FlightChange"> {{ segment.Features.FlightChange.Value }}</span>
                     <span v-else>{{ $t("ticket.notInclude") }}</span>
                 </p>
             </div>
 
-            
+
             <div class="flex items-center">
                 <span class="block h-[18px] mr-2">
                     <svg v-if="segment.Features.Cancellation" width="18" height="15" viewBox="0 0 18 15" fill="none"
@@ -178,7 +177,7 @@ defineProps({
             {{ $t("ticket.waitingDuration") }}:
             <span class="font-normal">
                 <span class="font-semibold">{{ stops[index].Location.Airport
-                    }}</span>,
+                }}</span>,
                 {{ stops[index].Location.Country }}
                 ({{ stops[index].Duration.Hours }} {{ $t("ticket.hour") }} {{
                     stops[index].Duration.Minutes }} {{ $t("ticket.minute") }})

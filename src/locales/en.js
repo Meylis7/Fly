@@ -102,17 +102,17 @@ export default {
     btn: "Book Tour",
     days: "days",
 
-    details:{
-      included:"Included",
-      notIncluded:"Not included",
-      bannerTitle:"Feeling ready to travel?",
-      bannerText:"We're ready to provide you with the best service, so please contact us.",
-      bannerBtn:"Contact us",
-
-    }
+    details: {
+      included: "Included",
+      notIncluded: "Not included",
+      bannerTitle: "Feeling ready to travel?",
+      bannerText:
+        "We're ready to provide you with the best service, so please contact us.",
+      bannerBtn: "Contact us",
+    },
   },
   visa: {
-    visa:"Visa",
+    visa: "Visa",
     title: "Unlock the World with Your Visa",
     text: "Wherever you're headed, our tools ensure a smooth and stress-free journey.",
     book: "Book",
@@ -188,6 +188,7 @@ export default {
   },
 
   filter: {
+    filter: "Filter",
     title: "Filter By",
     sort: {
       val_1: "Cheaper first",
