@@ -93,17 +93,18 @@
                 </RouterLink>
 
                 <div class="flex items-center justify-between">
-                    <LoginSlider class="w-[calc(50%-10px)]" />
+                    <LoginSlider class="w-[calc(50%-10px)] hidden xxl:block" />
 
-                    <form class="w-[calc(50%-10px)] flex flex-wrap justify-between" @submit.prevent="register">
-                        <h2 class="text-3xl font-normal mb-4 w-full">
+                    <form class="w-full xxl:w-[calc(50%-10px)] flex flex-wrap justify-between"
+                        @submit.prevent="register">
+                        <h2 class="text-lg xxl:text-3xl font-normal mb-4 w-full">
                             {{ $t("signUp.title") }}
                         </h2>
-                        <p class="text-base font-normal mb-12 w-full">
+                        <p class="text-sm xxl:text-base font-normal mb-12 w-full">
                             {{ $t("signUp.text") }}
                         </p>
 
-                        <div class="block relative mb-6 w-[calc(50%-10px)]">
+                        <div class="block relative mb-6 w-full lg:w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
                                 {{ $t("signUp.name.label") }}
                             </label>
@@ -113,7 +114,7 @@
                             <p v-if="errors.firstname" class="text-red-500 text-sm">{{ errors.firstname }}</p>
                         </div>
 
-                        <div class="block relative mb-6 w-[calc(50%-10px)]">
+                        <div class="block relative mb-6 w-full lg:w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
                                 {{ $t("signUp.lastName.label") }}
                             </label>
@@ -123,7 +124,7 @@
                             <p v-if="errors.lastname" class="text-red-500 text-sm">{{ errors.lastname }}</p>
                         </div>
 
-                        <div class="block relative mb-6 w-[calc(50%-10px)]">
+                        <div class="block relative mb-6 w-full lg:w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
                                 {{ $t("signUp.email.label") }}
                             </label>
@@ -133,7 +134,7 @@
                             <p v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</p>
                         </div>
 
-                        <div class="block relative mb-6 w-[calc(50%-10px)]">
+                        <div class="block relative mb-6 w-full lg:w-[calc(50%-10px)]">
                             <label class="absolute left-2 -top-2 px-2 bg-[#F9F9F9] text-sm font-normal">
                                 {{ $t("signUp.company.label") }}
                             </label>
@@ -187,12 +188,12 @@
                         </div>
 
                         <button type="submit" :disabled="loading"
-                            class="w-full text-center justify-center py-[14px] mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
+                            class="w-full text-center justify-center py-[14px] mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-4 lg:mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <div v-if="loading" class="flex items-center pl-6 py-0">
                                 {{ $t("loading") }}
                                 <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
                             </div>
-                            <p v-else class="px-6 py-2">
+                            <p v-else class="md:px-6 md:py-2">
                                 {{ $t("signUp.createAccount") }}
                             </p>
                         </button>

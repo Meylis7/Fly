@@ -76,11 +76,11 @@
                 </RouterLink>
 
                 <div class="flex items-center justify-between">
-                    <form class="w-[calc(50%-10px)]" @submit.prevent="login">
-                        <h2 class="text-3xl font-normal mb-4">
+                    <form class="w-full xxl:w-[calc(50%-10px)]" @submit.prevent="login">
+                        <h2 class="text-lg xxl:text-3xl font-normal mb-4">
                             {{ $t("signIn.title") }}
                         </h2>
-                        <p class="text-base font-normal mb-12">
+                        <p class="text-sm xxl:text-base font-normal mb-12">
                             {{ $t("signIn.text") }}
                         </p>
 
@@ -122,7 +122,7 @@
                         </a>
 
                         <button type="submit" :disabled="loading"
-                            class="w-full text-center justify-center py-3 mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
+                            class="w-full text-center justify-center py-3 mb-4 text-base bg-[#223A60] text-white flex items-center gap-2 mx-auto rounded-lg mt-4 lg:mt-10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <div v-if="loading" class="flex items-center pl-6 py-0">
                                 {{ $t("loading") }}
                                 <Vue3Lottie :animationData="LoadingJson" class="!w-[50px] !h-[50px]" />
@@ -139,7 +139,7 @@
                         </p>
                     </form>
 
-                    <LoginSlider class="w-[calc(50%-10px)]" />
+                    <LoginSlider class="w-[calc(50%-10px)] hidden xxl:block" />
                 </div>
             </div>
         </div>

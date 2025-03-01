@@ -1,29 +1,29 @@
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
-import { Vue3Lottie } from 'vue3-lottie';
-import NoData from '@/assets/NoData.json';
+    import { ref, onMounted, reactive } from 'vue'
+    import { Vue3Lottie } from 'vue3-lottie';
+    import NoData from '@/assets/NoData.json';
 
-import apiService from "@/services/apiService";
+    import apiService from "@/services/apiService";
 
-const states = reactive({
-    bookings: [],
-});
+    const states = reactive({
+        bookings: [],
+    });
 
-onMounted(async () => {
-    try {
-        const response = await apiService.fetchMyFlightBookings();
+    onMounted(async () => {
+        try {
+            const response = await apiService.fetchMyFlightBookings();
 
-        states.bookings = response.data;
-    } catch (error) {
-        console.error("Error loading bookings:", error.message);
-    }
-});
+            states.bookings = response.data;
+        } catch (error) {
+            console.error("Error loading bookings:", error.message);
+        }
+    });
 </script>
 
 <template>
     <div v-if="states.bookings && states.bookings.length > 0" v-for="booking in states.bookings" :key="booking.id"
-        class="flex flex-col w-full px-6 py-8 mb-5 gap-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
-        <div class="flex items-center justify-between border-solid border-0 border-b border-[#eee] pb-2">
+        class="flex flex-col w-full px-3 xsm:px-6 py-8 mb-5 gap-5 bg-white shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-2xl">
+        <div class="flex flex-col xsm:flex-row gap-y-6 xsm:gap-y-0 xsm:items-center justify-between border-solid border-0 border-b border-[#eee] pb-2">
             <div class="flex items-center">
                 <span class="block mr-3">
                     <svg class="w-full object-contain" width="24" height="15" viewBox="0 0 24 15" fill="none"
@@ -53,15 +53,15 @@ onMounted(async () => {
             <h4 class="text-base font-medium mb-[10px] text-[#223A60] opacity-70">
                 Departure
             </h4>
-            <div class="flex items-center">
-                <div class="flex items-center gap-4">
+            <div class="flex flex-col 1xl:flex-row 1xl:items-center">
+                <div class="flex flex-col xsm:flex-row items-center text-center xsm:text-left gap-4">
                     <div class="block">
                         <h5 class="text-base font-normal mb-1">
                             {{ booking.outward.origin.airport }}({{ booking.outward.origin.code }})</h5>
                         <p class="text-xl font-semibold">{{ booking.outward.departureDate.time }}</p>
                         <p class="text-sm font-normal">{{ booking.outward.departureDate.date }}</p>
                     </div>
-                    <span class="block bg-[#112211] h-[0.5px] w-5 rounded-md"></span>
+                    <span class="block bg-[#112211] h-[0.5px] w-20 xsm:w-5 rounded-md"></span>
                     <div class="block">
                         <h5 class="text-base font-normal mb-1">
                             {{ booking.outward.destination.airport }}({{ booking.outward.destination.code }})</h5>
@@ -71,10 +71,9 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <span class="block h-20 w-[0.7px] bg-[#D7E2EE] mx-6"></span>
+                <span class="block h-[0.7px] 1xl:h-20 w-full 1xl:w-[0.7px] bg-[#D7E2EE] my-6 1xl:my-0 1xl:mx-6"></span>
 
-                <div class="flex gap-7">
-
+                <div class="flex flex-wrap gap-x-12 gap-y-3 1xl:gap-x-7">
                     <div class="block">
                         <div class="flex mb-[10px]">
                             <span class="block w-8 mr-2">
@@ -93,7 +92,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Change</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.outward.features.FlightChange && booking.outward.features.FlightChange.Bundled">
+                                    <span
+                                        v-if="booking.outward.features.FlightChange && booking.outward.features.FlightChange.Bundled">
                                         {{ $t("ticket.include") }}
                                     </span>
                                     <span v-else>
@@ -117,7 +117,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Cancellation</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.outward.features.Cancellation && booking.outward.features.Cancellation.Bundled">
+                                    <span
+                                        v-if="booking.outward.features.Cancellation && booking.outward.features.Cancellation.Bundled">
                                         {{ $t("ticket.include") }}
                                     </span>
                                     <span v-else>
@@ -143,7 +144,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Bagagge</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.outward.features.HoldBag && booking.outward.features.HoldBag.Bundled">
+                                    <span
+                                        v-if="booking.outward.features.HoldBag && booking.outward.features.HoldBag.Bundled">
                                         {{ booking.outward.features.HoldBag.Value }}
                                     </span>
                                     <span v-else>
@@ -168,7 +170,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Handbag</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.outward.features.CabinBag && booking.outward.features.CabinBag.Bundled">
+                                    <span
+                                        v-if="booking.outward.features.CabinBag && booking.outward.features.CabinBag.Bundled">
                                         {{ booking.outward.features.CabinBag.Value }}
                                     </span>
                                     <span v-else>
@@ -180,7 +183,6 @@ onMounted(async () => {
                     </div>
 
                     <div class="block">
-
                         <div class="flex">
                             <span class="block w-8 mr-2">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
@@ -207,15 +209,15 @@ onMounted(async () => {
                 Return
             </h4>
 
-            <div class="flex items-center">
-                <div class="flex items-center gap-4">
+            <div class="flex flex-col 1xl:flex-row 1xl:items-center">
+                <div class="flex flex-col xsm:flex-row items-center text-center xsm:text-left gap-4">
                     <div class="block">
                         <h5 class="text-base font-normal mb-1">
                             {{ booking.return.origin.airport }}({{ booking.return.origin.code }})</h5>
                         <p class="text-xl font-semibold">{{ booking.return.departureDate.time }}</p>
                         <p class="text-sm font-normal">{{ booking.return.departureDate.date }}</p>
                     </div>
-                    <span class="block bg-[#112211] h-[0.5px] w-5 rounded-md"></span>
+                    <span class="block bg-[#112211] h-[0.5px] w-20 xsm:w-5 rounded-md"></span>
                     <div class="block">
                         <h5 class="text-base font-normal mb-1">
                             {{ booking.return.destination.airport }}({{ booking.return.destination.code }})</h5>
@@ -225,10 +227,9 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <span class="block h-20 w-[0.7px] bg-[#D7E2EE] mx-6"></span>
+                <span class="block h-[0.7px] 1xl:h-20 w-full 1xl:w-[0.7px] bg-[#D7E2EE] my-6 1xl:my-0 1xl:mx-6"></span>
 
-                <div class="flex gap-7">
-
+                <div class="flex flex-wrap gap-x-12 gap-y-3 1xl:gap-x-7">
                     <div class="block">
                         <div class="flex mb-[10px]">
                             <span class="block w-8 mr-2">
@@ -247,7 +248,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Change</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.return.features.FlightChange && booking.return.features.FlightChange.Bundled">
+                                    <span
+                                        v-if="booking.return.features.FlightChange && booking.return.features.FlightChange.Bundled">
                                         {{ $t("ticket.include") }}
                                     </span>
                                     <span v-else>
@@ -271,7 +273,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Cancellation</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.return.features.Cancellation && booking.return.features.Cancellation.Bundled">
+                                    <span
+                                        v-if="booking.return.features.Cancellation && booking.return.features.Cancellation.Bundled">
                                         {{ $t("ticket.include") }}
                                     </span>
                                     <span v-else>
@@ -297,7 +300,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Bagagge</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.return.features.HoldBag && booking.return.features.HoldBag.Bundled">
+                                    <span
+                                        v-if="booking.return.features.HoldBag && booking.return.features.HoldBag.Bundled">
                                         {{ booking.return.features.HoldBag.Value }}
                                     </span>
                                     <span v-else>
@@ -322,7 +326,8 @@ onMounted(async () => {
                             <div class="block">
                                 <h6 class="text-xs font-semibold text-[#112211]">Handbag</h6>
                                 <p class="text-sm font-medium">
-                                    <span v-if="booking.return.features.CabinBag && booking.return.features.CabinBag.Bundled">
+                                    <span
+                                        v-if="booking.return.features.CabinBag && booking.return.features.CabinBag.Bundled">
                                         {{ booking.return.features.CabinBag.Value }}
                                     </span>
                                     <span v-else>
@@ -334,7 +339,6 @@ onMounted(async () => {
                     </div>
 
                     <div class="block">
-
                         <div class="flex">
                             <span class="block w-8 mr-2">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
