@@ -48,12 +48,12 @@ export default {
       {
         id: 2,
         title: "Эконом",
-        value: "Economy",
+        value: "Эконом",
       },
       {
         id: 3,
         title: "Бизнес",
-        value: "Business",
+        value: "Бизнес",
       },
     ],
     passengersLists: [

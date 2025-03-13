@@ -133,18 +133,8 @@
 
     const passengerDisplay = computed(() => {
         // Get the selected class text (Econom or Business)
-        const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
-        // return `${totalCount.value} Passenger${totalCount.value !== 1 ? "'s" : ""}, ${selectedClassText}`;
-
-        // const selectedClassText = computed(() => {
-        //     if (selectedClass.value === 'econom') {
-        //         return t('searchForm.typeFlights.econom');
-        //     } else if (selectedClass.value === 'all') {
-        //         return t('searchForm.typeFlights.all');
-        //     } else {
-        //         return t('searchForm.typeFlights.business');
-        //     }
-        // });
+        // const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
+        const selectedClassText = selectedClass.value === 'econom' ? `${t('searchForm.typeFlights[1].title')}` : selectedClass.value === 'all' ? `${t('searchForm.typeFlights[0].title')}` : `${t('searchForm.typeFlights[2].title')}`;
 
         // const selectedClassText = t(`searchForm.typeFlights.find(flight => flight.value === '${selectedClass.value}').title`);
         return `${totalCount.value} ${t('searchForm.passengers.label')}, ${selectedClassText}`;
