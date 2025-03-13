@@ -12,6 +12,7 @@
     import { useI18n } from 'vue-i18n';
 
     const { locale } = useI18n();
+    const { t } = useI18n();
 
     const currentLocale = computed(() => ['en', 'ru'].includes(locale.value) ? locale.value : 'en');
 
@@ -133,9 +134,20 @@
     const passengerDisplay = computed(() => {
         // Get the selected class text (Econom or Business)
         const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
+        // return `${totalCount.value} Passenger${totalCount.value !== 1 ? "'s" : ""}, ${selectedClassText}`;
 
+        // const selectedClassText = computed(() => {
+        //     if (selectedClass.value === 'econom') {
+        //         return t('searchForm.typeFlights.econom');
+        //     } else if (selectedClass.value === 'all') {
+        //         return t('searchForm.typeFlights.all');
+        //     } else {
+        //         return t('searchForm.typeFlights.business');
+        //     }
+        // });
 
-        return `${totalCount.value} Passenger${totalCount.value !== 1 ? "'s" : ""}, ${selectedClassText}`;
+        // const selectedClassText = t(`searchForm.typeFlights.find(flight => flight.value === '${selectedClass.value}').title`);
+        return `${totalCount.value} ${t('searchForm.passengers.label')}, ${selectedClassText}`;
     });
 
     const toggleModal = () => {

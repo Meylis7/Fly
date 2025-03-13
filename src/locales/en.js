@@ -249,12 +249,12 @@ export default {
       title: "Contact information",
       text: "We will send a ticket to the specified contact, send notifications about changes in the flight or in case of other emergency situations.",
       firstName: {
-        label: "Firstname",
+        label: "First name",
         placeholder: "e.g. Aman",
       },
       lastname: {
-        label: "Lastname",
-        placeholder: "e.g. Amanow",
+        label: "Last name",
+        placeholder: "Amanov",
       },
       gmail: {
         label: "Email",
@@ -298,12 +298,12 @@ export default {
       personal: "Personal data",
       documents: "Documents",
       firstName: {
-        label: "Firstname",
+        label: "First name",
         placeholder: "e.g. Aman",
       },
       lastname: {
-        label: "Lastname",
-        placeholder: "e.g. Amanow",
+        label: "Last name",
+        placeholder: "Amanov",
       },
       birth: {
         label: "Date of birth",
@@ -352,12 +352,12 @@ export default {
 
     accaunt: {
       firstName: {
-        label: "Firstname",
+        label: "First name",
         placeholder: "e.g. Aman",
       },
       lastname: {
-        label: "Lastname",
-        placeholder: "e.g. Amanow",
+        label: "Last name",
+        placeholder: "Amanov",
       },
       company: {
         label: "Company name",

@@ -66,7 +66,7 @@ const updateUser = async () => {
                 {{ $t("profile.accaunt.lastname.label") }}
             </label>
             <input v-model="state.userInfo.lastname" type="text"
-                class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Amanow">
+                class="bg-[#F9F9F9] py-[14px] px-5 w-full rounded-lg cursor-auto" placeholder="Amanov">
         </div>
 
         <div class="block w-full md:w-[calc(50%-16px)] ">

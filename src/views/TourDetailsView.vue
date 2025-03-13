@@ -5,7 +5,9 @@
     import { useRoute, RouterLink, useRouter } from 'vue-router';
 
     import axios from 'axios';
+    import { useI18n } from 'vue-i18n';
 
+    const { t } = useI18n();
 
     const route = useRoute();
     // const router = useRouter();
@@ -69,7 +71,7 @@
                     <img class="absolute top-0 left-0 object-cover w-full h-full" :src="state.tour.background_image"
                         alt="Tour-country-image">
 
-                    <div class="block relative z-10 max-w-[50%] bg-white rounded-[20px] p-8">
+                    <div class="block relative z-10 min-w-full lg:min-w-[50%] bg-white rounded-[20px] p-8">
                         <h2 class=" text-2xl font-medium mb-6">
                             {{ state.tour.name }}
                         </h2>
@@ -150,7 +152,7 @@
                 </a>
 
                 <div class="relative !mt-[100px]">
-                    <Tour title="$t('searchForm.header.links.tour')"  />
+                    <Tour :title="t('header.links.tour')" />
                 </div>
 
                 <div class="block relative my-[60px]">
