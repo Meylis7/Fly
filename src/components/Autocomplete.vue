@@ -31,8 +31,9 @@ watch(() => props.modelValue, (newValue) => {
 });
 
 watch(searchQuery, (newValue) => {
+    emit('update:modelValue', newValue);
+
     if (!isSelecting.value) { // Add this check
-        emit('update:modelValue', newValue);
         debouncedFetchAirports();
     }
     isSelecting.value = false; // Reset the flag
