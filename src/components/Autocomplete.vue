@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed  } from 'vue';
+import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed } from 'vue';
 import apiService from "@/services/apiService";
 import { useI18n } from 'vue-i18n';
 
@@ -7,16 +7,18 @@ const { locale } = useI18n();
 
 const currentLocale = computed(() => ['en', 'ru', 'tk'].includes(locale.value) ? locale.value : 'en');
 
-
 const props = defineProps({
     placeholder: {
         type: String,
         default: 'Enter city or airport',
     },
     modelValue: String
-})
+});
 
-const isSelecting = ref(false); // Add this line
+// Flag to track if selection is in progress
+const isSelecting = ref(false);
+// Flag to track if input is focused
+const isFocused = ref(false);
 
 const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
 
@@ -30,12 +32,15 @@ watch(() => props.modelValue, (newValue) => {
     searchQuery.value = newValue || '';
 });
 
+// Modified watch to ensure it works on mobile
 watch(searchQuery, (newValue) => {
-    if (!isSelecting.value) { // Add this check
-        emit('update:modelValue', newValue);
+    emit('update:modelValue', newValue);
+    
+    if (!isSelecting.value) {
         debouncedFetchAirports();
+    } else {
+        isSelecting.value = false; // Reset the flag
     }
-    isSelecting.value = false; // Reset the flag
 });
 
 const debounce = (func, delay) => {
@@ -56,7 +61,8 @@ const fetchAirports = async () => {
 
     try {
         const data = await apiService.fetchAirports(searchQuery.value);
-        state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
+        // Always update flights data regardless of device type
+        state.flights = data.data;
     } catch (error) {
         console.error("Error fetching airports:", error);
         state.flights = {};
@@ -64,6 +70,24 @@ const fetchAirports = async () => {
 };
 
 const debouncedFetchAirports = debounce(fetchAirports, 300);
+
+// New method to handle input focus
+const handleInputFocus = () => {
+    isFocused.value = true;
+    // If already has 3+ characters, trigger search immediately
+    if (searchQuery.value.length >= 3) {
+        fetchAirports();
+    }
+};
+
+// New method to handle input blur
+const handleInputBlur = (event) => {
+    // Don't hide results immediately on blur to allow selection on mobile
+    // We'll rely on the click outside handler instead
+    setTimeout(() => {
+        isFocused.value = false;
+    }, 300);
+};
 
 const selectCity = (city, cityData, country) => {
     isSelecting.value = true;
@@ -78,15 +102,6 @@ const selectCity = (city, cityData, country) => {
     });
 };
 
-// const selectCity = (city, cityData, country) => {
-//     isSelecting.value = true; // Add this line
-//     searchQuery.value = city;
-//     state.flights = {};
-//     emit('update:modelValue', city);
-//     emit('city-selected', { city, cityData, country });
-// };
-
-
 const selectAirport = (airport) => {
     isSelecting.value = true;
     searchQuery.value = airport.name[currentLocale.value] ?? airport.name.en;
@@ -98,24 +113,44 @@ const selectAirport = (airport) => {
     });
 };
 
+// Modified click outside handler to be more mobile-friendly
 const handleClickOutside = (event) => {
-    if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
+    // Don't close the dropdown when clicking on the input itself
+    const isInputElement = event.target.tagName.toLowerCase() === 'input';
+    
+    if (autocompleteContainer.value && 
+        !autocompleteContainer.value.contains(event.target) &&
+        !isInputElement) {
         state.flights = {};
     }
 };
 
+// Expose method for parent component to trigger search
+const triggerSearch = () => {
+    if (searchQuery.value.length >= 3) {
+        fetchAirports();
+    }
+};
+
+// Make sure click events work properly on mobile by adding touch events
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
+    document.addEventListener('touchend', handleClickOutside);
 });
 
 onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside);
+    document.removeEventListener('touchend', handleClickOutside);
+});
+
+// Expose the triggerSearch method to parent components
+defineExpose({
+    triggerSearch
 });
 </script>
 
 <template>
     <div class="autocomplete" ref="autocompleteContainer">
-
         <ul v-if="Object.keys(state.flights).length > 0"
             class="flights p-1 block bg-white rounded-xl shadow-lg overflow-auto max-h-96 md:max-h-80 z-10">
             <li v-for="(cityData, city) in state.flights" :key="city">
@@ -170,7 +205,6 @@ onUnmounted(() => {
     </div>
 </template>
 
-
 <style scoped>
 .autocomplete {
     position: relative;
@@ -178,6 +212,12 @@ onUnmounted(() => {
 }
 
 .flights {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    width: 100%;
     z-index: 10;
+    margin-top: 5px;
 }
 </style>

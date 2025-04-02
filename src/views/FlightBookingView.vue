@@ -103,8 +103,6 @@
         payment_type: 'post-pay'
     });
 
-
-
     const fetchOptions = async () => {
         try {
             const payload = {
@@ -136,8 +134,20 @@
             toast.error(errorMessage, {
                 autoClose: 3000,
             });
+
             // Optionally go back
             router.go(-1);
+
+            // 1) Delay navigation to previous page
+            // setTimeout(() => {
+            //     router.go(-1);
+            // }, 3100);
+
+            // 2) ===========
+            // router.replace({
+            //     name: "FlightResultVue", // Change this to the correct route name
+            //     state: { errorMessage: error.message || "An error occurred" }
+            // });
         }
     };
 
