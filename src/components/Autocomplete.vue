@@ -1,182 +1,116 @@
 <script setup>
-    import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed } from 'vue';
-    import apiService from "@/services/apiService";
-    import { useI18n } from 'vue-i18n';
+import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed  } from 'vue';
+import apiService from "@/services/apiService";
+import { useI18n } from 'vue-i18n';
 
-    const { locale } = useI18n();
+const { locale } = useI18n(); 
 
-    const currentLocale = computed(() => ['en', 'ru', 'tk'].includes(locale.value) ? locale.value : 'en');
+const currentLocale = computed(() => ['en', 'ru', 'tk'].includes(locale.value) ? locale.value : 'en');
 
 
-    const props = defineProps({
-        placeholder: {
-            type: String,
-            default: 'Enter city or airport',
-        },
-        modelValue: String
-    })
+const props = defineProps({
+    placeholder: {
+        type: String,
+        default: 'Enter city or airport',
+    },
+    modelValue: String
+})
 
-    const isSelecting = ref(false); // Add this line
-    // Add a specific flag for mobile detection
-    const isMobile = ref(false);
+const isSelecting = ref(false); // Add this line
 
-    const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
+const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
 
-    const searchQuery = ref(props.modelValue || '');
-    const state = reactive({
-        flights: {},
-    });
-    const autocompleteContainer = ref(null);
-    // Check if device is mobile
-    const checkMobile = () => {
-        isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const searchQuery = ref(props.modelValue || '');
+const state = reactive({
+    flights: {},
+});
+const autocompleteContainer = ref(null);
+
+watch(() => props.modelValue, (newValue) => {
+    searchQuery.value = newValue || '';
+});
+
+watch(searchQuery, (newValue) => {
+    if (!isSelecting.value) { // Add this check
+        emit('update:modelValue', newValue);
+        debouncedFetchAirports();
+    }
+    isSelecting.value = false; // Reset the flag
+});
+
+const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func(...args);
+        }, delay);
     };
+};
 
-    watch(() => props.modelValue, (newValue) => {
-        searchQuery.value = newValue || '';
-    });
-
-    watch(searchQuery, (newValue) => {
-        if (!isSelecting.value) { // Add this check
-            emit('update:modelValue', newValue);
-            debouncedFetchAirports();
-        }
-        isSelecting.value = false; // Reset the flag
-    });
-
-    const debounce = (func, delay) => {
-        let timeoutId;
-        return (...args) => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                func(...args);
-            }, delay);
-        };
-    };
-
-    const fetchAirports = async () => {
-        if (searchQuery.value.length < 3) {
-            state.flights = {};
-            return;
-        }
-
-        try {
-            const data = await apiService.fetchAirports(searchQuery.value);
-            state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
-        } catch (error) {
-            console.error("Error fetching airports:", error);
-            state.flights = {};
-        }
-    };
-
-    const debouncedFetchAirports = debounce(fetchAirports, 300);
-
-    // Force update function for mobile devices
-    const forceUpdateResults = () => {
-        if (searchQuery.value.length >= 3) {
-            // Set a tiny timeout to let the keyboard stabilize
-            setTimeout(() => {
-                fetchAirports();
-                state.showResults = true;
-            }, 50);
-        }
-    };
-
-
-    const selectCity = (city, cityData, country) => {
-        isSelecting.value = true;
-        searchQuery.value = city;
+const fetchAirports = async () => {
+    if (searchQuery.value.length < 3) {
         state.flights = {};
-        emit('update:modelValue', city);
-        emit('city-selected', {
-            city,
-            cityData,
-            country,
-            cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
-        });
-    };
+        return;
+    }
 
-    // const selectCity = (city, cityData, country) => {
-    //     isSelecting.value = true; // Add this line
-    //     searchQuery.value = city;
-    //     state.flights = {};
-    //     emit('update:modelValue', city);
-    //     emit('city-selected', { city, cityData, country });
-    // };
-
-
-    const selectAirport = (airport) => {
-        isSelecting.value = true;
-        searchQuery.value = airport.name[currentLocale.value] ?? airport.name.en;
+    try {
+        const data = await apiService.fetchAirports(searchQuery.value);
+        state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
+    } catch (error) {
+        console.error("Error fetching airports:", error);
         state.flights = {};
-        emit('update:modelValue', airport.name[currentLocale.value] ?? airport.name.en);
-        emit('airport-selected', {
-            airport,
-            airportCode: airport.code
-        });
-    };
+    }
+};
 
-    // const handleClickOutside = (event) => {
-    //     if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
-    //         state.flights = {};
-    //     }
-    // };
-    const handleClickOutside = (event) => {
-        if (autocompleteContainer.value &&
-            !autocompleteContainer.value.contains(event.target)) {
+const debouncedFetchAirports = debounce(fetchAirports, 300);
 
-            // On mobile, we need to be more careful about closing the results
-            if (isMobile.value) {
-                // Only close if click is not on an input element
-                if (event.target.tagName.toLowerCase() !== 'input') {
-                    state.showResults = false;
-                    state.flights = {};
-                }
-            } else {
-                state.showResults = false;
-                state.flights = {};
-            }
-        }
-    };
-
-    const handleInput = () => {
-        if (isMobile.value && searchQuery.value.length >= 3) {
-            forceUpdateResults();
-        }
-    };
-
-    // onMounted(() => {
-    //     document.addEventListener('click', handleClickOutside);
-    // });
-
-    // onUnmounted(() => {
-    //     document.removeEventListener('click', handleClickOutside);
-    // });
-
-    onMounted(() => {
-        checkMobile();
-        document.addEventListener('click', handleClickOutside);
-        document.addEventListener('touchend', handleClickOutside);
-
-        // Add a resize listener to detect orientation changes on mobile
-        window.addEventListener('resize', () => {
-            checkMobile();
-            if (isMobile.value && searchQuery.value.length >= 3) {
-                forceUpdateResults();
-            }
-        });
+const selectCity = (city, cityData, country) => {
+    isSelecting.value = true;
+    searchQuery.value = city;
+    state.flights = {};
+    emit('update:modelValue', city);
+    emit('city-selected', {
+        city,
+        cityData,
+        country,
+        cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
     });
+};
 
-    onUnmounted(() => {
-        document.removeEventListener('click', handleClickOutside);
-        document.removeEventListener('touchend', handleClickOutside);
-        window.removeEventListener('resize', checkMobile);
-    });
+// const selectCity = (city, cityData, country) => {
+//     isSelecting.value = true; // Add this line
+//     searchQuery.value = city;
+//     state.flights = {};
+//     emit('update:modelValue', city);
+//     emit('city-selected', { city, cityData, country });
+// };
 
-    // Expose method for parent component
-    defineExpose({
-        forceUpdateResults
+
+const selectAirport = (airport) => {
+    isSelecting.value = true;
+    searchQuery.value = airport.name[currentLocale.value] ?? airport.name.en;
+    state.flights = {};
+    emit('update:modelValue', airport.name[currentLocale.value] ?? airport.name.en);
+    emit('airport-selected', {
+        airport,
+        airportCode: airport.code
     });
+};
+
+const handleClickOutside = (event) => {
+    if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
+        state.flights = {};
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
@@ -237,12 +171,12 @@
 
 
 <style scoped>
-    .autocomplete {
-        position: relative;
-        width: 100%;
-    }
+.autocomplete {
+    position: relative;
+    width: 100%;
+}
 
-    .flights {
-        z-index: 10;
-    }
+.flights {
+    z-index: 10;
+}
 </style>
