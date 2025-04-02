@@ -1,152 +1,182 @@
 <script setup>
-import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed } from 'vue';
-import apiService from "@/services/apiService";
-import { useI18n } from 'vue-i18n';
+    import { ref, reactive, watch, onMounted, onUnmounted, defineProps, computed } from 'vue';
+    import apiService from "@/services/apiService";
+    import { useI18n } from 'vue-i18n';
 
-const { locale } = useI18n(); 
+    const { locale } = useI18n();
 
-const currentLocale = computed(() => ['en', 'ru', 'tk'].includes(locale.value) ? locale.value : 'en');
+    const currentLocale = computed(() => ['en', 'ru', 'tk'].includes(locale.value) ? locale.value : 'en');
 
-const props = defineProps({
-    placeholder: {
-        type: String,
-        default: 'Enter city or airport',
-    },
-    modelValue: String
-});
 
-// Flag to track if selection is in progress
-const isSelecting = ref(false);
-// Flag to track if input is focused
-const isFocused = ref(false);
+    const props = defineProps({
+        placeholder: {
+            type: String,
+            default: 'Enter city or airport',
+        },
+        modelValue: String
+    })
 
-const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
+    const isSelecting = ref(false); // Add this line
+    // Add a specific flag for mobile detection
+    const isMobile = ref(false);
 
-const searchQuery = ref(props.modelValue || '');
-const state = reactive({
-    flights: {},
-});
-const autocompleteContainer = ref(null);
+    const emit = defineEmits(['update:modelValue', 'city-selected', 'airport-selected']);
 
-watch(() => props.modelValue, (newValue) => {
-    searchQuery.value = newValue || '';
-});
-
-// Modified watch to ensure it works on mobile
-watch(searchQuery, (newValue) => {
-    emit('update:modelValue', newValue);
-    
-    if (!isSelecting.value) {
-        debouncedFetchAirports();
-    } else {
-        isSelecting.value = false; // Reset the flag
-    }
-});
-
-const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            func(...args);
-        }, delay);
+    const searchQuery = ref(props.modelValue || '');
+    const state = reactive({
+        flights: {},
+    });
+    const autocompleteContainer = ref(null);
+    // Check if device is mobile
+    const checkMobile = () => {
+        isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     };
-};
 
-const fetchAirports = async () => {
-    if (searchQuery.value.length < 3) {
-        state.flights = {};
-        return;
-    }
-
-    try {
-        const data = await apiService.fetchAirports(searchQuery.value);
-        // Always update flights data regardless of device type
-        state.flights = data.data;
-    } catch (error) {
-        console.error("Error fetching airports:", error);
-        state.flights = {};
-    }
-};
-
-const debouncedFetchAirports = debounce(fetchAirports, 300);
-
-// New method to handle input focus
-const handleInputFocus = () => {
-    isFocused.value = true;
-    // If already has 3+ characters, trigger search immediately
-    if (searchQuery.value.length >= 3) {
-        fetchAirports();
-    }
-};
-
-// New method to handle input blur
-const handleInputBlur = (event) => {
-    // Don't hide results immediately on blur to allow selection on mobile
-    // We'll rely on the click outside handler instead
-    setTimeout(() => {
-        isFocused.value = false;
-    }, 300);
-};
-
-const selectCity = (city, cityData, country) => {
-    isSelecting.value = true;
-    searchQuery.value = city;
-    state.flights = {};
-    emit('update:modelValue', city);
-    emit('city-selected', {
-        city,
-        cityData,
-        country,
-        cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
+    watch(() => props.modelValue, (newValue) => {
+        searchQuery.value = newValue || '';
     });
-};
 
-const selectAirport = (airport) => {
-    isSelecting.value = true;
-    searchQuery.value = airport.name[currentLocale.value] ?? airport.name.en;
-    state.flights = {};
-    emit('update:modelValue', airport.name[currentLocale.value] ?? airport.name.en);
-    emit('airport-selected', {
-        airport,
-        airportCode: airport.code
+    watch(searchQuery, (newValue) => {
+        if (!isSelecting.value) { // Add this check
+            emit('update:modelValue', newValue);
+            debouncedFetchAirports();
+        }
+        isSelecting.value = false; // Reset the flag
     });
-};
 
-// Modified click outside handler to be more mobile-friendly
-const handleClickOutside = (event) => {
-    // Don't close the dropdown when clicking on the input itself
-    const isInputElement = event.target.tagName.toLowerCase() === 'input';
-    
-    if (autocompleteContainer.value && 
-        !autocompleteContainer.value.contains(event.target) &&
-        !isInputElement) {
+    const debounce = (func, delay) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func(...args);
+            }, delay);
+        };
+    };
+
+    const fetchAirports = async () => {
+        if (searchQuery.value.length < 3) {
+            state.flights = {};
+            return;
+        }
+
+        try {
+            const data = await apiService.fetchAirports(searchQuery.value);
+            state.flights = data.data; // Assuming the response contains a 'data' field with the list of airports
+        } catch (error) {
+            console.error("Error fetching airports:", error);
+            state.flights = {};
+        }
+    };
+
+    const debouncedFetchAirports = debounce(fetchAirports, 300);
+
+    // Force update function for mobile devices
+    const forceUpdateResults = () => {
+        if (searchQuery.value.length >= 3) {
+            // Set a tiny timeout to let the keyboard stabilize
+            setTimeout(() => {
+                fetchAirports();
+                state.showResults = true;
+            }, 50);
+        }
+    };
+
+
+    const selectCity = (city, cityData, country) => {
+        isSelecting.value = true;
+        searchQuery.value = city;
         state.flights = {};
-    }
-};
+        emit('update:modelValue', city);
+        emit('city-selected', {
+            city,
+            cityData,
+            country,
+            cityCode: cityData.citycode || (cityData.airports && cityData.airports[0] && cityData.airports[0].code)
+        });
+    };
 
-// Expose method for parent component to trigger search
-const triggerSearch = () => {
-    if (searchQuery.value.length >= 3) {
-        fetchAirports();
-    }
-};
+    // const selectCity = (city, cityData, country) => {
+    //     isSelecting.value = true; // Add this line
+    //     searchQuery.value = city;
+    //     state.flights = {};
+    //     emit('update:modelValue', city);
+    //     emit('city-selected', { city, cityData, country });
+    // };
 
-// Make sure click events work properly on mobile by adding touch events
-onMounted(() => {
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('touchend', handleClickOutside);
-});
 
-onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside);
-    document.removeEventListener('touchend', handleClickOutside);
-});
+    const selectAirport = (airport) => {
+        isSelecting.value = true;
+        searchQuery.value = airport.name[currentLocale.value] ?? airport.name.en;
+        state.flights = {};
+        emit('update:modelValue', airport.name[currentLocale.value] ?? airport.name.en);
+        emit('airport-selected', {
+            airport,
+            airportCode: airport.code
+        });
+    };
 
-// Expose the triggerSearch method to parent components
-defineExpose({
-    triggerSearch
-});
+    // const handleClickOutside = (event) => {
+    //     if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
+    //         state.flights = {};
+    //     }
+    // };
+    const handleClickOutside = (event) => {
+        if (autocompleteContainer.value &&
+            !autocompleteContainer.value.contains(event.target)) {
+
+            // On mobile, we need to be more careful about closing the results
+            if (isMobile.value) {
+                // Only close if click is not on an input element
+                if (event.target.tagName.toLowerCase() !== 'input') {
+                    state.showResults = false;
+                    state.flights = {};
+                }
+            } else {
+                state.showResults = false;
+                state.flights = {};
+            }
+        }
+    };
+
+    const handleInput = () => {
+        if (isMobile.value && searchQuery.value.length >= 3) {
+            forceUpdateResults();
+        }
+    };
+
+    // onMounted(() => {
+    //     document.addEventListener('click', handleClickOutside);
+    // });
+
+    // onUnmounted(() => {
+    //     document.removeEventListener('click', handleClickOutside);
+    // });
+
+    onMounted(() => {
+        checkMobile();
+        document.addEventListener('click', handleClickOutside);
+        document.addEventListener('touchend', handleClickOutside);
+
+        // Add a resize listener to detect orientation changes on mobile
+        window.addEventListener('resize', () => {
+            checkMobile();
+            if (isMobile.value && searchQuery.value.length >= 3) {
+                forceUpdateResults();
+            }
+        });
+    });
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleClickOutside);
+        document.removeEventListener('touchend', handleClickOutside);
+        window.removeEventListener('resize', checkMobile);
+    });
+
+    // Expose method for parent component
+    defineExpose({
+        forceUpdateResults
+    });
 </script>
 
 <template>
@@ -205,19 +235,14 @@ defineExpose({
     </div>
 </template>
 
-<style scoped>
-.autocomplete {
-    position: relative;
-    width: 100%;
-}
 
-.flights {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    width: 100%;
-    z-index: 10;
-    margin-top: 5px;
-}
+<style scoped>
+    .autocomplete {
+        position: relative;
+        width: 100%;
+    }
+
+    .flights {
+        z-index: 10;
+    }
 </style>
