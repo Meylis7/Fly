@@ -154,7 +154,7 @@ export default {
       placeholder: "**********",
     },
     forget: "Forgot password",
-    accountText: "Don’t have an account?",
+    accountText: "Don't have an account?",
   },
   signUp: {
     title: "Sign up",
@@ -288,8 +288,7 @@ export default {
       OutwardLuggageOptions: "Outward luggage options",
       ReturnLuggageOptions: "Return luggage options",
       LuggageOptions: "Luggage options",
-      OutwardLuggageOptions: "Outward luggage options",
-      ReturnLuggageOptions: "Return luggage options",
+      MealType: "Meal type",
       select_placeholder: "Select an option",
     },
     passenger: {

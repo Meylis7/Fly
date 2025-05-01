@@ -275,6 +275,7 @@ export default {
       OutwardLuggageOptions: "Gidiş bagaj mümkinçikleri",
       ReturnLuggageOptions: "Gaýdyp geliş bagaj mümkinçikleri",
       LuggageOptions: "Bagaj mümkinçikleri",
+      MealType: "Nahar görnüşleri",
       select_placeholder: "Bir wariant saýlaň",
     },
     passenger: {

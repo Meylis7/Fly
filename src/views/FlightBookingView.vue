@@ -233,20 +233,42 @@
             contact_details: state.contact_details,
             travellers: state.passengers,
             payment_type: state.payment_type,
-            // options: selectedOptions.value
             options: Object.fromEntries(
                 Object.entries(selectedOptions.value).filter(([_, v]) => v !== '' && v !== null)
             )
         };
 
-        console.log(payload.options);
-
         try {
+            // First API call to process booking
             const response = await apiService.bookFlight(payload);
-            toast.success("Booking submitted successfully!", { autoClose: 1000 });
-            router.push({
-                path: `/flight/book/${response.data.booking_reference}`,
+            
+            // Show price confirmation dialog
+            const confirmed = await new Promise((resolve) => {
+                const price = response.data.price;
+                const message = `Final price: ${price.Amount} ${price.Currency}. Do you want to continue?`;
+                if (confirm(message)) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
             });
+
+            if (!confirmed) {
+                loading.value = false;
+                return;
+            }
+
+            // Second API call to start booking
+            const startResponse = await apiService.startBooking(response.data.booking_reference);
+            
+            if (startResponse.data.success) {
+                toast.success("Booking submitted successfully!", { autoClose: 1000 });
+                router.push({
+                    path: `/flight/book/${response.data.booking_reference}`,
+                });
+            } else {
+                throw new Error("Failed to start booking");
+            }
         } catch (error) {
             toast.error(error.message || "Failed to submit the form. Please try again.", { autoClose: 1000 });
             console.error("Error submitting form:", error);

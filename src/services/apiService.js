@@ -94,7 +94,12 @@ const apiService = {
 
   //Booking flight
   bookFlight(payload) {
-    return apiRequest("post", `/tfusion/book/flights`, payload);
+    return apiRequest("post", `/tfusion/bookings/process`, payload);
+  },
+
+  // Start booking
+  startBooking(bookingReference) {
+    return apiRequest("post", `/tfusion/bookings/${bookingReference}/start`);
   },
 
   // My Bookings
