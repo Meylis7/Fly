@@ -275,6 +275,7 @@ export default {
       OutwardLuggageOptions: "Варианты багажа в одну сторону",
       ReturnLuggageOptions: "Варианты обратного багажа",
       LuggageOptions: "Варианты багажа",
+      MealType: "Тип еды",
       select_placeholder: "Выберите вариант",
     },
     passenger: {
