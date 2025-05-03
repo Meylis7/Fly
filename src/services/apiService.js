@@ -2,6 +2,27 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Helper function to get user's IP address
+const getUserIP = async () => {
+  try {
+    const response = await axios.get('https://api.ipify.org?format=json');
+    return response.data.ip;
+  } catch (error) {
+    console.error('Error getting IP address:', error);
+    return window.location.hostname; // Fallback to hostname
+  }
+};
+
+// Helper function to get meta data
+const getMetaData = async () => {
+  const userIP = await getUserIP();
+  return {
+    end_user_ip_address: userIP,
+    end_user_browser_agent: navigator.userAgent,
+    end_user_device_mac_address: '00:00:00:00:00:00', // Default MAC address
+  };
+};
+
 // Base API method that handles GET and POST requests with automatic headers
 const apiRequest = async (method, endpoint, data = null) => {
   try {
@@ -60,7 +81,6 @@ const apiService = {
     return apiRequest("post", `/user/register`, userData);
   },
 
-
   updateUser(userData) {
     return apiRequest("post", `/user`, userData);
   },
@@ -87,14 +107,26 @@ const apiService = {
   },
 
   // Search flights
-  searchFlight(payload) {
-    return apiRequest("get", `/tfusion/search/flights?${payload}`);
+  async searchFlight(payload) {
+    const meta = await getMetaData();
+    const searchPayload = {
+      ...payload,
+      "meta[end_user_ip_address]": meta.end_user_ip_address,
+      "meta[end_user_browser_agent]": meta.end_user_browser_agent,
+      "meta[end_user_device_mac_address]": meta.end_user_device_mac_address,
+    };
+    return apiRequest("get", `/tfusion/search/flights?${new URLSearchParams(searchPayload).toString()}`);
   },
 
-
-  //Booking flight
-  bookFlight(payload) {
-    return apiRequest("post", `/tfusion/bookings/process`, payload);
+  // Booking flight
+  async bookFlight(payload) {
+    // Add meta data to booking payload
+    const meta = await getMetaData();
+    const bookingPayload = {
+      ...payload,
+      meta
+    };
+    return apiRequest("post", `/tfusion/bookings/process`, bookingPayload);
   },
 
   // Start booking

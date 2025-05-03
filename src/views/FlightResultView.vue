@@ -71,9 +71,9 @@
       }
 
       // Convert queryParams to query string
-      const queryString = new URLSearchParams(queryParams).toString();
+      // const queryString = new URLSearchParams(queryParams).toString();
 
-      const searchResponse = await apiService.searchFlight(queryString);
+      const searchResponse = await apiService.searchFlight(queryParams);
 
       return searchResponse.data
     } catch (error) {
