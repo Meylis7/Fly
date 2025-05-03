@@ -380,5 +380,14 @@ export default {
       passenger: "Ýolagçy",
       download: "Ýükle",
     },
+    status: {
+      unconfirmed: "Howa ýoly sargydyň ýagdaýy barada açyk maglumat bermedi. Eger sargyt üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli ýagdaýda bolsaňyz, kömek hyzmatymyz bilen +00xx xxxxxxxxx belgisi arkaly habarlaşyň.",
+      unconfirmedBySupplier: "Howa ýoly sargydyň ýagdaýy barada açyk maglumat bermedi. Eger sargyt üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli ýagdaýda bolsaňyz, kömek hyzmatymyz bilen +00xx xxxxxxxxx belgisi arkaly habarlaşyň.",
+      duplicate: "Biziň ulgamyňyz şol bir ýolagçy we uçuş maglumatlary bilen tassyklanan sargydyňyz bardygyny anyklady. Öňki sargydyňyzyň maglumatlaryny barlaň.",
+      failed: "Sargyt amala aşyrylmady. Täzeden synanyşyň ýa-da kömek hyzmatymyz bilen habarlaşyň.",
+      succeeded: "Sargyt üstünlikli tamamlandy!",
+      pending: "Sargydyňyz işlenýär. Garaşyň...",
+      bookingInProgress: "Sargydyňyz işlenýär. Garaşyň..."
+    }
   },
 };

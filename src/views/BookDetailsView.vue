@@ -4,6 +4,8 @@
     import { Vue3Lottie } from 'vue3-lottie';
     import { RouterLink } from 'vue-router';
     import Load_3 from '@/assets/loading-3.json';
+    import { toast } from 'vue3-toastify';
+    import 'vue3-toastify/dist/index.css';
 
     import apiService from '@/services/apiService';
 
@@ -23,20 +25,48 @@
         if (data.data) {
             state.status = data.data.status;
             state.booking = data.data;
-            if(state.booking.payment_type === 'post-pay'){
-                state.loading = false;
-            }
-            else if (state.status === 'pending' || state.status === 'in-progress' ) {
-                setTimeout(fetchBookingDetails, 5000);
-            } else {
-                state.loading = false;
-                if (state.status === 'approved') {
+            
+            // Handle different statuses
+            switch (state.status) {
+                case 'Pending':
+                case 'BookingInProgress':
+                    if(state.booking.payment_type === 'post-pay') {
+                        state.loading = false;
+                    } else {
+                        setTimeout(fetchBookingDetails, 5000);
+                    }
+                    break;
+                    
+                case 'Succeeded':
+                    state.loading = false;
                     state.tickets = data.data.tickets;
-                }
+                    toast.success($t('BookingTicket.status.succeeded'), { autoClose: 3000 });
+                    break;
+                    
+                case 'Unconfirmed':
+                case 'UnconfirmedBySupplier':
+                    state.loading = false;
+                    toast.warning($t('BookingTicket.status.' + state.status.toLowerCase()), { autoClose: 5000 });
+                    break;
+                    
+                case 'Duplicate':
+                    state.loading = false;
+                    toast.error($t('BookingTicket.status.duplicate'), { autoClose: 5000 });
+                    break;
+                    
+                case 'Failed':
+                    state.loading = false;
+                    toast.error($t('BookingTicket.status.failed'), { autoClose: 3000 });
+                    break;
+                    
+                default:
+                    state.loading = false;
+                    break;
             }
         } else {
             state.status = 'Failed';
             state.loading = false;
+            toast.error($t('BookingTicket.status.failed'), { autoClose: 3000 });
         }
     };
 
