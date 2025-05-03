@@ -212,7 +212,7 @@
         </div>
 
         <div v-show="openIndex === index"
-            class="details-info block p-5 mt-2 relative z-20 rounded-lg bg-white border border-solid border-[#223a604d]">
+            class="details-info block p-5 mt-2 relative rounded-lg bg-white border border-solid border-[#223a604d]">
             <div class="Departure block">
                 <h4 class="text-base font-bold text-center">
                     {{ $t("ticket.departure") }}

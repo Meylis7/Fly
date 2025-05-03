@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, onMounted, reactive, onBeforeUnmount, nextTick } from 'vue'
+    import { ref, onMounted, computed, watch, onUnmounted, reactive, onBeforeUnmount, nextTick } from 'vue'
     import { useRouter } from 'vue-router';
 
     import { Vue3Lottie } from 'vue3-lottie'
@@ -10,6 +10,8 @@
     import apiService from "@/services/apiService";
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
+
+    import { countryCodes } from '@/data/countryData'; // Import the data
 
     const router = useRouter();
     const processLoading = ref(false);
@@ -151,6 +153,97 @@
         }
     };
 
+    // Country code select box
+    // Props
+    const props = defineProps({
+        modelValue: {
+            type: String,
+            default: '+90'
+        }
+    });
+
+    // Emits
+    const emit = defineEmits(['update:modelValue']);
+
+    // Refs
+    const isOpen = ref(false);
+    const dropdownRef = ref(null);
+    const selectedCode = ref(props.modelValue);
+    const searchQuery = ref('');
+
+    // All countries
+    const countries = countryCodes;
+
+    // Computed: Filter countries
+    const filteredCountries = computed(() => {
+        if (!searchQuery.value) return countries;
+
+        const query = searchQuery.value.toLowerCase().trim();
+        return countries.filter(country => {
+            return (
+                country.name.toLowerCase().includes(query) ||
+                country.code.includes(query)
+            );
+        });
+    });
+
+    // Watch external changes
+    // watch(() => props.modelValue, (newVal) => {
+    //     selectedCode.value = newVal;
+    // });
+
+    watch(selectedCode, (newCode) => {
+        state.contact_details.phone.code = newCode;
+    });
+
+    // Toggle dropdown
+    const toggleDropdown = () => {
+        isOpen.value = !isOpen.value;
+        if (isOpen.value) {
+            searchQuery.value = '';
+            setTimeout(() => {
+                const searchInput = dropdownRef.value?.querySelector('.search-input');
+                if (searchInput) searchInput.focus();
+            }, 0);
+        }
+    };
+
+    // Select a country
+    // const selectCountry = (code) => {
+    //     selectedCode.value = code;
+    //     emit('update:modelValue', code);
+    //     isOpen.value = false;
+    // };
+    const selectCountry = (code) => {
+        selectedCode.value = code;
+        state.contact_details.phone.code = code; // 👈 form sync
+        emit('update:modelValue', code);
+        isOpen.value = false;
+    };
+
+    // Handle outside click
+    const handleClickOutsides = (event) => {
+        if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+            isOpen.value = false;
+        }
+    };
+
+    // Lifecycle
+    // onMounted(() => {
+    //     document.addEventListener('click', handleClickOutsides);
+    //     selectedCode.value = props.modelValue;
+    // });
+    onMounted(() => {
+        document.addEventListener('click', handleClickOutsides);
+        selectedCode.value = props.modelValue;
+        state.contact_details.phone.code = props.modelValue; // 👈 sync on mount
+    });
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleClickOutsides);
+    });
+    // ============
+
     onMounted(async () => {
         document.addEventListener("click", handleClickOutside);
 
@@ -241,7 +334,7 @@
         try {
             // First API call to process booking
             const response = await apiService.bookFlight(payload);
-            
+
             // Show price confirmation dialog
             const confirmed = await new Promise((resolve) => {
                 const price = response.data.price;
@@ -260,7 +353,7 @@
 
             // Second API call to start booking
             const startResponse = await apiService.startBooking(response.data.booking_reference);
-            
+
             if (startResponse.data.success) {
                 toast.success("Booking submitted successfully!", { autoClose: 1000 });
                 router.push({
@@ -332,7 +425,7 @@
                                             :placeholder="$t('booking.contact.gmail.placeholder')">
                                     </div>
 
-                                    <div
+                                    <!-- <div
                                         class="input relative w-[calc(100%-10px)] md:w-[calc(50%-10px)] overflow-hidden">
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t("booking.contact.number.label") }}
@@ -346,6 +439,67 @@
                                         <input type="number" v-model="state.contact_details.phone.code"
                                             class="absolute left-[1px] bottom-[1px] text-sm lg:text-base font-normal w-[70px] text-center py-[14px] border-solid border-0 border-r border-[#A1B0CC] rounded-l"
                                             placeholder="993">
+
+                                        <div class="country-code-selector" ref="dropdownRef">
+                                            <div class="selected-code" @click="toggleDropdown">
+                                                {{ selectedCode }}
+                                                <span class="arrow">{{ isOpen ? '▲' : '▼' }}</span>
+                                            </div>
+
+                                            <div class="dropdown" v-if="isOpen">
+                                                <input type="text" v-model="searchQuery"
+                                                    placeholder="Search countries..." class="search-input"
+                                                    @click.stop />
+                                                <div class="dropdown-list">
+                                                    <div v-for="country in filteredCountries"
+                                                        :key="country.code + '-' + country.name" class="country-option"
+                                                        :class="{ 'selected': selectedCode === country.code }"
+                                                        @click="selectCountry(country.code)">
+                                                        <span class="flag">{{ country.flag }}</span>
+                                                        <span class="name">{{ country.name }}</span>
+                                                        <span class="code">{{ country.code }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="input relative w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
+                                        <label class="text-sm font-normal mb-2 block">
+                                            {{ $t("booking.contact.number.label") }}
+                                        </label>
+                                        <input v-model="state.contact_details.phone.number" required type="number"
+                                            min="8"
+                                            class="text-sm lg:text-base font-normal w-full py-[14px] pr-3 pl-[120px] placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                            :class="[errors.phone ? 'border-red-500' : '']"
+                                            :placeholder="$t('booking.contact.number.placeholder')">
+
+                                        <input type="number" v-model="state.contact_details.phone.code"
+                                            class="hidden absolute left-[1px] bottom-[1px] text-sm lg:text-base font-normal w-[70px] text-center py-[14px] border-solid border-0 border-r border-[#A1B0CC] rounded-l"
+                                            placeholder="993">
+
+                                        <div class="country-code-selector" ref="dropdownRef">
+                                            <div class="selected-code" @click="toggleDropdown">
+                                                {{ selectedCode }}
+                                                <span class="arrow">{{ isOpen ? '▲' : '▼' }}</span>
+                                            </div>
+
+                                            <div class="dropdown" v-if="isOpen">
+                                                <input type="text" v-model="searchQuery"
+                                                    placeholder="Search countries..." class="search-input"
+                                                    @click.stop />
+                                                <div class="dropdown-list">
+                                                    <div v-for="country in filteredCountries"
+                                                        :key="country.code + '-' + country.name" class="country-option"
+                                                        :class="{ 'selected': selectedCode === country.code }"
+                                                        @click="selectCountry(country.code)">
+                                                        <span class="flag">{{ country.flag }}</span>
+                                                        <span class="name">{{ country.name }}</span>
+                                                        <span class="code">{{ country.code }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
@@ -688,12 +842,100 @@
                 <div v-else class="flex items-center pl-6 py-0 xl:min-h-[450px]">
                     <Vue3Lottie :animationData="Booking_loading" class="!w-[200px] !h-[200px]" />
                 </div>
+
+                <!-- Modal Window (Hidden Until Time is Up) -->
+                <div class="modal-overlay">
+                    <div class="modal">
+                        <p>Your tikcet price.</p>
+                        <button>Proceed</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 </template>
 
 <style lang="scss" scoped>
+    .country-code-selector {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        min-width: 90px;
+    }
+
+    .selected-code {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 14px;
+        border: 1px solid #A1B0CC;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: white;
+        user-select: none;
+    }
+
+    .arrow {
+        margin-left: 8px;
+        font-size: 10px;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 280px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        z-index: 1000;
+        margin-top: 2px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .dropdown-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .country-option {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .country-option:hover {
+        background-color: #f5f5f5;
+    }
+
+    .country-option.selected {
+        background-color: #e9f5ff;
+    }
+
+    .flag {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .name {
+        flex: 1;
+    }
+
+    .code {
+        font-weight: bold;
+        margin-left: 8px;
+    }
+
     input[type="date"] {
         position: relative;
         padding: 10px;
@@ -782,4 +1024,36 @@
 
     // .btn-primary {
     //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
-    // }</style>
+    // }
+
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+        /* Ensures it's above everything */
+    }
+
+    .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    // button { 
+    //     background: green;
+    //     color: white;
+    //     padding: 10px 20px;
+    //     border: none;
+    //     cursor: pointer;
+    //     border-radius: 5px;
+    // }
+</style>
