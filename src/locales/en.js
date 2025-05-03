@@ -394,8 +394,8 @@ export default {
       download: "Download",
     },
     status: {
-      unconfirmed: "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk on +00xx xxxxxxxxx.",
-      unconfirmedBySupplier: "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk on +00xx xxxxxxxxx.",
+      unconfirmed: "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk",
+      unconfirmedBySupplier: "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk",
       duplicate: "Our system has detected that you already have a confirmed booking with the same passenger and flight details. Please check your existing booking details.",
       failed: "The booking has failed. Please try again or contact our help desk for assistance.",
       succeeded: "Booking completed successfully!",
