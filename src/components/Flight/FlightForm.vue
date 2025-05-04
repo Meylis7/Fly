@@ -354,7 +354,8 @@
 
                         <input type="text" v-model="departureCity" :placeholder="$t('searchForm.routeFrom.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
-                            :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''">
+                            :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''"
+                            @focus="$event.target.blur(); $event.target.focus()">
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
                             @airport-selected="handleDepartureAirportSelected"
@@ -393,7 +394,8 @@
 
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
-                            :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''">
+                            :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''"
+                            @focus="$event.target.blur(); $event.target.focus()">
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
                             @airport-selected="handleArrivalAirportSelected"
