@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, computed, onMounted, onUnmounted } from "vue";
+import { ref, reactive, watch, computed, onMounted, onUnmounted, nextTick } from "vue";
 import Autocomplete from "../Autocomplete.vue";
 import { useRouter, useRoute } from 'vue-router'
 
@@ -57,38 +57,111 @@ const returnInput = ref(null);
 const departureInputField = ref(null);
 const arrivalInputField = ref(null);
 
+// Add these for mobile scroll handling
+const formContainer = ref(null);
+const isMobile = ref(window.innerWidth <= 768);
+
 function formatDate(date) {
-    if (!date) return ''
-    return date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    })
+    if (!date) return '';
+    try {
+        const d = new Date(date);
+        if (isNaN(d.getTime())) return '';
+        return d.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return '';
+    }
 }
+
+const scrollToInput = (inputElement) => {
+    if (!inputElement) return;
+    
+    // Add a small delay to ensure the keyboard is shown on mobile
+    setTimeout(() => {
+        const inputRect = inputElement.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetPosition = inputRect.top + scrollTop - 100; // 100px offset from top
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }, 300);
+};
 
 const openDepartureCalendar = () => {
     departureCalendarVisible.value = true;
-    returnCalendarVisible.value = false; // Close other calendar
+    returnCalendarVisible.value = false;
+    
+    // Handle mobile scroll
+    if (isMobile.value) {
+        nextTick(() => {
+            scrollToInput(departureInput.value);
+        });
+    }
 };
 
 const openReturnCalendar = () => {
+    if (!departureDate.value) {
+        toast.error(t('searchForm.datePicker.selectDepartureFirst'));
+        return;
+    }
     returnCalendarVisible.value = true;
-    departureCalendarVisible.value = false; // Close other calendar
-};
-
-const onDepartureDateSelect = () => {
     departureCalendarVisible.value = false;
+    
+    // Handle mobile scroll
+    if (isMobile.value) {
+        nextTick(() => {
+            scrollToInput(returnInput.value);
+        });
+    }
 };
 
-const onReturnDateSelect = () => {
-    returnCalendarVisible.value = false;
+const onDepartureDateSelect = (date) => {
+    try {
+        if (date) {
+            const newDate = new Date(date);
+            if (!isNaN(newDate.getTime())) {
+                departureDate.value = newDate;
+            }
+        }
+    } catch (error) {
+        console.error('Error selecting departure date:', error);
+    } finally {
+        departureCalendarVisible.value = false;
+    }
+};
+
+const onReturnDateSelect = (date) => {
+    try {
+        if (date) {
+            const newDate = new Date(date);
+            if (!isNaN(newDate.getTime())) {
+                returnDate.value = newDate;
+            }
+        }
+    } catch (error) {
+        console.error('Error selecting return date:', error);
+    } finally {
+        returnCalendarVisible.value = false;
+    }
 };
 
 const isPastDay = (day) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const dayDate = new Date(day.year, day.month, day.day);
-    return dayDate < today;
+    if (!day || !day.year || !day.month || !day.day) return true;
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const dayDate = new Date(day.year, day.month - 1, day.day);
+        return dayDate < today;
+    } catch (error) {
+        console.error('Error checking past day:', error);
+        return true;
+    }
 };
 
 const handleClickOutside = (event) => {
@@ -224,7 +297,10 @@ const handleOutsideClick = (event) => {
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
     document.addEventListener('click', handleOutsideClick);
+    window.addEventListener('resize', handleResize);
 
+    // Initial mobile check
+    isMobile.value = window.innerWidth <= 768;
 
     // Populate city details from route params
     departureCityCode.value = route.query.departureCityCode || ""
@@ -254,6 +330,7 @@ onMounted(() => {
 onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside);
     document.removeEventListener('click', handleOutsideClick);
+    window.removeEventListener('resize', handleResize);
 });
 
 const autocompleteContainer = ref(null);
@@ -319,28 +396,24 @@ const handleArrivalAirportSelected = (selectedAirport) => {
 // const columns = mapCurrent({ lg: 2 }, 1);
 
 const handleFocus = (event) => {
-    // Scroll to the input for better UX
-    event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Handle mobile scroll
+    if (isMobile.value) {
+        scrollToInput(event.target);
+    }
 
     // Special handling for Samsung devices
     if (/Samsung/i.test(navigator.userAgent)) {
-        // Store current value
         const currentValue = event.target.value;
-
-        // Force refresh input state by triggering blur and focus with delay
         event.target.blur();
 
-        // Force update the autocomplete
         if (currentValue.length >= 3) {
             if (event.target === departureInputField.value) {
                 debouncedFetchAirports();
             }
         }
 
-        // Focus back with some delay
         setTimeout(() => {
             event.target.focus();
-            // Make sure the autocomplete shows
             if (currentValue.length >= 3) {
                 state.flights = state.flights || {};
             }
@@ -361,10 +434,15 @@ const handleBlur = (event) => {
         }, 300);
     }
 };
+
+// Add window resize handler
+const handleResize = () => {
+    isMobile.value = window.innerWidth <= 768;
+};
 </script>
 
 <template>
-    <form class="w-full relative z-10" @submit.prevent="handleSubmit">
+    <form class="w-full relative z-10" @submit.prevent="handleSubmit" ref="formContainer">
         <div
             class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
             <div class="flex items-center mb-5">
@@ -737,5 +815,21 @@ const handleBlur = (event) => {
 
 .passenger-counter input[type="number"] {
     -moz-appearance: textfield;
+}
+
+// Add these new styles for better mobile handling
+@media (max-width: 768px) {
+    .vc-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .vc-pane-container {
+        width: 100% !important;
+    }
+
+    .vc-pane {
+        width: 100% !important;
+    }
 }
 </style>
