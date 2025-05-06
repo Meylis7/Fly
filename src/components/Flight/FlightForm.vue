@@ -314,6 +314,20 @@
 
     // const { mapCurrent } = useScreens({ xs: '0px', sm: '640px', md: '768px', lg: '1024px' });
     // const columns = mapCurrent({ lg: 2 }, 1);
+
+    const handleFocus = (event) => {
+        // For Samsung devices, we need to trigger a blur and then focus
+        if (/Samsung/i.test(navigator.userAgent)) {
+            event.target.blur();
+            setTimeout(() => {
+                event.target.focus();
+            }, 100);
+        }
+    };
+
+    const handleBlur = (event) => {
+        // Handle any blur-related logic if needed
+    };
 </script>
 
 <template>
@@ -355,7 +369,8 @@
                         <input type="text" v-model="departureCity" :placeholder="$t('searchForm.routeFrom.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''"
-                            @focus="$event.target.blur(); $event.target.focus()">
+                            @focus="handleFocus"
+                            @blur="handleBlur">
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
                             @airport-selected="handleDepartureAirportSelected"
@@ -395,7 +410,8 @@
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''"
-                            @focus="$event.target.blur(); $event.target.focus()">
+                            @focus="handleFocus"
+                            @blur="handleBlur">
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
                             @airport-selected="handleArrivalAirportSelected"
