@@ -133,7 +133,7 @@ onUnmounted(() => {
                             </svg>
                         </span>
                         {{ city }}
-                        <span v-if="cityData.country" class="text-base font-normal">
+                        <span v-if="cityData.country" class="text-sm md:text-base font-normal">
                             {{ cityData.country[$i18n.locale] ?? cityData.country.en }}
                         </span>
 
@@ -148,7 +148,7 @@ onUnmounted(() => {
                         <a href="#"
                             class="flex items-center justify-between p-4 pl-10 hover:bg-[#303c8526] cursor-pointer transition rounded"
                             @click.prevent="selectAirport(airport)">
-                            <h6 class="flex items-center">
+                            <h6 class="flex items-center text-sm md:text-base">
                                 <span class="block mr-2">
                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +157,7 @@ onUnmounted(() => {
                                             fill="#84889B" />
                                     </svg>
                                 </span>
-                                <span v-if="airport && airport.name">
+                                <span class="text-sm md:text-base" v-if="airport && airport.name">
                                     {{ airport.name[$i18n.locale] ?? airport.name.en }}
                                 </span>
                             </h6>
