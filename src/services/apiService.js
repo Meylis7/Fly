@@ -130,8 +130,8 @@ const apiService = {
   },
 
   // Start booking
-  startBooking(bookingReference) {
-    return apiRequest("post", `/tfusion/bookings/${bookingReference}/start`);
+  startBooking(payload) {
+    return apiRequest("post", `/tfusion/bookings/start`, payload);
   },
 
   // My Bookings
