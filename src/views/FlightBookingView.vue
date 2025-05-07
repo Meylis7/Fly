@@ -351,8 +351,12 @@
                 return;
             }
 
+            const payload = {
+                booking_reference: response.data.booking_reference
+            };
+
             // Second API call to start booking
-            const startResponse = await apiService.startBooking(response.data.booking_reference);
+            const startResponse = await apiService.startBooking(payload);
 
             if (startResponse.data.success) {
                 toast.success("Booking submitted successfully!", { autoClose: 1000 });
