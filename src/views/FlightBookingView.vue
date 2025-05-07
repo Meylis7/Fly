@@ -1,6 +1,7 @@
 <script setup>
     import { ref, onMounted, computed, watch, onUnmounted, reactive, onBeforeUnmount, nextTick } from 'vue'
     import { useRouter } from 'vue-router';
+    import { useI18n } from 'vue-i18n';
 
     import { Vue3Lottie } from 'vue3-lottie'
     import LoadingJson from '@/assets/btn-load.json'
@@ -12,6 +13,8 @@
     import 'vue3-toastify/dist/index.css';
 
     import { countryCodes } from '@/data/countryData'; // Import the data
+    import ConfirmModal from '@/components/ConfirmModal.vue';
+    import Timer from '@/components/Timer.vue';
 
     const router = useRouter();
     const processLoading = ref(false);
@@ -116,12 +119,10 @@
             const response = await apiService.processDetails(payload);
 
             if (!response.data.success) {
-                // If the response indicates failure, notify and go back
-                toast.error("Unable to load options. Returning to previous page.", {
-                    autoClose: 3000,
-                });
+                const errorMsg = "Unable to load options. Returning to previous page.";
+                sessionStorage.setItem('fly_error', errorMsg);
                 router.go(-1);
-                return; // Ensure no further code is executed here
+                return;
             }
 
             // If success is true, proceed
@@ -133,23 +134,8 @@
             });
         } catch (error) {
             const errorMessage = error.message || "An error occurred";
-            toast.error(errorMessage, {
-                autoClose: 3000,
-            });
-
-            // Optionally go back
+            sessionStorage.setItem('fly_error', errorMessage);
             router.go(-1);
-
-            // 1) Delay navigation to previous page
-            // setTimeout(() => {
-            //     router.go(-1);
-            // }, 3100);
-
-            // 2) ===========
-            // router.replace({
-            //     name: "FlightResultVue", // Change this to the correct route name
-            //     state: { errorMessage: error.message || "An error occurred" }
-            // });
         }
     };
 
@@ -311,6 +297,29 @@
         return Object.keys(errors.value).length === 0
     }
 
+    const { t, locale } = useI18n();
+    const showConfirmModal = ref(false);
+    const confirmModalMessage = ref('');
+    let confirmModalResolve;
+
+    async function showPriceConfirmModal(price) {
+        confirmModalMessage.value = t('confirmModal.message', { amount: price.Amount, currency: price.Currency });
+        showConfirmModal.value = true;
+        return new Promise((resolve) => {
+            confirmModalResolve = resolve;
+        });
+    }
+
+    function handleModalConfirm() {
+        showConfirmModal.value = false;
+        confirmModalResolve(true);
+    }
+
+    function handleModalCancel() {
+        showConfirmModal.value = false;
+        confirmModalResolve(false);
+    }
+
     // Submit form
     const submitForm = async () => {
         const isValid = validateForm()
@@ -334,41 +343,29 @@
         try {
             // First API call to process booking
             const response = await apiService.bookFlight(payload);
-
             // Show price confirmation dialog
-            const confirmed = await new Promise((resolve) => {
-                const price = response.data.price;
-                const message = `Final price: ${price.Amount} ${price.Currency}. Do you want to continue?`;
-                if (confirm(message)) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            });
-
+            const price = response.data.price;
+            const confirmed = await showPriceConfirmModal(price);
             if (!confirmed) {
                 loading.value = false;
                 return;
             }
-
-            const payload = {
+            const bookingPayload = {
                 booking_reference: response.data.booking_reference
             };
-
             // Second API call to start booking
-            const startResponse = await apiService.startBooking(payload);
-
+            const startResponse = await apiService.startBooking(bookingPayload);
             if (startResponse.data.success) {
-                toast.success("Booking submitted successfully!", { autoClose: 1000 });
+                toast.success(t('booking.success'), { autoClose: 1000 });
                 router.push({
                     path: `/flight/book/${response.data.booking_reference}`,
                 });
             } else {
-                throw new Error("Failed to start booking");
+                throw new Error(t('booking.startFailed'));
             }
         } catch (error) {
-            toast.error(error.message || "Failed to submit the form. Please try again.", { autoClose: 1000 });
-            console.error("Error submitting form:", error);
+            toast.error(error.message || t('booking.submitFailed'), { autoClose: 1000 });
+            console.error('Error submitting form:', error);
         } finally {
             loading.value = false;
         }
@@ -378,7 +375,7 @@
 </script>
 
 <template>
-    <Timer />
+    <Timer mode="booking" />
 
     <section class="mt-[150px] pt-[50px] pb-[100px] bg-[#F9F9F9]">
         <div class="auto_container">
@@ -847,16 +844,18 @@
                     <Vue3Lottie :animationData="Booking_loading" class="!w-[200px] !h-[200px]" />
                 </div>
 
-                <!-- Modal Window (Hidden Until Time is Up) -->
-                <div class="modal-overlay">
-                    <div class="modal">
-                        <p>Your tikcet price.</p>
-                        <button>Proceed</button>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
+    <ConfirmModal
+        :visible="showConfirmModal"
+        :title="$t('confirmModal.title')"
+        :message="confirmModalMessage"
+        :cancelText="$t('confirmModal.cancel')"
+        :confirmText="$t('confirmModal.confirm')"
+        @confirm="handleModalConfirm"
+        @cancel="handleModalCancel"
+    />
 </template>
 
 <style lang="scss" scoped>

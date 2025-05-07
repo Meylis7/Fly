@@ -4,6 +4,7 @@
   import { Vue3Lottie } from 'vue3-lottie'
   import LoadAnimationJSON from '@/assets/ticket-loading.json'
   import NotFoundJson from '@/assets/not-found.json'
+  import { toast } from 'vue3-toastify'
 
   import apiService from "@/services/apiService";
 
@@ -22,6 +23,8 @@
   const searchData = ref({});
 
   const itemsPerPage = ref(8);
+
+  const timerRef = ref(null);
 
   // Helper to format dates to YYYY-MM-DD
   function formatDate(dateInput) {
@@ -83,6 +86,11 @@
   }
 
   onMounted(async () => {
+    const flyError = sessionStorage.getItem('fly_error');
+    if (flyError) {
+      toast.error(flyError, { autoClose: 3000 });
+      sessionStorage.removeItem('fly_error');
+    }
     try {
       // Convert route query to search parameters
       const searchParams = {
@@ -114,6 +122,11 @@
 
       // Initialize displayed flights
       displayedFlights.value = flights.value.slice(0, itemsPerPage.value);
+
+      // Start timer only if there are flights
+      if (flights.value && flights.value.length > 0 && timerRef.value) {
+        timerRef.value.startTimer();
+      }
     } catch (searchError) {
       error.value = searchError
     } finally {
@@ -161,7 +174,7 @@
     </div>
   </section>
 
-  <Timer />
+  <Timer ref="timerRef" mode="result" />
 
   <section class="relative pt-20 pb-24 bg-[#F9F9F9]">
     <div class="auto_container">

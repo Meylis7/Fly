@@ -336,6 +336,9 @@ export default {
       val_2: "Post pay",
     },
     submit: "Submit",
+    success: "Booking submitted successfully!",
+    startFailed: "Failed to start booking",
+    submitFailed: "Failed to submit the form. Please try again.",
   },
 
   loading: "Loading",
@@ -402,5 +405,19 @@ export default {
       pending: "Your booking is being processed. Please wait...",
       bookingInProgress: "Your booking is being processed. Please wait..."
     }
+  },
+
+  confirmModal: {
+    title: "Confirm Your Booking",
+    message: "The final price is: {amount} {currency}. Do you want to proceed with the booking?",
+    cancel: "Cancel",
+    confirm: "Confirm"
+  },
+
+  timer: {
+    resultTitle: "Your search session has expired. Please update the results to see the latest flights.",
+    bookingTitle: "Your search session has expired. Please start a new search to book flights.",
+    resultBtn: "Update Results",
+    bookingBtn: "Start New Search"
   },
 };

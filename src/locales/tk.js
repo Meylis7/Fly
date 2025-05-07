@@ -323,6 +323,9 @@ export default {
       val_2: "Soň tölemek",
     },
     submit: "Ugrat",
+    success: "Ýazgy üstünlikli ugradyldy!",
+    startFailed: "Ýazgyny başlap bolmady",
+    submitFailed: "Formany ugratmak başartmady. Täzeden synanyşyň.",
   },
 
   loading: "Ýüklenýär",
@@ -389,5 +392,19 @@ export default {
       pending: "Sargydyňyz işlenýär. Garaşyň...",
       bookingInProgress: "Sargydyňyz işlenýär. Garaşyň..."
     }
+  },
+
+  confirmModal: {
+    title: "Sargydy tassyklamak",
+    message: "Jemi baha: {amount} {currency}. Sargyt etmek isleýärsiňizmi?",
+    cancel: "Ýatyr",
+    confirm: "Tassykla"
+  },
+
+  timer: {
+    resultTitle: "Gözleg sessiýasy tamamlandy. Täze reýslar üçin netijeleri täzeläň.",
+    bookingTitle: "Gözleg sessiýasy tamamlandy. Bilet almak üçin täze gözleg başlaň.",
+    resultBtn: "Netijeleri täzeläň",
+    bookingBtn: "Täze gözleg başla"
   },
 };

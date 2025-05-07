@@ -1,77 +1,94 @@
 <script setup>
-  import { ref, onMounted, onUnmounted } from "vue";
-  import { useRouter, useRoute } from "vue-router";
+import { ref, onMounted, onUnmounted, watch, defineExpose } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useI18n } from 'vue-i18n';
 
-  const router = useRouter();
-  const route = useRoute();
-  const modalVisible = ref(false);
-  const TIMER_DURATION = 20 * 60 * 1000; // 10 seconds for testing 10 seconds for testing (Change to 20 * 60 * 1000 for 20 min)
+const { t: $t } = useI18n();
 
-  // Function to check if session expired
-  const checkTimer = () => {
-    const startTime = localStorage.getItem("ticketSearchStartTime");
-    if (!startTime) return;
+const props = defineProps({
+  mode: {
+    type: String,
+    default: 'result', // 'result' or 'booking'
+  },
+});
 
-    const elapsed = Date.now() - parseInt(startTime, 10);
-    if (elapsed >= TIMER_DURATION) {
-      modalVisible.value = true; // Show the modal
+const router = useRouter();
+const route = useRoute();
+const modalVisible = ref(false);
+const TIMER_DURATION = 10 * 60 * 1000; // 10 minutes
+let interval;
+
+function clearTimer() {
+  clearInterval(interval);
+  interval = null;
+  localStorage.removeItem("ticketSearchStartTime");
+}
+
+const startTimer = () => {
+  localStorage.setItem("ticketSearchStartTime", Date.now().toString());
+
+  console.log('timer started')
+
+  if (interval) clearInterval(interval);
+  interval = setInterval(checkTimer, 1000);
+};
+
+defineExpose({ startTimer });
+
+const checkTimer = () => {
+  const startTime = localStorage.getItem("ticketSearchStartTime");
+  if (!startTime) return;
+  const elapsed = Date.now() - parseInt(startTime, 10);
+  if (elapsed >= TIMER_DURATION) {
+    modalVisible.value = true;
+    clearTimer();
+  }
+};
+
+onMounted(() => {
+  // Only auto-start in result mode for backward compatibility
+  if (props.mode === 'result') {
+    // Do not auto-start, parent should call startTimer
+  } else if (props.mode === 'booking') {
+    // In booking, timer should already be running if user came from results
+    if (localStorage.getItem("ticketSearchStartTime")) {
+      if (interval) clearInterval(interval);
+      interval = setInterval(checkTimer, 1000);
     }
-  };
+  }
+});
 
-  // Function to reset expired session when the page loads
-  const resetIfExpired = () => {
-    const startTime = localStorage.getItem("ticketSearchStartTime");
-    if (!startTime) return;
+onUnmounted(() => {
+  clearInterval(interval);
+});
 
-    const elapsed = Date.now() - parseInt(startTime, 10);
-    if (elapsed >= TIMER_DURATION) {
-      // Reset session and make sure the modal is not visible
-      localStorage.removeItem("ticketSearchStartTime");
-      modalVisible.value = false;
-    }
-  };
-
-  // Function to start the timer if not already started
-  const startTimer = () => {
-    if (!localStorage.getItem("ticketSearchStartTime")) {
-      localStorage.setItem("ticketSearchStartTime", Date.now().toString());
-    }
-  };
-
-  // Interval to check time every second (for testing)
-  let interval;
-  onMounted(() => {
-    resetIfExpired(); // First, reset the session if already expired
-    startTimer(); // Start the timer if it's not running
-    checkTimer(); // Check if the session is already expired
-    interval = setInterval(checkTimer, 1000); // Run check every second
-  });
-
-  onUnmounted(() => {
-    clearInterval(interval);
-  });
-
-  // Function to handle timeout action
-  const handleTimeout = (event) => {
-    event.preventDefault();
-    localStorage.removeItem("ticketSearchStartTime"); // Reset session
-    modalVisible.value = false;
-
-    if (route.path === "/flight/book") {
-      router.go(-1); // If on FlightBookingView.vue, go back one page
-    } else {
-      location.reload(); // If on FlightResultView.vue, reload the page
-    }
-  };
+const handleTimeout = (event) => {
+  event?.preventDefault?.();
+  modalVisible.value = false;
+  clearTimer();
+  if (props.mode === 'booking') {
+    // Go back to results
+    router.go(-1);
+  } else {
+    // Refresh search results
+    location.reload();
+  }
+};
 </script>
 
 <template>
   <div>
-    <!-- Modal Window (Hidden Until Time is Up) -->
     <div v-if="modalVisible" class="modal-overlay">
       <div class="modal">
-        <p>Your session has expired. Please go back and refresh.</p>
-        <button @click="handleTimeout">OK</button>
+        <p v-if="props.mode === 'result'">
+          {{ $t('timer.resultTitle') }}
+        </p>
+        <p v-else>
+          {{ $t('timer.bookingTitle') }}
+        </p>
+        <button @click="handleTimeout">
+          {{ props.mode === 'result' ? $t('timer.resultBtn') : $t('timer.bookingBtn') }}
+        </button>
       </div>
     </div>
   </div>
@@ -89,22 +106,21 @@
     justify-content: center;
     align-items: center;
     z-index: 200;
-    /* Ensures it's above everything */
   }
-
   .modal {
     background: white;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
   }
-
   button {
-    background: red;
+    background: #373e7b;
     color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: 600;
+    margin-top: 16px;
   }
 </style>
