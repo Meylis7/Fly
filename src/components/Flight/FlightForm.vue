@@ -1,448 +1,337 @@
 <script setup>
-import { ref, reactive, watch, computed, onMounted, onUnmounted, nextTick } from "vue";
-import Autocomplete from "../Autocomplete.vue";
-import { useRouter, useRoute } from 'vue-router'
+    import { ref, reactive, watch, computed, onMounted, onUnmounted } from "vue";
+    import Autocomplete from "../Autocomplete.vue";
+    import { useRouter, useRoute } from 'vue-router'
 
-import 'v-calendar/style.css'; // Import the CSS
-import minus from '@/assets/images/svg/minus.svg'
-import plus from '@/assets/images/svg/plus.svg'
-import calendar from '@/assets/images/svg/calendar.svg'
-import apiService from "@/services/apiService";
+    import 'v-calendar/style.css'; // Import the CSS
+    import minus from '@/assets/images/svg/minus.svg'
+    import plus from '@/assets/images/svg/plus.svg'
+    import calendar from '@/assets/images/svg/calendar.svg'
+    import apiService from "@/services/apiService";
 
-import { useI18n } from 'vue-i18n';
+    import { useI18n } from 'vue-i18n';
 
-const { locale } = useI18n();
-const { t } = useI18n();
+    const { locale } = useI18n();
+    const { t } = useI18n();
 
-const currentLocale = computed(() => ['en', 'ru'].includes(locale.value) ? locale.value : 'en');
+    const currentLocale = computed(() => ['en', 'ru'].includes(locale.value) ? locale.value : 'en');
 
-const route = useRoute()
-const router = useRouter()
+    const route = useRoute()
+    const router = useRouter()
 
-const departureCityCode = ref("");
-const departureCity = ref("");
-const arrivalCityCode = ref("");
-const arrivalCity = ref("");
-const tripType = ref('one-way');
-const isRotating = ref(false);
+    const departureCityCode = ref("");
+    const departureCity = ref("");
+    const arrivalCityCode = ref("");
+    const arrivalCity = ref("");
+    const tripType = ref('one-way');
+    const isRotating = ref(false);
 
-const swapCities = () => {
-    // Trigger rotate animation
-    isRotating.value = true;
+    const swapCities = () => {
+        // Trigger rotate animation
+        isRotating.value = true;
 
-    // Swap input values
-    const temp = departureCity.value;
-    departureCity.value = arrivalCity.value;
-    arrivalCity.value = temp;
+        // Swap input values
+        const temp = departureCity.value;
+        departureCity.value = arrivalCity.value;
+        arrivalCity.value = temp;
 
-    const tempCode = departureCityCode;
-    departureCityCode = arrivalCityCode.value;
-    arrivalCityCode = tempCode;
+        const tempCode = departureCityCode;
+        departureCityCode = arrivalCityCode.value;
+        arrivalCityCode = tempCode;
 
-    // Remove animation class after animation ends
-    setTimeout(() => {
-        isRotating.value = false;
-    }, 500); // Match the animation duration
-};
+        // Remove animation class after animation ends
+        setTimeout(() => {
+            isRotating.value = false;
+        }, 500); // Match the animation duration
+    };
 
-// Calendar inputs ======================================================
-const departureDate = ref(null);
-const returnDate = ref(null);
-const minDate = ref(new Date());
-const departureCalendarVisible = ref(false);
-const returnCalendarVisible = ref(false);
-const departureInput = ref(null);
-const returnInput = ref(null);
+    // Calendar inputs ======================================================
+    const departureDate = ref(null);
+    const returnDate = ref(null);
+    const minDate = ref(new Date());
+    const departureCalendarVisible = ref(false);
+    const returnCalendarVisible = ref(false);
+    const departureInput = ref(null);
+    const returnInput = ref(null);
 
-const departureInputField = ref(null);
-const arrivalInputField = ref(null);
-
-// Add these for mobile scroll handling
-const formContainer = ref(null);
-const isMobile = ref(window.innerWidth <= 768);
-
-function formatDate(date) {
-    if (!date) return '';
-    try {
-        const d = new Date(date);
-        if (isNaN(d.getTime())) return '';
-        return d.toLocaleDateString('en-GB', {
+    function formatDate(date) {
+        if (!date) return ''
+        return date.toLocaleDateString('en-GB', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
-        });
-    } catch (error) {
-        console.error('Error formatting date:', error);
-        return '';
-    }
-}
-
-const scrollToInput = (inputElement) => {
-    if (!inputElement) return;
-    
-    // Add a small delay to ensure the keyboard is shown on mobile
-    setTimeout(() => {
-        const inputRect = inputElement.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const targetPosition = inputRect.top + scrollTop - 100; // 100px offset from top
-
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
-    }, 300);
-};
-
-const openDepartureCalendar = () => {
-    departureCalendarVisible.value = true;
-    returnCalendarVisible.value = false;
-    
-    // Handle mobile scroll
-    if (isMobile.value) {
-        nextTick(() => {
-            scrollToInput(departureInput.value);
-        });
-    }
-};
-
-const openReturnCalendar = () => {
-    if (!departureDate.value) {
-        toast.error(t('searchForm.datePicker.selectDepartureFirst'));
-        return;
-    }
-    returnCalendarVisible.value = true;
-    departureCalendarVisible.value = false;
-    
-    // Handle mobile scroll
-    if (isMobile.value) {
-        nextTick(() => {
-            scrollToInput(returnInput.value);
-        });
-    }
-};
-
-const onDepartureDateSelect = (date) => {
-    try {
-        if (date) {
-            const newDate = new Date(date);
-            if (!isNaN(newDate.getTime())) {
-                departureDate.value = newDate;
-            }
-        }
-    } catch (error) {
-        console.error('Error selecting departure date:', error);
-    } finally {
-        departureCalendarVisible.value = false;
-    }
-};
-
-const onReturnDateSelect = (date) => {
-    try {
-        if (date) {
-            const newDate = new Date(date);
-            if (!isNaN(newDate.getTime())) {
-                returnDate.value = newDate;
-            }
-        }
-    } catch (error) {
-        console.error('Error selecting return date:', error);
-    } finally {
-        returnCalendarVisible.value = false;
-    }
-};
-
-const isPastDay = (day) => {
-    if (!day || !day.year || !day.month || !day.day) return true;
-    try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const dayDate = new Date(day.year, day.month - 1, day.day);
-        return dayDate < today;
-    } catch (error) {
-        console.error('Error checking past day:', error);
-        return true;
-    }
-};
-
-const handleClickOutside = (event) => {
-    if (event.target.closest('.vc-container')) {
-        return;
-    }
-    if (departureCalendarVisible.value && !departureInput.value.contains(event.target)) {
-        departureCalendarVisible.value = false;
-    }
-    if (returnCalendarVisible.value && !returnInput.value.contains(event.target)) {
-        returnCalendarVisible.value = false;
-    }
-};
-
-// Modal people count ======================================
-
-const counts = ref({
-    adult: 1,
-    child: 0,
-    infant: 0,
-});
-const totalCount = computed(() => {
-    return counts.value.adult + counts.value.child + counts.value.infant;
-});
-
-const isMaxCount = computed(() => totalCount.value >= 9);
-
-const incrementCount = (type) => {
-    if (!isMaxCount.value) {
-        counts.value[type]++;
-    }
-};
-
-const decrementCount = (type) => {
-    if (type === 'adult' && counts.value[type] > 1) {
-        counts.value[type]--;
-    } else if (type !== 'adult' && counts.value[type] > 0) {
-        counts.value[type]--;
-    }
-};
-
-const showModal = ref(false);
-
-const selectedClass = ref('all'); // Default selected class
-
-const passengerDisplay = computed(() => {
-    // Get the selected class text (Econom or Business)
-    // const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
-    const selectedClassText = selectedClass.value === 'econom' ? `${t('searchForm.typeFlights[1].title')}` : selectedClass.value === 'all' ? `${t('searchForm.typeFlights[0].title')}` : `${t('searchForm.typeFlights[2].title')}`;
-
-    // const selectedClassText = t(`searchForm.typeFlights.find(flight => flight.value === '${selectedClass.value}').title`);
-    return `${totalCount.value} ${t('searchForm.passengers.label')}, ${selectedClassText}`;
-});
-
-const toggleModal = () => {
-    showModal.value = !showModal.value;
-};
-
-
-const errors = ref({});
-const validateForm = () => {
-    errors.value = {};
-
-    if (!departureCityCode.value) {
-        errors.value.departureCityCode = "required";
-    }
-
-    if (!arrivalCityCode.value) {
-        errors.value.arrivalCityCode = "required";
-    }
-
-    if (!departureDate.value) {
-        errors.value.departureDate = "required";
-    }
-
-    if (tripType.value === 'round-trip' && !returnDate.value) {
-        errors.value.returnDate = "required";
-    }
-
-    console.log(errors.value);
-    return Object.keys(errors.value).length === 0;
-};
-
-// Form submission handler
-const handleSubmit = (event) => {
-    if (!validateForm()) return;
-    event.preventDefault()
-
-    // Prepare query parameters
-    const queryParams = {
-        tripType: tripType.value,
-        departureCityCode: departureCityCode.value,
-        departureCity: departureCity.value,
-        arrivalCityCode: arrivalCityCode.value,
-        arrivalCity: arrivalCity.value,
-        departureDate: departureDate.value,
-        returnDate: returnDate.value,
-
-        adults: counts.value.adult,
-        children: counts.value.child,
-        infants: counts.value.infant,
-        flightClass: selectedClass.value
-    }
-
-    // console.log(departureDate.value)
-    // console.log(departureDate.value.toISOString().split('T')[0])
-    // Navigate to results with query parameters
-    if (route.name === 'flights') {
-        window.location.href = router.resolve({
-            name: 'flights',
-            query: queryParams
-        }).href
-    } else {
-        router.push({
-            name: 'flights',
-            query: queryParams,
-            force: true
         })
     }
-}
 
-// Close modal when clicking outside
-const handleOutsideClick = (event) => {
-    if (showModal.value && !event.target.closest('.modal') && !event.target.closest('#passengers-input')) {
-        showModal.value = false;
-    }
-
-    if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
-        state.flights = {};
-    }
-};
-
-onMounted(() => {
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('click', handleOutsideClick);
-    window.addEventListener('resize', handleResize);
-
-    // Initial mobile check
-    isMobile.value = window.innerWidth <= 768;
-
-    // Populate city details from route params
-    departureCityCode.value = route.query.departureCityCode || ""
-    departureCity.value = route.query.departureCity || ""
-    arrivalCityCode.value = route.query.arrivalCityCode || ""
-    arrivalCity.value = route.query.arrivalCity || ""
-
-    // Populate dates
-    departureDate.value = route.query.departureDate
-        ? new Date(route.query.departureDate)
-        : null
-
-    returnDate.value = route.query.returnDate
-        ? new Date(route.query.returnDate)
-        : null
-
-    // Populate passenger counts
-    counts.value.adult = Number(route.query.adults) || 1
-    counts.value.child = Number(route.query.children) || 0
-    counts.value.infant = Number(route.query.infants) || 0
-
-    // Populate flight class and type
-    selectedClass.value = route.query.flightClass || 'all'
-    tripType.value = route.query.tripType || 'one-way'
-});
-
-onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside);
-    document.removeEventListener('click', handleOutsideClick);
-    window.removeEventListener('resize', handleResize);
-});
-
-const autocompleteContainer = ref(null);
-const state = reactive({
-    flights: [],
-})
-
-const emit = defineEmits(['city-selected', 'airport-selected']);
-
-const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            func(...args);
-        }, delay);
+    const openDepartureCalendar = () => {
+        departureCalendarVisible.value = true;
+        returnCalendarVisible.value = false; // Close other calendar
     };
-};
+
+    const openReturnCalendar = () => {
+        returnCalendarVisible.value = true;
+        departureCalendarVisible.value = false; // Close other calendar
+    };
+
+    const onDepartureDateSelect = () => {
+        departureCalendarVisible.value = false;
+    };
+
+    const onReturnDateSelect = () => {
+        returnCalendarVisible.value = false;
+    };
+
+    const isPastDay = (day) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const dayDate = new Date(day.year, day.month, day.day);
+        return dayDate < today;
+    };
+
+    const handleClickOutside = (event) => {
+        if (event.target.closest('.vc-container')) {
+            return;
+        }
+        if (departureCalendarVisible.value && !departureInput.value.contains(event.target)) {
+            departureCalendarVisible.value = false;
+        }
+        if (returnCalendarVisible.value && !returnInput.value.contains(event.target)) {
+            returnCalendarVisible.value = false;
+        }
+    };
+
+    // Modal people count ======================================
+
+    const counts = ref({
+        adult: 1,
+        child: 0,
+        infant: 0,
+    });
+    const totalCount = computed(() => {
+        return counts.value.adult + counts.value.child + counts.value.infant;
+    });
+
+    const isMaxCount = computed(() => totalCount.value >= 9);
+
+    const incrementCount = (type) => {
+        if (!isMaxCount.value) {
+            counts.value[type]++;
+        }
+    };
+
+    const decrementCount = (type) => {
+        if (type === 'adult' && counts.value[type] > 1) {
+            counts.value[type]--;
+        } else if (type !== 'adult' && counts.value[type] > 0) {
+            counts.value[type]--;
+        }
+    };
+
+    const showModal = ref(false);
+
+    const selectedClass = ref('all'); // Default selected class
+
+    const passengerDisplay = computed(() => {
+        // Get the selected class text (Econom or Business)
+        // const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
+        const selectedClassText = selectedClass.value === 'econom' ? `${t('searchForm.typeFlights[1].title')}` : selectedClass.value === 'all' ? `${t('searchForm.typeFlights[0].title')}` : `${t('searchForm.typeFlights[2].title')}`;
+
+        // const selectedClassText = t(`searchForm.typeFlights.find(flight => flight.value === '${selectedClass.value}').title`);
+        return `${totalCount.value} ${t('searchForm.passengers.label')}, ${selectedClassText}`;
+    });
+
+    const toggleModal = () => {
+        showModal.value = !showModal.value;
+    };
 
 
-const fetchAirports = async () => {
-    if (departureCity.value.length < 3) {
-        state.flights = {};
-        return;
-    }
+    const errors = ref({});
+    const validateForm = () => {
+        errors.value = {};
 
-    try {
-        state.flights = await apiService.fetchAirports(departureCity.value);
-    } catch {
-        state.flights = {};
-    }
-};
-
-
-const debouncedFetchAirports = debounce(fetchAirports, 300);
-
-watch(departureCity, () => {
-    debouncedFetchAirports();
-});
-
-const handleDepartureCitySelected = (selectedCity) => {
-    departureCity.value = selectedCity.city;
-    departureCityCode.value = selectedCity.cityCode;
-};
-
-const handleDepartureAirportSelected = (selectedAirport) => {
-    departureCity.value = selectedAirport.airport.name[currentLocale.value] ?? selectedAirport.airport.name.en;
-    departureCityCode.value = selectedAirport.airportCode;
-};
-
-const handleArrivalCitySelected = (selectedCity) => {
-    arrivalCity.value = selectedCity.city;
-    arrivalCityCode.value = selectedCity.cityCode;
-};
-
-const handleArrivalAirportSelected = (selectedAirport) => {
-    arrivalCity.value = selectedAirport.airport.name[currentLocale.value] ?? selectedAirport.airport.name.en;
-    arrivalCityCode.value = selectedAirport.airportCode;
-};
-// import { useScreens } from 'vue-screen-utils';
-
-// const { mapCurrent } = useScreens({ xs: '0px', sm: '640px', md: '768px', lg: '1024px' });
-// const columns = mapCurrent({ lg: 2 }, 1);
-
-const handleFocus = (event) => {
-    // Handle mobile scroll
-    if (isMobile.value) {
-        scrollToInput(event.target);
-    }
-
-    // Special handling for Samsung devices
-    if (/Samsung/i.test(navigator.userAgent)) {
-        const currentValue = event.target.value;
-        event.target.blur();
-
-        if (currentValue.length >= 3) {
-            if (event.target === departureInputField.value) {
-                debouncedFetchAirports();
-            }
+        if (!departureCityCode.value) {
+            errors.value.departureCityCode = "required";
         }
 
-        setTimeout(() => {
-            event.target.focus();
-            if (currentValue.length >= 3) {
-                state.flights = state.flights || {};
-            }
-        }, 200);
-    }
-};
+        if (!arrivalCityCode.value) {
+            errors.value.arrivalCityCode = "required";
+        }
 
-const handleBlur = (event) => {
-    // Don't immediately hide the autocomplete for Samsung devices
-    if (/Samsung/i.test(navigator.userAgent)) {
-        // Small delay to allow clicking on autocomplete options
-        setTimeout(() => {
-            // Only hide if the user didn't click on the autocomplete
-            if (!event.relatedTarget ||
-                (event.relatedTarget && !event.relatedTarget.closest('.autocomplete-results'))) {
-                // Keep state.flights populated
-            }
-        }, 300);
-    }
-};
+        if (!departureDate.value) {
+            errors.value.departureDate = "required";
+        }
 
-// Add window resize handler
-const handleResize = () => {
-    isMobile.value = window.innerWidth <= 768;
-};
+        if (tripType.value === 'round-trip' && !returnDate.value) {
+            errors.value.returnDate = "required";
+        }
+
+        console.log(errors.value);
+        return Object.keys(errors.value).length === 0;
+    };
+
+    // Form submission handler
+    const handleSubmit = (event) => {
+        if (!validateForm()) return;
+        event.preventDefault()
+
+        // Prepare query parameters
+        const queryParams = {
+            tripType: tripType.value,
+            departureCityCode: departureCityCode.value,
+            departureCity: departureCity.value,
+            arrivalCityCode: arrivalCityCode.value,
+            arrivalCity: arrivalCity.value,
+            departureDate: departureDate.value,
+            returnDate: returnDate.value,
+
+            adults: counts.value.adult,
+            children: counts.value.child,
+            infants: counts.value.infant,
+            flightClass: selectedClass.value
+        }
+
+        // console.log(departureDate.value)
+        // console.log(departureDate.value.toISOString().split('T')[0])
+        // Navigate to results with query parameters
+        if (route.name === 'flights') {
+            window.location.href = router.resolve({
+                name: 'flights',
+                query: queryParams
+            }).href
+        } else {
+            router.push({
+                name: 'flights',
+                query: queryParams,
+                force: true
+            })
+        }
+    }
+
+    // Close modal when clicking outside
+    const handleOutsideClick = (event) => {
+        if (showModal.value && !event.target.closest('.modal') && !event.target.closest('#passengers-input')) {
+            showModal.value = false;
+        }
+
+        if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
+            state.flights = {};
+        }
+    };
+
+    onMounted(() => {
+        document.addEventListener('click', handleClickOutside);
+        document.addEventListener('click', handleOutsideClick);
+
+
+        // Populate city details from route params
+        departureCityCode.value = route.query.departureCityCode || ""
+        departureCity.value = route.query.departureCity || ""
+        arrivalCityCode.value = route.query.arrivalCityCode || ""
+        arrivalCity.value = route.query.arrivalCity || ""
+
+        // Populate dates
+        departureDate.value = route.query.departureDate
+            ? new Date(route.query.departureDate)
+            : null
+
+        returnDate.value = route.query.returnDate
+            ? new Date(route.query.returnDate)
+            : null
+
+        // Populate passenger counts
+        counts.value.adult = Number(route.query.adults) || 1
+        counts.value.child = Number(route.query.children) || 0
+        counts.value.infant = Number(route.query.infants) || 0
+
+        // Populate flight class and type
+        selectedClass.value = route.query.flightClass || 'all'
+        tripType.value = route.query.tripType || 'one-way'
+    });
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleClickOutside);
+        document.removeEventListener('click', handleOutsideClick);
+    });
+
+    const autocompleteContainer = ref(null);
+    const state = reactive({
+        flights: [],
+    })
+
+    const emit = defineEmits(['city-selected', 'airport-selected']);
+
+    const debounce = (func, delay) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func(...args);
+            }, delay);
+        };
+    };
+
+
+    const fetchAirports = async () => {
+        if (departureCity.value.length < 3) {
+            state.flights = {};
+            return;
+        }
+
+        try {
+            state.flights = await apiService.fetchAirports(departureCity.value);
+        } catch {
+            state.flights = {};
+        }
+    };
+
+
+    const debouncedFetchAirports = debounce(fetchAirports, 300);
+
+    watch(departureCity, () => {
+        debouncedFetchAirports();
+    });
+
+    const handleDepartureCitySelected = (selectedCity) => {
+        departureCity.value = selectedCity.city;
+        departureCityCode.value = selectedCity.cityCode;
+    };
+
+    const handleDepartureAirportSelected = (selectedAirport) => {
+        departureCity.value = selectedAirport.airport.name[currentLocale.value] ?? selectedAirport.airport.name.en;
+        departureCityCode.value = selectedAirport.airportCode;
+    };
+
+    const handleArrivalCitySelected = (selectedCity) => {
+        arrivalCity.value = selectedCity.city;
+        arrivalCityCode.value = selectedCity.cityCode;
+    };
+
+    const handleArrivalAirportSelected = (selectedAirport) => {
+        arrivalCity.value = selectedAirport.airport.name[currentLocale.value] ?? selectedAirport.airport.name.en;
+        arrivalCityCode.value = selectedAirport.airportCode;
+    };
+    // import { useScreens } from 'vue-screen-utils';
+
+    // const { mapCurrent } = useScreens({ xs: '0px', sm: '640px', md: '768px', lg: '1024px' });
+    // const columns = mapCurrent({ lg: 2 }, 1);
+
+    const handleFocus = (event) => {
+        // For Samsung devices, we need to trigger a blur and then focus
+        if (/Samsung/i.test(navigator.userAgent)) {
+            event.target.blur();
+            setTimeout(() => {
+                event.target.focus();
+            }, 100);
+        }
+    };
+
+    const handleBlur = (event) => {
+        // Handle any blur-related logic if needed
+    };
 </script>
 
 <template>
-    <form class="w-full relative z-10" @submit.prevent="handleSubmit" ref="formContainer">
+    <form class="w-full relative z-10" @submit.prevent="handleSubmit">
         <div
             class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
             <div class="flex items-center mb-5">
@@ -480,8 +369,8 @@ const handleResize = () => {
                         <input type="text" v-model="departureCity" :placeholder="$t('searchForm.routeFrom.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''"
-                            @focus="handleFocus($event)" @blur="handleBlur($event)" @input="debouncedFetchAirports"
-                            ref="departureInputField">
+                            @focus="handleFocus"
+                            @blur="handleBlur">
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
                             @airport-selected="handleDepartureAirportSelected"
@@ -521,10 +410,8 @@ const handleResize = () => {
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''"
-                            @focus="handleFocus($event)"
-                            @blur="handleBlur($event)" 
-                            @input="debouncedFetchAirports"
-                            ref="arrivalInputField">
+                            @focus="handleFocus"
+                            @blur="handleBlur">
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
                             @airport-selected="handleArrivalAirportSelected"
@@ -705,131 +592,115 @@ const handleResize = () => {
 </template>
 
 <style lang="scss" scoped>
-@use '../../assets/css/variables.scss' as v;
+    @use '../../assets/css/variables.scss' as v;
 
 
-.modal {
-    box-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.15);
-}
-
-.air-type {
-    margin-right: 10px;
-
-    &:last-child {
-        margin-right: 0;
+    .modal {
+        box-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.15);
     }
 
-    input {
-        display: none;
-        appearance: none;
+    .air-type {
+        margin-right: 10px;
 
-        &:checked~label {
-            background: v.$main-color;
-            color: #fff;
+        &:last-child {
+            margin-right: 0;
+        }
+
+        input {
+            display: none;
+            appearance: none;
+
+            &:checked~label {
+                background: v.$main-color;
+                color: #fff;
+            }
+        }
+
+        label {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 17px;
+            letter-spacing: 0.06em;
+            color: #223A60;
+            padding: 10px;
+            border-radius: 7px;
+            display: block;
+            cursor: pointer;
+            background: #F2F3F4;
         }
     }
 
-    label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 17px;
-        letter-spacing: 0.06em;
-        color: #223A60;
-        padding: 10px;
-        border-radius: 7px;
-        display: block;
-        cursor: pointer;
-        background: #F2F3F4;
-    }
-}
+    .class-type {
+        margin-right: 10px;
 
-.class-type {
-    margin-right: 10px;
+        &:last-child {
+            margin-right: 0;
+        }
 
-    &:last-child {
-        margin-right: 0;
-    }
+        input {
+            display: none;
 
-    input {
-        display: none;
+            &:checked~label {
+                background: white;
+            }
+        }
 
-        &:checked~label {
-            background: white;
+        label {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: 0.06em;
+            text-transform: capitalize;
+            color: #000000;
+            display: block;
+            cursor: pointer;
+            text-align: center;
+            padding: 12px;
+            border-radius: 7px;
         }
     }
 
-    label {
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.06em;
-        text-transform: capitalize;
-        color: #000000;
-        display: block;
-        cursor: pointer;
-        text-align: center;
-        padding: 12px;
-        border-radius: 7px;
-    }
-}
-
-.rotate-animation {
-    animation: rotate 0.5s ease-in-out;
-}
-
-@keyframes rotate {
-    0% {
-        transform: rotate(0deg);
+    .rotate-animation {
+        animation: rotate 0.5s ease-in-out;
     }
 
-    100% {
-        transform: rotate(180deg);
-    }
-}
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
 
-.not-allowed {
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
-.opacity-50 {
-    opacity: 0.5;
-}
-
-.cursor-not-allowed {
-    cursor: not-allowed;
-}
-
-.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
-.passenger-counter input[type="number"]::-webkit-inner-spin-button,
-.passenger-counter input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.passenger-counter input[type="number"] {
-    -moz-appearance: textfield;
-}
-
-// Add these new styles for better mobile handling
-@media (max-width: 768px) {
-    .vc-container {
-        width: 100% !important;
-        max-width: 100% !important;
+        100% {
+            transform: rotate(180deg);
+        }
     }
 
-    .vc-pane-container {
-        width: 100% !important;
+    .not-allowed {
+        pointer-events: none;
+        cursor: not-allowed;
     }
 
-    .vc-pane {
-        width: 100% !important;
+    .opacity-50 {
+        opacity: 0.5;
     }
-}
+
+    .cursor-not-allowed {
+        cursor: not-allowed;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .passenger-counter input[type="number"]::-webkit-inner-spin-button,
+    .passenger-counter input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .passenger-counter input[type="number"] {
+        -moz-appearance: textfield;
+    }
 </style>
