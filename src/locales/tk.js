@@ -379,18 +379,18 @@ export default {
     goHome: "Baş Sahypa",
     form: {
       title: "Biletler",
-      text: "Biletleriňiziň göçürmesi berlen habarlaşyk e-poçtasyna iberildi.",
+      text: "Biletleriňiziň nusgasy görkezilen habarlaşma e-poçta adresine iberildi.",
       passenger: "Ýolagçy",
-      download: "Ýükle",
+      download: "Ýükläp almak",
     },
     status: {
-      unconfirmed: "Howa ýoly sargydyň ýagdaýy barada açyk maglumat bermedi. Eger sargyt üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli ýagdaýda bolsaňyz, kömek hyzmatymyz bilen +00xx xxxxxxxxx belgisi arkaly habarlaşyň.",
-      unconfirmedBySupplier: "Howa ýoly sargydyň ýagdaýy barada açyk maglumat bermedi. Eger sargyt üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli ýagdaýda bolsaňyz, kömek hyzmatymyz bilen +00xx xxxxxxxxx belgisi arkaly habarlaşyň.",
-      duplicate: "Biziň ulgamyňyz şol bir ýolagçy we uçuş maglumatlary bilen tassyklanan sargydyňyz bardygyny anyklady. Öňki sargydyňyzyň maglumatlaryny barlaň.",
-      failed: "Sargyt amala aşyrylmady. Täzeden synanyşyň ýa-da kömek hyzmatymyz bilen habarlaşyň.",
-      succeeded: "Sargyt üstünlikli tamamlandy!",
-      pending: "Sargydyňyz işlenýär. Garaşyň...",
-      bookingInProgress: "Sargydyňyz işlenýär. Garaşyň..."
+      unconfirmed: "Awiakompaniýa bu bellige almagyň ýagdaýy barada açyk görkezme bermedi. Eger bellige almak üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli bolsaňyz, kömek hyzmatymyz bilen habarlaşyň. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň.",
+      unconfirmedBySupplier: "Awiakompaniýa bu bellige almagyň ýagdaýy barada açyk görkezme bermedi. Eger bellige almak üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli bolsaňyz, kömek hyzmatymyz bilen habarlaşyň. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň.",
+      duplicate: "Sistemimiz sizde eýýäm şol ýolagçy we uçus maglumatlary bilen tassyklanan bellige almagyňyz baradaky maglumatlary tapdy. Haýyş edýäris, bar bolan bellige almagyňyzyň jikme-jikliklerini barlaň.",
+      failed: "Bellige almak üstünliksiz boldy. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň. Eger mesele dowam etse, täzeden synanyşyň ýa-da kömek almak üçin kömek hyzmatymyz bilen habarlaşyň.",
+      succeeded: "Bellige almak üstünlikli tamamlandy!",
+      pending: "Bellige almagyňyz gaýta işlenilýär. Haýyş edýäris, garaşyň...",
+      bookingInProgress: "Bellige almagyňyz gaýta işlenilýär. Haýyş edýäris, garaşyň..."
     }
   },
 
