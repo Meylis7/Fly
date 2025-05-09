@@ -44,7 +44,7 @@
                 </p>
 
                 <div class="flex flex-wrap gap-5 mt-10">
-                    <TourCard class="!w-[calc(25%-15px)]" v-for="tour in displayedTours" :key="tour.id" :tour="tour" />
+                    <TourCard class="sm:w-[calc(100%-15px)] md:w-[calc(50%-15px)] lg:w-[calc(25%-15px)]" v-for="tour in displayedTours" :key="tour.id" :tour="tour" />
                 </div>
 
                 <LoadMore v-if="displayedTours.length < tours.length" :items="tours" :itemsPerPage="itemsPerPage"

@@ -2,6 +2,7 @@
     import { ref, reactive, watch, computed, onMounted, onUnmounted } from "vue";
     import Autocomplete from "../Autocomplete.vue";
     import { useRouter, useRoute } from 'vue-router'
+    import CitySelectionModal from './CitySelectionModal.vue';
 
     import 'v-calendar/style.css'; // Import the CSS
     import minus from '@/assets/images/svg/minus.svg'
@@ -328,6 +329,23 @@
     const handleBlur = (event) => {
         // Handle any blur-related logic if needed
     };
+
+    // Add these refs after other refs
+    const showDepartureModal = ref(false);
+    const showArrivalModal = ref(false);
+
+    // Add these methods after other methods
+    const openDepartureModal = () => {
+        if (window.innerWidth < 768) { // Only open modal on mobile
+            showDepartureModal.value = true;
+        }
+    };
+
+    const openArrivalModal = () => {
+        if (window.innerWidth < 768) { // Only open modal on mobile
+            showArrivalModal.value = true;
+        }
+    };
 </script>
 
 <template>
@@ -369,12 +387,13 @@
                         <input type="text" v-model="departureCity" :placeholder="$t('searchForm.routeFrom.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.departureCityCode ? 'border-red-500 border-solid border' : ''"
+                            @click="openDepartureModal"
                             @focus="handleFocus"
                             @blur="handleBlur">
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
                             @airport-selected="handleDepartureAirportSelected"
-                            class="!absolute z-20 top-[calc(100%+5px)] left-0 min-w-full xsm:min-w-80 lg:!min-w-96" />
+                            class="!absolute z-20 top-[calc(100%+5px)] left-0 min-w-full xsm:min-w-80 lg:!min-w-96 hidden md:block" />
                     </div>
 
                     <button @click="swapCities" type="button"
@@ -410,12 +429,13 @@
                         <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''"
+                            @click="openArrivalModal"
                             @focus="handleFocus"
                             @blur="handleBlur">
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
                             @airport-selected="handleArrivalAirportSelected"
-                            class="!absolute z-20 top-[calc(100%+5px)] right-0 min-w-full xsm:min-w-80 lg:!min-w-96" />
+                            class="!absolute z-20 top-[calc(100%+5px)] right-0 min-w-full xsm:min-w-80 lg:!min-w-96 hidden md:block" />
                     </div>
                 </div>
 
@@ -588,6 +608,22 @@
                 </svg>
             </span>
         </button>
+
+        <CitySelectionModal
+            :visible="showDepartureModal"
+            :placeholder="$t('searchForm.routeFrom.placeholder')"
+            @city-selected="handleDepartureCitySelected"
+            @airport-selected="handleDepartureAirportSelected"
+            @close="showDepartureModal = false"
+        />
+
+        <CitySelectionModal
+            :visible="showArrivalModal"
+            :placeholder="$t('searchForm.routeTo.placeholder')"
+            @city-selected="handleArrivalCitySelected"
+            @airport-selected="handleArrivalAirportSelected"
+            @close="showArrivalModal = false"
+        />
     </form>
 </template>
 

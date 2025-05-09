@@ -44,7 +44,7 @@
                 </p>
 
                 <div class="flex flex-wrap gap-5 mt-10">
-                    <VisaCard class="w-[calc(33.33%-14px)]" v-for="visa in displayedVisas" :key="visa.id"
+                    <VisaCard class="w-[calc(100%-14px)] md:w-[calc(50%-14px)] lg:w-[calc(33.33%-14px)]" v-for="visa in displayedVisas" :key="visa.id"
                         :visa="visa" />
                 </div>
 
