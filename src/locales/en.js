@@ -342,7 +342,7 @@ export default {
   },
 
   loading: "Loading",
-  notFound: "No flights found.",
+  notFound: "No data found.",
 
   profile: {
     tabs: {
