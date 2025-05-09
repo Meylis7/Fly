@@ -177,10 +177,11 @@ export default {
   filter: {
     filter: "Süzgüç",
     title: "Süzgüçler",
+    total: "Jemi uçuşlar",
     sort: {
       val_1: "Arzan",
       val_2: "Çalt",
-      val_3: "Uçuş wagty boýunça",
+      val_3: "Uçuş wagty boýunça"
     },
     stops: {
       title: "Duralgalar",
@@ -208,6 +209,7 @@ export default {
       title: "Howa ýollary",
     },
     btn: "Täzeden başla",
+    resetAll: "Ähli süzgüçleri täzeden başla",
   },
 
   ticket: {

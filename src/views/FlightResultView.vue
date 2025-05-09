@@ -22,9 +22,84 @@
   const error = ref(null)
   const searchData = ref({});
 
-  const itemsPerPage = ref(8);
+  const itemsPerPage = ref(20);
 
   const timerRef = ref(null);
+
+  // Filter and sort state
+  const activeFilters = ref({
+    stops: [],
+    baggage: false,
+    airlines: []
+  });
+  const activeSort = ref('');
+
+  // Computed filtered and sorted flights
+  const filteredFlights = computed(() => {
+    let result = [...flights.value];
+
+    // Apply filters
+    if (activeFilters.value.stops.length > 0) {
+      result = result.filter(flight => {
+        const outwardStops = Number(flight.Outward?.StopsCount ?? 0);
+        const returnStops = flight.Return ? Number(flight.Return?.StopsCount ?? 0) : null;
+        return activeFilters.value.stops.includes(outwardStops) || activeFilters.value.stops.includes(returnStops);
+      });
+    }
+
+    if (activeFilters.value.baggage) {
+      result = result.filter(flight => {
+        const hasOutwardBaggage = flight.Outward?.Segments?.some(segment => segment.Features?.HoldBag) || false;
+        const hasReturnBaggage = flight.Return?.Segments?.some(segment => segment.Features?.HoldBag) || false;
+        return hasOutwardBaggage || hasReturnBaggage;
+      });
+    }
+
+    if (activeFilters.value.airlines.length > 0) {
+      result = result.filter(flight => {
+        const outwardAirlines = flight.Outward?.Segments?.map(segment => segment.Operator?.Name) || [];
+        const returnAirlines = flight.Return?.Segments?.map(segment => segment.Operator?.Name) || [];
+        const allAirlines = [...outwardAirlines, ...returnAirlines];
+        return allAirlines.some(airline => activeFilters.value.airlines.includes(airline));
+      });
+    }
+
+    // Apply sorting
+    if (activeSort.value) {
+      result.sort((a, b) => {
+        switch (activeSort.value) {
+          case 'cheap':
+            return parseFloat(a.TotalSum.Amount) - parseFloat(b.TotalSum.Amount);
+          case 'fast':
+            const aDuration = (a.Outward?.Duration?.Hours || 0) * 60 + (a.Outward?.Duration?.Minutes || 0);
+            const bDuration = (b.Outward?.Duration?.Hours || 0) * 60 + (b.Outward?.Duration?.Minutes || 0);
+            return aDuration - bDuration;
+          case 'time':
+            const aTime = a.Outward?.DepartDate?.Time || '';
+            const bTime = b.Outward?.DepartDate?.Time || '';
+            return aTime.localeCompare(bTime);
+          default:
+            return 0;
+        }
+      });
+    }
+
+    return result;
+  });
+
+  // Handle filter changes
+  const handleFilterChange = (filters) => {
+    activeFilters.value = filters;
+    // Reset displayed flights to first page
+    displayedFlights.value = filteredFlights.value.slice(0, itemsPerPage.value);
+  };
+
+  // Handle sort changes
+  const handleSortChange = (sortType) => {
+    activeSort.value = sortType;
+    // Reset displayed flights to first page
+    displayedFlights.value = filteredFlights.value.slice(0, itemsPerPage.value);
+  };
 
   // Helper to format dates to YYYY-MM-DD
   function formatDate(dateInput) {
@@ -43,8 +118,6 @@
 
     return `${year}-${month}-${day}`
   }
-
-
 
   // Search flights method
   const searchFlights = async (params) => {
@@ -163,6 +236,11 @@
       });
     }
   });
+
+  function getStopsCount(stops) {
+    if (stops === null || stops === undefined) return 0;
+    return Array.isArray(stops) ? stops.length : 0;
+  }
 </script>
 
 <template>
@@ -193,10 +271,30 @@
 
         <!-- class="pointer-events-none" -->
         <div v-else class="flex flex-col xl:flex-row items-start gap-[30px]">
-          <Filter @close="menuOpen = false" ref="filterRef"
-            :class="['fixed 1xl:static top-0 transition-all', { '-left-full': !menuOpen, 'left-0': menuOpen },]" />
+          <Filter 
+            @close="menuOpen = false" 
+            ref="filterRef"
+            :flights="flights"
+            @filter-change="handleFilterChange"
+            @sort-change="handleSortChange"
+            :class="['fixed 1xl:static top-0 transition-all', { '-left-full': !menuOpen, 'left-0': menuOpen },]" 
+          />
 
+          <!-- <div class="tabs bg-[#EDF0F1] mb-8 flex rounded-xl overflow-hidden w-fit">
+            <h3 @click="setActiveTab('src-1')" :class="[
+              'tab-item relative cursor-pointer text-base font-semibold p-5 rounded-xl min-w-[180px] text-center text-[#223A60] opacity-40 transition-all',
+              activeTab === 'src-1' ? 'text-white bg-prime-color !opacity-100' : ''
+            ]">
+              European source
+            </h3>
 
+            <h3 @click="setActiveTab('src-2')" :class="[
+              'tab-item relative cursor-pointer text-base font-semibold p-5 rounded-xl min-w-[180px] text-center text-[#223A60] opacity-40 transition-all',
+              activeTab === 'src-2' ? 'text-white bg-prime-color !opacity-100' : ''
+            ]">
+              CIS source
+            </h3>
+          </div> -->
 
           <section class="w-full 1xl:w-[calc(100%-380px)] flex flex-col">
             <button @click="menuOpen = !menuOpen"
@@ -238,8 +336,12 @@
                 :searchData="searchData" :index="index" class="last:mb-0" />
             </div>
 
-            <LoadMore v-if="displayedFlights.length < flights.length" :items="flights" :itemsPerPage="itemsPerPage"
-              @loaded="handleFlightsLoaded" />
+            <LoadMore 
+              v-if="displayedFlights.length < filteredFlights.length" 
+              :items="filteredFlights" 
+              :itemsPerPage="itemsPerPage"
+              @loaded="handleFlightsLoaded" 
+            />
           </section>
 
         </div>

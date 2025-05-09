@@ -355,7 +355,10 @@
             };
             // Second API call to start booking
             const startResponse = await apiService.startBooking(bookingPayload);
-            if (startResponse.data.success) {
+
+            console.log('startResponse', startResponse);
+
+            if (startResponse.success) {
                 toast.success(t('booking.success'), { autoClose: 1000 });
                 router.push({
                     path: `/flight/book/${response.data.booking_reference}`,

@@ -190,10 +190,11 @@ export default {
   filter: {
     filter: "Filter",
     title: "Filter By",
+    total: "Total flights",
     sort: {
       val_1: "Cheaper first",
       val_2: "First the fast ones",
-      val_3: "By departure time",
+      val_3: "By departure time"
     },
     stops: {
       title: "Stop",
@@ -221,6 +222,7 @@ export default {
       title: "Airlines",
     },
     btn: "Reset",
+    resetAll: "Reset all filters",
   },
 
   ticket: {
