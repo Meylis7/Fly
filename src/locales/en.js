@@ -248,15 +248,19 @@ export default {
 
   booking: {
     contact: {
-      title: "Contact information",
-      text: "We will send a ticket to the specified contact, send notifications about changes in the flight or in case of other emergency situations.",
+      title: "Contact Information",
+      text: "Please provide your contact information",
       firstName: {
-        label: "First name",
-        placeholder: "e.g. Aman",
+        label: "First Name",
+        placeholder: "Enter your first name"
       },
-      lastname: {
-        label: "Last name",
-        placeholder: "Amanov",
+      middleName: {
+        label: "Middle Name",
+        placeholder: "Enter your middle name (optional)"
+      },
+      lastName: {
+        label: "Last Name",
+        placeholder: "Enter your last name"
       },
       gmail: {
         label: "Email",
@@ -301,6 +305,10 @@ export default {
       firstName: {
         label: "First name",
         placeholder: "e.g. Aman",
+      },
+      middleName: {
+        label: "Middle name",
+        placeholder: "Enter middle name (optional)"
       },
       lastname: {
         label: "Last name",

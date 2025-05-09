@@ -236,14 +236,18 @@ export default {
   booking: {
     contact: {
       title: "Habarlaşmak maglumatlary",
-      text: "Görkezilen habara bilet iberilýär, uçuşdaky üýtgeşmeler ýa-da beýleki adatdan daşary ýagdaýlar barada habar berilýär.",
+      text: "Habarlaşmak maglumatlaryňyzy giriziň",
       firstName: {
         label: "Ady",
-        placeholder: "Aman",
+        placeholder: "Adyňyzy giriziň"
       },
-      lastname: {
+      middleName: {
+        label: "Atasynyň ady",
+        placeholder: "Atasynyň adyny giriziň (majburi däl)"
+      },
+      lastName: {
         label: "Familiýasy",
-        placeholder: "Amanow",
+        placeholder: "Familiýaňyzy giriziň"
       },
       gmail: {
         label: "E-poçta",
@@ -288,6 +292,10 @@ export default {
       firstName: {
         label: "Ady",
         placeholder: "Aman",
+      },
+      middleName: {
+        label: "Atasynyň ady",
+        placeholder: "Atasynyň adyny giriziň (majburi däl)"
       },
       lastname: {
         label: "Familiýasy",

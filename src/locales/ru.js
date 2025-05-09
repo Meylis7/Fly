@@ -236,14 +236,18 @@ export default {
   booking: {
     contact: {
       title: "Контактная информация",
-      text: "Мы отправим билет на указанный контакт, уведомления о изменениях рейса или в случае других чрезвычайных ситуаций.",
+      text: "Пожалуйста, предоставьте вашу контактную информацию",
       firstName: {
         label: "Имя",
-        placeholder: "Аман",
+        placeholder: "Введите ваше имя"
       },
-      lastname: {
+      middleName: {
+        label: "Отчество",
+        placeholder: "Введите отчество (необязательно)"
+      },
+      lastName: {
         label: "Фамилия",
-        placeholder: "Аманов",
+        placeholder: "Введите вашу фамилию"
       },
       gmail: {
         label: "Email",
@@ -288,6 +292,10 @@ export default {
       firstName: {
         label: "Имя",
         placeholder: "Аман",
+      },
+      middleName: {
+        label: "Отчество",
+        placeholder: "Введите отчество (необязательно)"
       },
       lastname: {
         label: "Фамилия",
