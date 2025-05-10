@@ -11,7 +11,7 @@
 
 <template>
     <aside ref="menuRef" @click.self="closeMenu"
-        class="aside w-full 1xl:w-[350px] h-full bg-[rgba(0,0,0,.5)] 1xl:!bg-transparent">
+        class="aside z-50 w-full 1xl:w-[350px] h-full bg-[rgba(0,0,0,.5)] 1xl:!bg-transparent">
         <div
             class="p-5 max-w-[calc(100%-100px)] md:max-w-[550px] 1xl:w-full h-full overflow-auto bg-white rounded-xl border border-solid border-[#223a604d] shadow-[0px_4px_5px_rgba(0, 0, 0, 0.15)]">
             <h3 class="text-lg md:text-xl font-semibold mb-10">
