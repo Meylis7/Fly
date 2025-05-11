@@ -295,6 +295,7 @@ export default {
       ReturnLuggageOptions: "Return luggage options",
       LuggageOptions: "Luggage options",
       MealType: "Meal type",
+      AdvancedAncillaryOptions: "Ancillary options",
       select_placeholder: "Select an option",
     },
     passenger: {
