@@ -5,8 +5,6 @@ import apiService from "@/services/apiService";
 import { Vue3Lottie } from 'vue3-lottie';
 import NoData from '@/assets/NoData.json';
 
-const bookingData = history.state?.updatedSearchData || {};
-
 const states = reactive({
     bookings: [],
 });

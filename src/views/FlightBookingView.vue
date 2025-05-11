@@ -35,6 +35,37 @@
     const birthdayInput = ref(null);
     const expireDateInput = ref(null);
 
+    // Calculate age based on birth date and reference date (flight date)
+    const calculateAge = (birthDate, referenceDate) => {
+        if (!birthDate || !referenceDate) return null;
+        
+        const birth = new Date(birthDate);
+        const reference = new Date(referenceDate);
+        
+        let age = reference.getFullYear() - birth.getFullYear();
+        const monthDiff = reference.getMonth() - birth.getMonth();
+        
+        // If birth month is later than reference month, or same month but birth day is later
+        if (monthDiff < 0 || (monthDiff === 0 && reference.getDate() < birth.getDate())) {
+            age--;
+        }
+        
+        return age;
+    };
+
+    // Get flight date from bookingData
+    const getFlightDate = () => {
+        // Check if flightDate is directly available (this should always be the case now)
+        if (bookingData.flightDate) {
+            console.log(`Using flight date: ${bookingData.flightDate}`);
+            return bookingData.flightDate;
+        }
+        
+        // Fallback to current date if flightDate is somehow missing
+        console.warn("Flight date not found in bookingData:", bookingData);
+        return new Date().toISOString().split('T')[0];
+    };
+
     const openBirthdayCalendar = async () => {
         birthdayCalendarVisible.value = true;
         expireDateCalendarVisible.value = false; // Close other calendar
@@ -332,13 +363,30 @@
         if (!isValid) return
 
         loading.value = true;
+        
+        // Log booking data to understand its structure
+        console.log('BookingData contents:', bookingData);
+
+        // Get flight date for age calculation
+        const flightDate = getFlightDate();
+        console.log('Using flight date for age calculation:', flightDate);
+        
+        // Add age property to each passenger based on their birthdate and flight date
+        const travellersWithAge = state.passengers.map(passenger => {
+            const age = calculateAge(passenger.birthdate, flightDate);
+            console.log(`Passenger ${passenger.firstname}: DOB=${passenger.birthdate}, age=${age}`);
+            return {
+                ...passenger,
+                age: age
+            };
+        });
 
         const payload = {
             routing_id: bookingData.routing_id,
             outward_id: bookingData.outward_id,
             return_id: bookingData.return_id,
             contact_details: state.contact_details,
-            travellers: state.passengers,
+            travellers: travellersWithAge,
             payment_type: state.payment_type,
             options: Object.fromEntries(
                 Object.entries(selectedOptions.value).filter(([_, v]) => v !== '' && v !== null)
@@ -479,8 +527,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div> -->
+                                        </div> -->
 
                                     <div class="input relative w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">

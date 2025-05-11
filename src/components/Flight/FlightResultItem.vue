@@ -20,27 +20,41 @@
         }
     });
 
-    // const updatedSearchData = computed(() => ({
-    //     ...props.searchData, // ✅ Use props.searchData
-    //     outward_id: props.flight?.Outward?.Id, // ✅ Use props.flight
-    //     return_id: props.flight?.Return?.Id || null
-    // }));
-
     const goToBookingPage = () => {
+        // Extract flight dates for age calculation
+        let outwardDate = null;
+        let returnDate = null;
+        
+        if (props.flight?.Outward?.DepartDate?.Date) {
+            const [day, month, year] = props.flight.Outward.DepartDate.Date.split('/');
+            outwardDate = `${year}-${month}-${day}`;
+        }
+        
+        if (props.flight?.Return?.DepartDate?.Date) {
+            const [day, month, year] = props.flight.Return.DepartDate.Date.split('/');
+            returnDate = `${year}-${month}-${day}`;
+        }
+        
+        // Use return date as flight date if it exists, otherwise use outward date
+        const flightDate = returnDate || outwardDate;
+        
         console.log(
             {
                 ...props.searchData,
                 outward_id: props.flight?.Outward?.Id,
-                return_id: props.flight?.Return?.Id || null
+                return_id: props.flight?.Return?.Id || null,
+                flightDate
             }
         )
+        
         router.push({
             path: '/flight/book',
             state: {
                 updatedSearchData: {
                     ...props.searchData,
                     outward_id: props.flight?.Outward?.Id,
-                    return_id: props.flight?.Return?.Id || null
+                    return_id: props.flight?.Return?.Id || null,
+                    flightDate: flightDate // Send the pre-formatted date directly
                 }
             }
         });
