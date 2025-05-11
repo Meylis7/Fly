@@ -30,10 +30,12 @@
     const options = ref({});
     const selectedOptions = ref({});
 
-    const birthdayCalendarVisible = ref(false);
-    const expireDateCalendarVisible = ref(false);
-    const birthdayInput = ref(null);
-    const expireDateInput = ref(null);
+    const birthdayCalendarVisible = ref([]);
+    const expireDateCalendarVisible = ref([]);
+    const passengerRefs = ref({
+        birthdayInputs: {},
+        expireDateInputs: {}
+    });
 
     // Calculate age based on birth date and reference date (flight date)
     const calculateAge = (birthDate, referenceDate) => {
@@ -64,36 +66,52 @@
         return new Date().toISOString().split('T')[0];
     };
 
-    const openBirthdayCalendar = async () => {
-        birthdayCalendarVisible.value = true;
-        expireDateCalendarVisible.value = false; // Close other calendar
+    const openBirthdayCalendar = async (index) => {
+        // Reset all calendars
+        birthdayCalendarVisible.value = birthdayCalendarVisible.value.map(() => false);
+        expireDateCalendarVisible.value = expireDateCalendarVisible.value.map(() => false);
+        
+        // Open the selected one
+        birthdayCalendarVisible.value[index] = true;
         await nextTick();
     };
 
-    const openExpireDateCalendar = async () => {
-        expireDateCalendarVisible.value = true;
-        birthdayCalendarVisible.value = false; // Close other calendar
+    const openExpireDateCalendar = async (index) => {
+        // Reset all calendars
+        birthdayCalendarVisible.value = birthdayCalendarVisible.value.map(() => false);
+        expireDateCalendarVisible.value = expireDateCalendarVisible.value.map(() => false);
+        
+        // Open the selected one
+        expireDateCalendarVisible.value[index] = true;
         await nextTick();
     };
 
-    const onBirthdaySelect = () => {
-        birthdayCalendarVisible.value = false;
+    const onBirthdaySelect = (index) => {
+        birthdayCalendarVisible.value[index] = false;
     };
 
-    const onExpireDateSelect = () => {
-        expireDateCalendarVisible.value = false;
+    const onExpireDateSelect = (index) => {
+        expireDateCalendarVisible.value[index] = false;
     };
 
     const handleClickOutside = (event) => {
         if (event.target.closest('.vc-container')) {
             return;
         }
-        if (birthdayInput.value && birthdayInput.value.$el && !birthdayInput.value.$el.contains(event.target)) {
-            birthdayCalendarVisible.value = false;
-        }
-        if (expireDateInput.value && expireDateInput.value.$el && !expireDateInput.value.$el.contains(event.target)) {
-            expireDateCalendarVisible.value = false;
-        }
+        
+        // Check all birthday inputs
+        Object.entries(passengerRefs.value.birthdayInputs).forEach(([index, input]) => {
+            if (input && input.$el && !input.$el.contains(event.target)) {
+                birthdayCalendarVisible.value[index] = false;
+            }
+        });
+        
+        // Check all expiry date inputs
+        Object.entries(passengerRefs.value.expireDateInputs).forEach(([index, input]) => {
+            if (input && input.$el && !input.$el.contains(event.target)) {
+                expireDateCalendarVisible.value[index] = false;
+            }
+        });
     };
 
     function formatDate(date) {
@@ -287,6 +305,16 @@
                 nationality: "",
                 gender: "male",
             }));
+
+            // Initialize calendar visibility arrays
+            birthdayCalendarVisible.value = Array(passengersCount).fill(false);
+            expireDateCalendarVisible.value = Array(passengersCount).fill(false);
+            
+            // For refs, we'll use an object approach instead of arrays
+            passengerRefs.value = {
+                birthdayInputs: {},
+                expireDateInputs: {}
+            };
         } catch (error) {
             console.error("Error loading countries:", error.message);
             toast.error("Error loading countries: " + error.message, {
@@ -322,7 +350,7 @@
             if (!passenger.passport_country?.trim()) errors.value[`passenger${index}passportCountry`] = true
             if (!passenger.passport_number?.trim()) errors.value[`passenger${index}passportNumber`] = true
             if (!passenger.nationality?.trim()) errors.value[`passenger${index}nationality`] = true
-            if (!passenger.passport_expiry_date?.trim()) errors.value[`passenger${index}expiryDate`] = true
+            if (!passenger.passport_expiry_date) errors.value[`passenger${index}expiryDate`] = true
         })
 
         return Object.keys(errors.value).length === 0
@@ -680,19 +708,18 @@
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t("booking.passenger.birth.label") }}
                                         </label>
-                                        <!-- <input v-model="passenger.birthdate" required type="date"
-                                        class="text-sm lg:text-base font-normal w-full !py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        :class="[errors[`passenger${index}birthdate`] ? 'border-red-500' : '']"
-                                        :placeholder="$t('booking.passenger.birth.label')"> -->
 
-                                        <input type="text" :value="formatDate(state.passengers[0].birthdate)"
+                                        <input type="text" :value="formatDate(passenger.birthdate)"
                                             :placeholder="$t('searchForm.datePicker.placeholder')"
                                             class="text-sm lg:text-base font-normal w-full !py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                            @focus="openBirthdayCalendar" ref="birthdayInput" readonly />
+                                            :class="[errors[`passenger${index}birthdate`] ? 'border-red-500' : '']"
+                                            @focus="openBirthdayCalendar(index)" 
+                                            :ref="el => { if(el) passengerRefs.birthdayInputs[index] = el }" 
+                                            readonly />
 
-                                        <VDatePicker v-model="state.passengers[0].birthdate"
-                                            @update:modelValue="onBirthdaySelect" placeholder="Choose Dates"
-                                            v-if="birthdayCalendarVisible"
+                                        <VDatePicker v-model="passenger.birthdate"
+                                            @update:modelValue="onBirthdaySelect(index)" placeholder="Choose Dates"
+                                            v-if="birthdayCalendarVisible[index]"
                                             class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
                                     </div>
 
@@ -801,19 +828,18 @@
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t("booking.passenger.passportExpire.label") }}
                                         </label>
-                                        <!-- <input v-model="passenger.passport_expiry_date" type="date"
-                                        class="text-sm lg:text-base font-normal w-full py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                        :class="[errors[`passenger${index}expiryDate`] ? 'border-red-500' : '']"
-                                        :placeholder="$t('booking.passenger.passportExpire.placeholder')"> -->
 
-                                        <input type="text" :value="formatDate(state.passengers[0].passport_expiry_date)"
+                                        <input type="text" :value="formatDate(passenger.passport_expiry_date)"
                                             :placeholder="$t('searchForm.datePicker.placeholder')"
                                             class="text-sm lg:text-base font-normal w-full !py-[14px] pl-3 pr-14 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                            @focus="openExpireDateCalendar" ref="expireDateInput" readonly />
+                                            :class="[errors[`passenger${index}expiryDate`] ? 'border-red-500' : '']"
+                                            @focus="openExpireDateCalendar(index)" 
+                                            :ref="el => { if(el) passengerRefs.expireDateInputs[index] = el }" 
+                                            readonly />
 
-                                        <VDatePicker v-model="state.passengers[0].passport_expiry_date"
-                                            @update:modelValue="onExpireDateSelect" placeholder="Choose Dates"
-                                            v-if="expireDateCalendarVisible"
+                                        <VDatePicker v-model="passenger.passport_expiry_date"
+                                            @update:modelValue="onExpireDateSelect(index)" placeholder="Choose Dates"
+                                            v-if="expireDateCalendarVisible[index]"
                                             class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
                                     </div>
                                 </div>
