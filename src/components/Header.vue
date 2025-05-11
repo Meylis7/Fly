@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
 
 
 <template>
-    <header class="absolute top-7 left-0 w-full">
+    <header class="absolute top-7 left-0 w-full z-30">
         <div class="auto_container">
             <div class="inner-wrapper">
                 <div class="inner p-5 flex items-center justify-between">

@@ -349,7 +349,7 @@
 </script>
 
 <template>
-    <form class="w-full relative z-10" @submit.prevent="handleSubmit">
+    <form class="w-full relative" @submit.prevent="handleSubmit">
         <div
             class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
             <div class="flex items-center mb-5">
@@ -364,7 +364,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap 1xl:flex-nowrap items-center justify-between gap-y-3">
+            <div class="flex flex-wrap z-20 1xl:flex-nowrap items-center justify-between gap-y-3">
                 <div
                     class="flex items-center xsm:items-end flex-col xsm:flex-row relative gap-x-[22px] w-full 1xl:w-[35%] mb-5 1xl:mb-0">
                     <div class="relative w-full xsm:w-1/2 1xl:w-full mb-5 xsm:mb-0">
@@ -455,7 +455,7 @@
                     <VDatePicker v-model="departureDate" :columns="columns" placeholder="Choose Dates"
                         :min-date="minDate" :day-class="(day) => (isPastDay(day) ? 'not-allowed' : '')"
                         v-if="departureCalendarVisible" @update:modelValue="onDepartureDateSelect"
-                        class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
+                        class="!absolute z-20 top-[85px] left-0 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
 
                     <span class="icon absolute bottom-3 right-2 pointer-events-none">
                         <img :src="calendar" alt="calendar-icon">
@@ -479,7 +479,7 @@
                     <VDatePicker v-model="returnDate" mode="single" placeholder="Choose Dates"
                         :min-date="departureDate || minDate" :day-class="(day) => (isPastDay(day) ? 'not-allowed' : '')"
                         v-if="returnCalendarVisible" @update:modelValue="onReturnDateSelect"
-                        class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
+                        class="!absolute z-20 top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
 
                     <span class="icon absolute bottom-3 right-2 pointer-events-none">
                         <img :src="calendar" alt="calendar-icon">
@@ -500,7 +500,7 @@
             </div>
 
 
-            <div v-if="showModal" class="modal absolute top-full right-0 w-[485px] p-5 rounded-3xl bg-white ">
+            <div v-if="showModal" class="modal absolute z-20 top-full right-0 w-[485px] p-5 rounded-3xl bg-white ">
                 <div
                     class="flex items-center justify-between w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
                     <div class="block">
@@ -594,7 +594,7 @@
         </div>
 
         <button type="submit"
-            class="flex items-center w-3/4 xsm:w-auto justify-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px] cursor-pointer">
+            class="flex items-center z-10 w-3/4 xsm:w-auto justify-center bg-prime-color py-[10px] px-4 gap-3 rounded-xl absolute left-[50%] translate-x-[-50%] bottom-[-36px] cursor-pointer">
             <p class="text-sm md:text-base font-semibold text-white">
                 {{ $t("searchForm.searchButton.flightText") }}
             </p>
