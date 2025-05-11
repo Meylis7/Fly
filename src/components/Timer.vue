@@ -27,8 +27,6 @@ function clearTimer() {
 const startTimer = () => {
   localStorage.setItem("ticketSearchStartTime", Date.now().toString());
 
-  console.log('timer started')
-
   if (interval) clearInterval(interval);
   interval = setInterval(checkTimer, 1000);
 };

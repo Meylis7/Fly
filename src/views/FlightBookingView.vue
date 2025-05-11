@@ -55,9 +55,7 @@
 
     // Get flight date from bookingData
     const getFlightDate = () => {
-        // Check if flightDate is directly available (this should always be the case now)
         if (bookingData.flightDate) {
-            console.log(`Using flight date: ${bookingData.flightDate}`);
             return bookingData.flightDate;
         }
         
@@ -308,11 +306,9 @@
 
         // Contact Details
         if (!state.contact_details.firstname?.trim()) errors.value.firstname = true
-        if (!state.contact_details.middlename?.trim()) errors.value.middlename = true
         if (!state.contact_details.lastname?.trim()) errors.value.lastname = true
         if (!state.contact_details.email?.trim()) errors.value.email = true
         if (!state.contact_details.address.country_code?.trim()) errors.value.country_code = true
-        // if (!state.contact_details.phone?.number?.trim()) errors.value.phone = true
         if (!String(state.contact_details.phone?.number || "").trim()) errors.value.phone = true
 
         if (!state.contact_details.address?.city?.trim()) errors.value.city = true
@@ -321,13 +317,12 @@
         // Passengers
         state.passengers.forEach((passenger, index) => {
             if (!passenger.firstname?.trim()) errors.value[`passenger${index}firstname`] = true
-            if (!passenger.middlename?.trim()) errors.value[`passenger${index}middlename`] = true
             if (!passenger.lastname?.trim()) errors.value[`passenger${index}lastname`] = true
             if (!passenger.birthdate) errors.value[`passenger${index}birthdate`] = true
             if (!passenger.passport_country?.trim()) errors.value[`passenger${index}passportCountry`] = true
             if (!passenger.passport_number?.trim()) errors.value[`passenger${index}passportNumber`] = true
             if (!passenger.nationality?.trim()) errors.value[`passenger${index}nationality`] = true
-            // if (!passenger.passport_expiry_date?.trim()) errors.value[`passenger${index}expiryDate`] = true
+            if (!passenger.passport_expiry_date?.trim()) errors.value[`passenger${index}expiryDate`] = true
         })
 
         return Object.keys(errors.value).length === 0
@@ -364,17 +359,12 @@
 
         loading.value = true;
         
-        // Log booking data to understand its structure
-        console.log('BookingData contents:', bookingData);
-
         // Get flight date for age calculation
         const flightDate = getFlightDate();
-        console.log('Using flight date for age calculation:', flightDate);
         
         // Add age property to each passenger based on their birthdate and flight date
         const travellersWithAge = state.passengers.map(passenger => {
             const age = calculateAge(passenger.birthdate, flightDate);
-            console.log(`Passenger ${passenger.firstname}: DOB=${passenger.birthdate}, age=${age}`);
             return {
                 ...passenger,
                 age: age
@@ -408,8 +398,6 @@
             };
             // Second API call to start booking
             const startResponse = await apiService.startBooking(bookingPayload);
-
-            console.log('startResponse', startResponse);
 
             if (startResponse.success) {
                 toast.success(t('booking.success'), { autoClose: 1000 });
@@ -491,44 +479,6 @@
                                             :placeholder="$t('booking.contact.gmail.placeholder')">
                                     </div>
 
-                                    <!-- <div
-                                        class="input relative w-[calc(100%-10px)] md:w-[calc(50%-10px)] overflow-hidden">
-                                        <label class="text-sm font-normal mb-2 block">
-                                            {{ $t("booking.contact.number.label") }}
-                                        </label>
-                                        <input v-model="state.contact_details.phone.number" required type="number"
-                                            min="8"
-                                            class="text-sm lg:text-base font-normal w-full py-[14px] pr-3 pl-[80px] placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
-                                            :class="[errors.phone ? 'border-red-500' : '']"
-                                            :placeholder="$t('booking.contact.number.placeholder')">
-
-                                        <input type="number" v-model="state.contact_details.phone.code"
-                                            class="absolute left-[1px] bottom-[1px] text-sm lg:text-base font-normal w-[70px] text-center py-[14px] border-solid border-0 border-r border-[#A1B0CC] rounded-l"
-                                            placeholder="993">
-
-                                        <div class="country-code-selector" ref="dropdownRef">
-                                            <div class="selected-code" @click="toggleDropdown">
-                                                {{ selectedCode }}
-                                                <span class="arrow">{{ isOpen ? '▲' : '▼' }}</span>
-                                            </div>
-
-                                            <div class="dropdown" v-if="isOpen">
-                                                <input type="text" v-model="searchQuery"
-                                                    placeholder="Search countries..." class="search-input"
-                                                    @click.stop />
-                                                <div class="dropdown-list">
-                                                    <div v-for="country in filteredCountries"
-                                                        :key="country.code + '-' + country.name" class="country-option"
-                                                        :class="{ 'selected': selectedCode === country.code }"
-                                                        @click="selectCountry(country.code)">
-                                                        <span class="flag">{{ country.flag }}</span>
-                                                        <span class="name">{{ country.name }}</span>
-                                                        <span class="code">{{ country.code }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> -->
-
                                     <div class="input relative w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t("booking.contact.number.label") }}
@@ -573,7 +523,7 @@
                                         </h6>
 
                                         <div
-                                            class="flex items-center bg-[#F2F2F2] py-[9px] px-[9px] rounded-lg w-fit gap-[10px]">
+                                            class="flex items-center bg-[#F2F2F2] py-3 px-3 rounded-lg w-fit gap-[10px]">
                                             <div class="block w-[109px]">
                                                 <input v-model="state.contact_details.gender" required type="radio"
                                                     class="peer hidden" name="user-gender" value="male" id="user-male"
@@ -618,8 +568,6 @@
                                         </div>
 
                                     </div>
-
-                                    <!-- <br> -->
 
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">
@@ -1094,15 +1042,6 @@
         }
     }
 
-    // .input-field {
-    //     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
-    // }
-
-    // .btn-primary {
-    //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
-    // }
-
-
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -1113,8 +1052,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 200;
-        /* Ensures it's above everything */
+        z-index: 200; /* Ensures it's above everything */
     }
 
     .modal {
@@ -1123,6 +1061,14 @@
         border-radius: 8px;
         text-align: center;
     }
+
+    // .input-field {
+    //     @apply text-base font-normal w-full py-[14px] px-3 border border-solid border-[#A1B0CC] rounded;
+    // }
+
+    // .btn-primary {
+    //     @apply bg-blue-600 text-white py-2 px-4 rounded-lg;
+    // }
 
     // button { 
     //     background: green;

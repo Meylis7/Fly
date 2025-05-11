@@ -181,7 +181,6 @@
       // Perform flight search
       const results = await searchFlights(searchParams)
 
-      console.log(results);
       flights.value = results.flights
 
       const travellersCount = searchParams.adults + searchParams.children + searchParams.infants;

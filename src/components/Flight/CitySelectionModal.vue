@@ -45,11 +45,9 @@ const onSearchInput = async (event) => {
 };
 
 const fetchAirports = async (query) => {
-    console.log('Fetching airports for query:', query);
     isLoading.value = true;
     try {
         const data = await apiService.fetchAirports(query);
-        console.log('Airport fetch response:', data);
         airports.value = { ...data.data };
     } catch (error) {
         console.error("Error fetching airports:", error);

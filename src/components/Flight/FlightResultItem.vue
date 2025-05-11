@@ -38,15 +38,6 @@
         // Use return date as flight date if it exists, otherwise use outward date
         const flightDate = returnDate || outwardDate;
         
-        console.log(
-            {
-                ...props.searchData,
-                outward_id: props.flight?.Outward?.Id,
-                return_id: props.flight?.Return?.Id || null,
-                flightDate
-            }
-        )
-        
         router.push({
             path: '/flight/book',
             state: {
