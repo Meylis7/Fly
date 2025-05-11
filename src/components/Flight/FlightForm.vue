@@ -393,7 +393,7 @@
 
                         <Autocomplete v-model="departureCity" @city-selected="handleDepartureCitySelected"
                             @airport-selected="handleDepartureAirportSelected"
-                            class="!absolute z-20 top-[calc(100%+5px)] left-0 min-w-full xsm:min-w-80 lg:!min-w-96 hidden md:block" />
+                            class="!absolute z-[51] top-[calc(100%+5px)] left-0 min-w-full xsm:min-w-80 lg:!min-w-96 hidden md:block" />
                     </div>
 
                     <button @click="swapCities" type="button"
@@ -435,7 +435,7 @@
 
                         <Autocomplete v-model="arrivalCity" @city-selected="handleArrivalCitySelected"
                             @airport-selected="handleArrivalAirportSelected"
-                            class="!absolute z-20 top-[calc(100%+5px)] right-0 min-w-full xsm:min-w-80 lg:!min-w-96 hidden md:block" />
+                            class="!absolute z-[51] top-[calc(100%+5px)] right-0 min-w-full xsm:min-w-80 lg:!min-w-96 hidden md:block" />
                     </div>
                 </div>
 
