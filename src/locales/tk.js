@@ -177,10 +177,11 @@ export default {
   filter: {
     filter: "Süzgüç",
     title: "Süzgüçler",
+    total: "Jemi uçuşlar",
     sort: {
       val_1: "Arzan",
       val_2: "Çalt",
-      val_3: "Uçuş wagty boýunça",
+      val_3: "Uçuş wagty boýunça"
     },
     stops: {
       title: "Duralgalar",
@@ -208,6 +209,7 @@ export default {
       title: "Howa ýollary",
     },
     btn: "Täzeden başla",
+    resetAll: "Ähli süzgüçleri täzeden başla",
   },
 
   ticket: {
@@ -234,14 +236,18 @@ export default {
   booking: {
     contact: {
       title: "Habarlaşmak maglumatlary",
-      text: "Görkezilen habara bilet iberilýär, uçuşdaky üýtgeşmeler ýa-da beýleki adatdan daşary ýagdaýlar barada habar berilýär.",
+      text: "Habarlaşmak maglumatlaryňyzy giriziň",
       firstName: {
         label: "Ady",
-        placeholder: "Aman",
+        placeholder: "Adyňyzy giriziň"
       },
-      lastname: {
+      middleName: {
+        label: "Atasynyň ady",
+        placeholder: "Atasynyň adyny giriziň (majburi däl)"
+      },
+      lastName: {
         label: "Familiýasy",
-        placeholder: "Amanow",
+        placeholder: "Familiýaňyzy giriziň"
       },
       gmail: {
         label: "E-poçta",
@@ -286,6 +292,10 @@ export default {
       firstName: {
         label: "Ady",
         placeholder: "Aman",
+      },
+      middleName: {
+        label: "Atasynyň ady",
+        placeholder: "Atasynyň adyny giriziň (majburi däl)"
       },
       lastname: {
         label: "Familiýasy",

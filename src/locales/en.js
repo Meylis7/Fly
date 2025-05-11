@@ -190,10 +190,11 @@ export default {
   filter: {
     filter: "Filter",
     title: "Filter By",
+    total: "Total flights",
     sort: {
       val_1: "Cheaper first",
       val_2: "First the fast ones",
-      val_3: "By departure time",
+      val_3: "By departure time"
     },
     stops: {
       title: "Stop",
@@ -221,6 +222,7 @@ export default {
       title: "Airlines",
     },
     btn: "Reset",
+    resetAll: "Reset all filters",
   },
 
   ticket: {
@@ -246,15 +248,19 @@ export default {
 
   booking: {
     contact: {
-      title: "Contact information",
-      text: "We will send a ticket to the specified contact, send notifications about changes in the flight or in case of other emergency situations.",
+      title: "Contact Information",
+      text: "Please provide your contact information",
       firstName: {
-        label: "First name",
-        placeholder: "e.g. Aman",
+        label: "First Name",
+        placeholder: "Enter your first name"
       },
-      lastname: {
-        label: "Last name",
-        placeholder: "Amanov",
+      middleName: {
+        label: "Middle Name",
+        placeholder: "Enter your middle name (optional)"
+      },
+      lastName: {
+        label: "Last Name",
+        placeholder: "Enter your last name"
       },
       gmail: {
         label: "Email",
@@ -300,6 +306,10 @@ export default {
         label: "First name",
         placeholder: "e.g. Aman",
       },
+      middleName: {
+        label: "Middle name",
+        placeholder: "Enter middle name (optional)"
+      },
       lastname: {
         label: "Last name",
         placeholder: "Amanov",
@@ -342,7 +352,7 @@ export default {
   },
 
   loading: "Loading",
-  notFound: "No flights found.",
+  notFound: "No data found.",
 
   profile: {
     tabs: {

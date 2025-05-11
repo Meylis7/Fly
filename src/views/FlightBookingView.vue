@@ -80,6 +80,7 @@
         passengers: [
             {
                 firstname: '',
+                middlename: '',
                 lastname: '',
                 birthdate: 'null',
                 passport_country: '',
@@ -92,6 +93,7 @@
 
         contact_details: {
             firstname: '',
+            middlename: '',
             lastname: '',
             email: '',
             phone: {
@@ -247,6 +249,7 @@
             // Initialize passengers array
             state.passengers = Array.from({ length: passengersCount }, () => ({
                 firstname: "",
+                middlename: "",
                 lastname: "",
                 birthdate: "",
                 passport_country: "",
@@ -274,6 +277,7 @@
 
         // Contact Details
         if (!state.contact_details.firstname?.trim()) errors.value.firstname = true
+        if (!state.contact_details.middlename?.trim()) errors.value.middlename = true
         if (!state.contact_details.lastname?.trim()) errors.value.lastname = true
         if (!state.contact_details.email?.trim()) errors.value.email = true
         if (!state.contact_details.address.country_code?.trim()) errors.value.country_code = true
@@ -286,6 +290,7 @@
         // Passengers
         state.passengers.forEach((passenger, index) => {
             if (!passenger.firstname?.trim()) errors.value[`passenger${index}firstname`] = true
+            if (!passenger.middlename?.trim()) errors.value[`passenger${index}middlename`] = true
             if (!passenger.lastname?.trim()) errors.value[`passenger${index}lastname`] = true
             if (!passenger.birthdate) errors.value[`passenger${index}birthdate`] = true
             if (!passenger.passport_country?.trim()) errors.value[`passenger${index}passportCountry`] = true
@@ -355,7 +360,10 @@
             };
             // Second API call to start booking
             const startResponse = await apiService.startBooking(bookingPayload);
-            if (startResponse.data.success) {
+
+            console.log('startResponse', startResponse);
+
+            if (startResponse.success) {
                 toast.success(t('booking.success'), { autoClose: 1000 });
                 router.push({
                     path: `/flight/book/${response.data.booking_reference}`,
@@ -395,7 +403,7 @@
                                     {{ $t("booking.contact.text") }}
                                 </p>
 
-                                <div class="flex flex-wrap gap-x-5 gap-y-4">
+                                <div class="flex items-start flex-wrap gap-x-5 gap-y-4">
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t("booking.contact.firstName.label") }}
@@ -408,12 +416,21 @@
 
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">
-                                            {{ $t("booking.contact.lastname.label") }}
+                                            {{ $t("booking.contact.middleName.label") }}
+                                        </label>
+                                        <input v-model="state.contact_details.middlename" type="text"
+                                            class="text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                            :placeholder="$t('booking.contact.middleName.placeholder')">
+                                    </div>
+
+                                    <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
+                                        <label class="text-sm font-normal mb-2 block">
+                                            {{ $t("booking.contact.lastName.label") }}
                                         </label>
                                         <input v-model="state.contact_details.lastname" required type="text"
                                             class="text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                             :class="[errors.lastname ? 'border-red-500' : '']"
-                                            :placeholder="$t('booking.contact.lastname.placeholder')">
+                                            :placeholder="$t('booking.contact.lastName.placeholder')">
                                     </div>
 
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
@@ -509,7 +526,7 @@
                                         </h6>
 
                                         <div
-                                            class="flex items-center bg-[#F2F2F2] py-3 px-3 rounded-lg w-fit gap-[10px]">
+                                            class="flex items-center bg-[#F2F2F2] py-[9px] px-[9px] rounded-lg w-fit gap-[10px]">
                                             <div class="block w-[109px]">
                                                 <input v-model="state.contact_details.gender" required type="radio"
                                                     class="peer hidden" name="user-gender" value="male" id="user-male"
@@ -555,14 +572,14 @@
 
                                     </div>
 
-                                    <br>
+                                    <!-- <br> -->
 
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t("booking.contact.country.label") }}
                                         </label>
                                         <select v-model="state.contact_details.address.country_code"
-                                            class=" text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                            class=" text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                             :class="[errors.country_code ? 'border-red-500' : '']">
                                             <option value="" disabled>
                                                 {{ $t("booking.contact.country.placeholder") }}
@@ -643,6 +660,15 @@
                                             class="text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
                                             :class="[errors[`passenger${index}firstname`] ? 'border-red-500' : '']"
                                             :placeholder="$t('booking.passenger.firstName.label')">
+                                    </div>
+
+                                    <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
+                                        <label class="text-sm font-normal mb-2 block">
+                                            {{ $t("booking.passenger.middleName.label") }}
+                                        </label>
+                                        <input v-model="passenger.middlename" type="text"
+                                            class="text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                                            :placeholder="$t('booking.passenger.middleName.placeholder')">
                                     </div>
 
                                     <div class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">

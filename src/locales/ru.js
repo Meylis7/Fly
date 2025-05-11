@@ -177,10 +177,11 @@ export default {
   filter: {
     filter: "Фильтр",
     title: "Фильтровать по",
+    total: "Всего рейсов",
     sort: {
       val_1: "Сначала дешевые",
       val_2: "Сначала быстрые",
-      val_3: "По времени отправления",
+      val_3: "По времени отправления"
     },
     stops: {
       title: "Остановки",
@@ -208,6 +209,7 @@ export default {
       title: "Авиакомпании",
     },
     btn: "Сбросить",
+    resetAll: "Сбросить все фильтры",
   },
 
   ticket: {
@@ -234,14 +236,18 @@ export default {
   booking: {
     contact: {
       title: "Контактная информация",
-      text: "Мы отправим билет на указанный контакт, уведомления о изменениях рейса или в случае других чрезвычайных ситуаций.",
+      text: "Пожалуйста, предоставьте вашу контактную информацию",
       firstName: {
         label: "Имя",
-        placeholder: "Аман",
+        placeholder: "Введите ваше имя"
       },
-      lastname: {
+      middleName: {
+        label: "Отчество",
+        placeholder: "Введите отчество (необязательно)"
+      },
+      lastName: {
         label: "Фамилия",
-        placeholder: "Аманов",
+        placeholder: "Введите вашу фамилию"
       },
       gmail: {
         label: "Email",
@@ -287,6 +293,10 @@ export default {
         label: "Имя",
         placeholder: "Аман",
       },
+      middleName: {
+        label: "Отчество",
+        placeholder: "Введите отчество (необязательно)"
+      },
       lastname: {
         label: "Фамилия",
         placeholder: "Аманов",
@@ -329,7 +339,7 @@ export default {
   },
 
   loading: "Загрузка",
-  notFound: "No flights found.",
+  notFound: "Данные не найдены.",
 
   profile: {
     tabs: {
