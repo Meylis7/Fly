@@ -146,7 +146,7 @@
     const props = defineProps({
         modelValue: {
             type: String,
-            default: '+90'
+            default: '+993'
         }
     });
 
