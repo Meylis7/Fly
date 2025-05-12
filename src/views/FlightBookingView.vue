@@ -261,6 +261,24 @@
         if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
             isOpen.value = false;
         }
+
+        if (event.target.closest('.vc-container')) {
+        return; // Click is inside the calendar, do nothing
+        }
+    
+        // Check all birthday inputs
+        Object.entries(passengerRefs.value.birthdayInputs).forEach(([index, input]) => {
+            if (input && !input.contains(event.target)) {
+                birthdayCalendarVisible.value[index] = false;
+            }
+        });
+        
+        // Check all expiry date inputs
+        Object.entries(passengerRefs.value.expireDateInputs).forEach(([index, input]) => {
+            if (input && !input.contains(event.target)) {
+                expireDateCalendarVisible.value[index] = false;
+            }
+        });
     };
 
     // Lifecycle
