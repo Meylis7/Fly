@@ -71,7 +71,7 @@
                 <p class="text-sm font-normal">
                     <span class="font-semibold">{{ $t("ticket.flightDuration") }}: </span> {{ segment.Duration.Hours }}
                     {{ $t("ticket.hour") }}
-                    {{ segment.Duration.Min }} {{ $t("ticket.minute") }}
+                    {{ segment.Duration.Minutes }} {{ $t("ticket.minute") }}
                 </p>
             </div>
 

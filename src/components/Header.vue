@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
                     <div class="flex items-center gap-2 xsm:gap-4 relative">
                         <button v-if="userStore.user" @click="router.push({ name: 'profile' })"
                             class="text-sm sm:text-base text-white bg-[#223A60] capitalize rounded-lg py-2 px-4 hover:bg-[#1B2E50] transition">
-                            $ {{ userStore.user.balance }}
+                            $ {{ new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(userStore.user.balance) }}
                         </button>
 
                         <!-- Show Sign in if not logged in -->
