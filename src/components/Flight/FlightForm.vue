@@ -500,9 +500,9 @@
             </div>
 
 
-            <div v-if="showModal" class="modal absolute z-20 top-full right-0 w-[485px] p-5 rounded-3xl bg-white ">
+            <div v-if="showModal" class="modal absolute z-20 top-full right-0 w-full md:w-[485px] p-5 rounded-3xl bg-white ">
                 <div
-                    class="flex items-center justify-between w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
+                    class="flex items-center justify-between flex-col sm:flex-row text-center gap-y-4 sm:gap-y-0 sm:text-left w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
                     <div class="block">
                         <h5 class="text-base font-medium mb-2 ">
                             {{ $t("searchForm.passengersLists[0].title") }}
@@ -527,7 +527,7 @@
                 </div>
 
                 <div
-                    class="flex items-center justify-between w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
+                    class="flex items-center justify-between flex-col sm:flex-row text-center gap-y-4 sm:gap-y-0 sm:text-left w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
                     <div class="block">
                         <h5 class="text-base font-medium mb-2 ">
                             {{ $t("searchForm.passengersLists[1].title") }}
@@ -552,7 +552,7 @@
                 </div>
 
                 <div
-                    class="flex items-center justify-between w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
+                    class="flex items-center justify-between flex-col sm:flex-row text-center gap-y-4 sm:gap-y-0 sm:text-left w-full border-solid border-0 border-b border-b-[#CCCCCC] p-[10px]">
                     <div class="block">
                         <h5 class="text-base font-medium mb-2 ">
                             {{ $t("searchForm.passengersLists[2].title") }}
@@ -576,16 +576,16 @@
                     </div>
                 </div>
 
-                <div class="class_type p-[10px] mt-3 rounded-[7px] bg-[#ECEFF5] flex items-center">
-                    <div class="class-type w-[33.33%]">
+                <div class="class_type p-[10px] mt-3 rounded-[7px] bg-[#ECEFF5] flex items-center flex-wrap sm:flex-nowrap">
+                    <div class="class-type w-[calc(100%-10px)] text-center sm:w-[33.33%]">
                         <input type="radio" id="all" name="flight-type" value="all" v-model="selectedClass">
                         <label for="all"> {{ $t("searchForm.typeFlights[0].title") }}</label>
                     </div>
-                    <div class="class-type w-[33.33%]">
+                    <div class="class-type w-[calc(100%-10px)] text-center sm:w-[33.33%]">
                         <input type="radio" id="econom" name="flight-type" value="econom" v-model="selectedClass">
                         <label for="econom">{{ $t("searchForm.typeFlights[1].title") }}</label>
                     </div>
-                    <div class="class-type w-[33.33%]">
+                    <div class="class-type w-[calc(100%-10px)] text-center sm:w-[33.33%]">
                         <input type="radio" id="business" name="flight-type" value="business" v-model="selectedClass">
                         <label for="business">{{ $t("searchForm.typeFlights[2].title") }}</label>
                     </div>
