@@ -9,7 +9,7 @@ const getUserIP = async () => {
     return response.data.ip;
   } catch (error) {
     console.error('Error getting IP address:', error);
-    return window.location.hostname; // Fallback to hostname
+    return '0.0.0.0'; // Fallback to hostname
   }
 };
 
