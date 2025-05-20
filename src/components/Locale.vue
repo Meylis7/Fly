@@ -13,8 +13,8 @@ const dropdownVisible = ref(false);
 
 const localeLabels = {
     en: "English",
-    ru: "Russian",
-    tk: "Turkmen",
+    ru: "Русский",
+    tk: "Türkmençe",
 };
 
 const toggleDropdown = () => {

@@ -1,7 +1,7 @@
 export default {
   header: {
     links: {
-      flightHotel: "Uçarlar we Myhmanhanalar",
+      flightHotel: "Uçuşlar we Myhmanhanalar",
       tour: "Syýahat",
       visa: "Wiza",
       profile: "Profile",

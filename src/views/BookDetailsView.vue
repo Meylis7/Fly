@@ -6,9 +6,11 @@
     import Load_3 from '@/assets/loading-3.json';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
+    import { useI18n } from 'vue-i18n';
 
     import apiService from '@/services/apiService';
 
+    const { t } = useI18n();
     const route = useRoute();
 
     const state = reactive({
@@ -40,23 +42,23 @@
                 case 'Succeeded':
                     state.loading = false;
                     state.tickets = data.data.tickets;
-                    toast.success($t('BookingTicket.status.succeeded'), { autoClose: 3000 });
+                    toast.success(t('BookingTicket.status.succeeded'), { autoClose: 3000 });
                     break;
                     
                 case 'Unconfirmed':
                 case 'UnconfirmedBySupplier':
                     state.loading = false;
-                    toast.warning($t('BookingTicket.status.' + state.status.toLowerCase()), { autoClose: 5000 });
+                    toast.warning(t('BookingTicket.status.' + state.status.toLowerCase()), { autoClose: 5000 });
                     break;
                     
                 case 'Duplicate':
                     state.loading = false;
-                    toast.error($t('BookingTicket.status.duplicate'), { autoClose: 5000 });
+                    toast.error(t('BookingTicket.status.duplicate'), { autoClose: 5000 });
                     break;
                     
                 case 'Failed':
                     state.loading = false;
-                    toast.error($t('BookingTicket.status.failed'), { autoClose: 3000 });
+                    toast.error(t('BookingTicket.status.failed'), { autoClose: 3000 });
                     break;
                     
                 default:
@@ -66,7 +68,7 @@
         } else {
             state.status = 'Failed';
             state.loading = false;
-            toast.error($t('BookingTicket.status.failed'), { autoClose: 3000 });
+            toast.error(t('BookingTicket.status.failed'), { autoClose: 3000 });
         }
     };
 
@@ -84,22 +86,22 @@
                 <div v-if="state.loading">
                     <Vue3Lottie :animationData="Load_3" class="!w-full !h-[300px]" />
                     <p class="text-base font-normal text-center mt-5">
-                        {{ $t("loadingBooking") }}
+                        {{ t("loadingBooking") }}
                     </p>
                 </div>
 
                 <!-- Success state -->
-                <div v-else-if="state.status === 'approved' || state.booking.payment_type === 'post-pay' ">
+                <div v-else-if="state.status === 'Succeeded' || state.booking.payment_type === 'post-pay' ">
                     <h4 class="text-xl font-normal text-center mb-4">
-                        <span v-if="state.booking.payment_type != 'post-pay'">{{ $t("BookingTicket.title") }}</span>
-                        <span v-if="state.booking.payment_type === 'post-pay'">{{ $t("BookingTicket.title2") }}</span>
+                        <span v-if="state.booking.payment_type != 'post-pay'">{{ t("BookingTicket.title") }}</span>
+                        <span v-if="state.booking.payment_type === 'post-pay'">{{ t("BookingTicket.title2") }}</span>
                     </h4>
                     <p class="text-base font-normal text-center">
-                        {{ $t("BookingTicket.subTitle") }} {{ state.bookId }}
+                        {{ t("BookingTicket.subTitle") }} {{ state.bookId }}
                     </p>
                     
                     <p class="text-base font-normal text-center" v-if=" state.booking.payment_type === 'post-pay'">
-                        {{ $t("BookingTicket.contact_admin") }}
+                        {{ t("BookingTicket.contact_admin") }}
                     </p>
                     
                     <a href="tel:+99365000000" class=" block text-base font-normal text-center" v-if=" state.booking.payment_type === 'post-pay'">
@@ -109,10 +111,10 @@
                     <div
                         class="mt-[30px] mx-auto p-10 max-w-[650px] rounded-lg bg-white border border-solid border-[#223a604d]" v-if="state.tickets.length">
                         <h5 class="text-xl font-bold">
-                            {{ $t("BookingTicket.form.title") }}
+                            {{ t("BookingTicket.form.title") }}
                         </h5>
                         <p class="text-sm font-normal my-[10px]">
-                            {{ $t("BookingTicket.form.text") }}
+                            {{ t("BookingTicket.form.text") }}
                         </p>
 
                         <div v-for="ticket in state.tickets" :key="ticket.ticket_url"
@@ -122,7 +124,7 @@
                                     {{ ticket.name }}
                                 </h6>
                                 <p class="text-sm font-normal">
-                                    {{ $t("BookingTicket.form.passenger") }}
+                                    {{ t("BookingTicket.form.passenger") }}
                                 </p>
                             </div>
 
@@ -136,7 +138,7 @@
                                             fill="#223A60" stroke="#223A60" />
                                     </svg>
                                 </span>
-                                {{ $t("BookingTicket.form.download") }}
+                                {{ t("BookingTicket.form.download") }}
                             </a>
                         </div>
                     </div>
@@ -156,7 +158,7 @@
                             </svg>
                         </span>
 
-                        {{ $t("BookingTicket.goHome") }}
+                        {{ t("BookingTicket.goHome") }}
                     </RouterLink>
                 </div>
             </div>
