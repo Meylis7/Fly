@@ -193,7 +193,7 @@
     const props = defineProps({
         modelValue: {
             type: String,
-            default: '+993'
+            default: '993'
         }
     });
 
