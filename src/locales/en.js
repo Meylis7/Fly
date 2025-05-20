@@ -193,7 +193,7 @@ export default {
     total: "Total flights",
     sort: {
       val_1: "Cheaper first",
-      val_2: "First the fast ones",
+      val_2: "Shortest",
       val_3: "By departure time"
     },
     stops: {

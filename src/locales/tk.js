@@ -180,7 +180,7 @@ export default {
     total: "Jemi uçuşlar",
     sort: {
       val_1: "Arzan",
-      val_2: "Çalt",
+      val_2: "Iň gysga",
       val_3: "Uçuş wagty boýunça"
     },
     stops: {
