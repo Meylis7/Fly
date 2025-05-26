@@ -2,20 +2,69 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// Helper function to get user's IP address
+// Helper function to get user's IP address with multiple fallback services
 const getUserIP = async () => {
-  try {
-    const response = await axios.get('https://api.ipify.org?format=json');
-    return response.data.ip;
-  } catch (error) {
-    console.error('Error getting IP address:', error);
-    return '0.0.0.0'; // Fallback to hostname
+  const ipServices = [
+    {
+      url: 'https://api.ipify.org?format=json',
+      getIP: (data) => data.ip
+    },
+    {
+      url: 'https://api64.ipify.org?format=json', 
+      getIP: (data) => data.ip
+    },
+    {
+      url: 'https://httpbin.org/ip',
+      getIP: (data) => data.origin
+    },
+    {
+      url: 'https://api.myip.com',
+      getIP: (data) => data.ip
+    },
+    {
+      url: 'https://ipapi.co/json/',
+      getIP: (data) => data.ip
+    }
+  ];
+
+  for (const service of ipServices) {
+    try {
+      console.log(`Trying to get IP from: ${service.url}`);
+      const response = await axios.get(service.url, { 
+        timeout: 5000 // 5 second timeout per service
+      });
+      const ip = service.getIP(response.data);
+      
+      // Validate IP format (basic IPv4/IPv6 validation)
+      if (ip && ip !== '0.0.0.0' && /^(?:(?:\d{1,3}\.){3}\d{1,3}|(?:[0-9a-fA-F]*:+)+[0-9a-fA-F]*)$/.test(ip)) {
+        console.log(`Successfully got IP: ${ip} from ${service.url}`);
+        return ip;
+      } else {
+        console.warn(`Invalid IP received from ${service.url}: ${ip}`);
+      }
+    } catch (error) {
+      console.warn(`Failed to get IP from ${service.url}:`, error.message);
+      continue; // Try next service
+    }
   }
+
+  // If all services fail, throw an error instead of returning invalid IP
+  throw new Error('Unable to determine user IP address. All IP detection services failed.');
 };
 
 // Helper function to get meta data
 const getMetaData = async () => {
-  const userIP = await getUserIP();
+  let userIP;
+  
+  try {
+    userIP = await getUserIP();
+  } catch (error) {
+    console.error('Failed to get user IP:', error.message);
+    // Instead of using 0.0.0.0, we'll let the API handle this case
+    // by not including the IP or using a special indicator
+    throw new Error('Unable to determine IP address. Please check your internet connection and try again.');
+  }
+
   return {
     end_user_ip_address: userIP,
     end_user_browser_agent: navigator.userAgent,
@@ -108,25 +157,37 @@ const apiService = {
 
   // Search flights
   async searchFlight(payload) {
-    const meta = await getMetaData();
-    const searchPayload = {
-      ...payload,
-      "meta[end_user_ip_address]": meta.end_user_ip_address,
-      "meta[end_user_browser_agent]": meta.end_user_browser_agent,
-      "meta[end_user_device_mac_address]": meta.end_user_device_mac_address,
-    };
-    return apiRequest("get", `/tfusion/search/flights?${new URLSearchParams(searchPayload).toString()}`);
+    try {
+      const meta = await getMetaData();
+      const searchPayload = {
+        ...payload,
+        "meta[end_user_ip_address]": meta.end_user_ip_address,
+        "meta[end_user_browser_agent]": meta.end_user_browser_agent,
+        "meta[end_user_device_mac_address]": meta.end_user_device_mac_address,
+      };
+      return apiRequest("get", `/tfusion/search/flights?${new URLSearchParams(searchPayload).toString()}`);
+    } catch (error) {
+      console.error('Failed to get metadata for flight search:', error.message);
+      // Retry without IP metadata or show user-friendly error
+      throw new Error('Unable to perform flight search. Please check your internet connection and try again.');
+    }
   },
 
   // Booking flight
   async bookFlight(payload) {
-    // Add meta data to booking payload
-    const meta = await getMetaData();
-    const bookingPayload = {
-      ...payload,
-      meta
-    };
-    return apiRequest("post", `/tfusion/bookings/process`, bookingPayload);
+    try {
+      // Add meta data to booking payload
+      const meta = await getMetaData();
+      const bookingPayload = {
+        ...payload,
+        meta
+      };
+      return apiRequest("post", `/tfusion/bookings/process`, bookingPayload);
+    } catch (error) {
+      console.error('Failed to get metadata for flight booking:', error.message);
+      // For booking, metadata might be required, so we throw a user-friendly error
+      throw new Error('Unable to complete booking. Please check your internet connection and try again.');
+    }
   },
 
   // Start booking
