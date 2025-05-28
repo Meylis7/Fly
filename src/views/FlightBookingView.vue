@@ -116,7 +116,24 @@
 
     function formatDate(date) {
         if (!date) return "";
-        return new Date(date).toLocaleDateString("en-GB", {
+        
+        // Handle date string in YYYY-MM-DD format to avoid timezone issues
+        if (typeof date === 'string' && date.includes('-')) {
+            const [year, month, day] = date.split('-');
+            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        }
+        
+        // For Date objects, use local date components to avoid timezone conversion
+        if (date instanceof Date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        // Fallback - try to create date object and format it
+        const dateObj = new Date(date);
+        return dateObj.toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric"
@@ -408,11 +425,36 @@
         // Get flight date for age calculation
         const flightDate = getFlightDate();
         
+        // Helper function to ensure dates are in YYYY-MM-DD format
+        const ensureDateFormat = (date) => {
+            if (!date) return date;
+            if (typeof date === 'string' && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                return date; // Already in correct format
+            }
+            if (typeof date === 'string' && date.includes('/')) {
+                // Convert DD/MM/YYYY to YYYY-MM-DD
+                const [day, month, year] = date.split('/');
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            }
+            if (date instanceof Date) {
+                // Format Date object to YYYY-MM-DD without timezone conversion
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+            return date;
+        };
+
         // Add age property to each passenger based on their birthdate and flight date
         const travellersWithAge = state.passengers.map(passenger => {
             const age = calculateAge(passenger.birthdate, flightDate);
+
+            console.log(age)
             return {
                 ...passenger,
+                birthdate: ensureDateFormat(passenger.birthdate),
+                passport_expiry_date: ensureDateFormat(passenger.passport_expiry_date),
                 age: age
             };
         });
