@@ -432,4 +432,34 @@ export default {
     resultBtn: "Обновить результаты",
     bookingBtn: "Начать новый поиск",
   },
+
+  // Charter flights specific translations
+  selectDepartureCity: "Выберите город отправления",
+  selectDestinationCity: "Выберите город назначения",
+  selectDepartureCityFirst: "Сначала выберите город отправления",
+  selectCitiesFirst: "Сначала выберите города",
+  selectDate: "Выберите дату",
+  noDatesAvailable: "Нет доступных дат",
+  noFlightsAvailable: "Нет доступных рейсов для выбранного маршрута и даты",
+  loadingFlights: "Загрузка рейсов...",
+  contactToBook: "Связаться для бронирования",
+  departure: "Отправление",
+  destination: "Назначение",
+  errors: {
+    failedToLoadDepartureCities: "Не удалось загрузить города отправления",
+    failedToLoadDestinationCities: "Не удалось загрузить города назначения",
+    failedToLoadAvailableDates: "Не удалось загрузить доступные даты",
+    failedToLoadAvailableFlights: "Не удалось загрузить доступные рейсы"
+  },
+
+  // WhatsApp booking message
+  whatsappBooking: {
+    greeting: "Здравствуйте! Меня интересует бронирование этого чартерного рейса:",
+    route: "Маршрут",
+    date: "Дата",
+    time: "Время", 
+    price: "Цена",
+    request: "Не могли бы вы помочь мне с процессом бронирования?",
+    thanks: "Спасибо!"
+  },
 };

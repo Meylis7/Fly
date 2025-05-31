@@ -73,26 +73,27 @@ const getMetaData = async () => {
 };
 
 // Base API method that handles GET and POST requests with automatic headers
-const apiRequest = async (method, endpoint, data = null) => {
+const apiRequest = async (method, endpoint, data = null, customHeaders = {}) => {
   try {
     const token = localStorage.getItem("authToken");
     const locale = localStorage.getItem("locale") || "en";
 
-    const headers = {
+    const requestHeaders = {
       Accept: "application/json",
       "Content-Type": "application/json",
       "Accept-Language": locale,
+      ...customHeaders,
     };
 
     if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
+      requestHeaders["Authorization"] = `Bearer ${token}`;
     }
 
     const response = await axios({
       method,
       url: `${API_BASE_URL}${endpoint}`,
       data,
-      headers,
+      headers: requestHeaders,
     });
 
     // ✅ If response status is 200, return response data directly
@@ -118,6 +119,16 @@ const apiRequest = async (method, endpoint, data = null) => {
 };
 
 const apiService = {
+  // General HTTP methods for flexible API usage
+  get(endpoint, config = {}) {
+    const params = config.params ? `?${new URLSearchParams(config.params).toString()}` : '';
+    return apiRequest("get", `${endpoint}${params}`, null, config.headers);
+  },
+
+  post(endpoint, data, config = {}) {
+    return apiRequest("post", endpoint, data, config.headers);
+  },
+
   getBookingStatus(bookId) {
     return apiRequest("get", `/book/${bookId}/check`);
   },

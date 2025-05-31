@@ -431,4 +431,34 @@ export default {
     resultBtn: "Netijeleri täzeläň",
     bookingBtn: "Täze gözleg başla",
   },
+
+  // Charter flights specific translations
+  selectDepartureCity: "Uçuş şäherini saýlaň",
+  selectDestinationCity: "Baryş şäherini saýlaň", 
+  selectDepartureCityFirst: "Ilki uçuş şäherini saýlaň",
+  selectCitiesFirst: "Ilki şäherleri saýlaň",
+  selectDate: "Senäni saýlaň",
+  noDatesAvailable: "Elýeterli seneler ýok",
+  noFlightsAvailable: "Saýlanan ugur we sene üçin elýeterli uçuşlar ýok",
+  loadingFlights: "Uçuşlar ýüklenýär...",
+  contactToBook: "Ýazylmak üçin habarlaş",
+  departure: "Uçuş",
+  destination: "Baryş ýeri",
+  errors: {
+    failedToLoadDepartureCities: "Uçuş şäherlerini ýükläp bolmady",
+    failedToLoadDestinationCities: "Baryş şäherlerini ýükläp bolmady",
+    failedToLoadAvailableDates: "Elýeterli seneleri ýükläp bolmady", 
+    failedToLoadAvailableFlights: "Elýeterli uçuşlary ýükläp bolmady"
+  },
+
+  // WhatsApp booking message
+  whatsappBooking: {
+    greeting: "Salam! Meni bu çarter uçuşyny ýazylmak gyzyklandyrýar:",
+    route: "Ugur",
+    date: "Sene",
+    time: "Wagt",
+    price: "Baha", 
+    request: "Ýazylmak prosesi bilen kömek edip bilersiňizmi?",
+    thanks: "Sag boluň!"
+  },
 };

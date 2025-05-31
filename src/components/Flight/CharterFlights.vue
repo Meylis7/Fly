@@ -13,77 +13,285 @@
     const route = useRoute()
     const router = useRouter()
 
+    // Reactive data for form state
+    const departureCities = ref([]);
+    const destinationCities = ref([]);
+    const availableDates = ref([]);
+    const availableFlights = ref([]);
 
+    // Selected values
+    const selectedDepartureCity = ref(null);
+    const selectedDestinationCity = ref(null);
+    const selectedDate = ref(null);
+
+    // Loading states
+    const loading = reactive({
+        departureCities: false,
+        destinationCities: false,
+        availableDates: false,
+        availableFlights: false
+    });
+
+    // Error states
     const errors = ref({});
-    const validateForm = () => {
-        errors.value = {};
 
-        if (!departureCityCode.value) {
-            errors.value.departureCityCode = "required";
+    // API service methods for charter flights
+    const charterFlightAPI = {
+        async getDepartureCities() {
+            try {
+                loading.departureCities = true;
+                const response = await apiService.get('/charter-flights/departure-cities', {
+                    headers: {
+                        'Accept-Language': currentLocale.value
+                    }
+                });
+                return response.data || response;
+            } catch (error) {
+                console.error('Error fetching departure cities:', error);
+                throw error;
+            } finally {
+                loading.departureCities = false;
+            }
+        },
+
+        async getDestinationCities(departureCityId) {
+            try {
+                loading.destinationCities = true;
+                const response = await apiService.get('/charter-flights/destination-cities', {
+                    params: { departure_city_id: departureCityId },
+                    headers: {
+                        'Accept-Language': currentLocale.value
+                    }
+                });
+                return response.data || response;
+            } catch (error) {
+                console.error('Error fetching destination cities:', error);
+                throw error;
+            } finally {
+                loading.destinationCities = false;
+            }
+        },
+
+        async getAvailableDates(departureCityId, destinationCityId) {
+            try {
+                loading.availableDates = true;
+                const response = await apiService.get('/charter-flights/available-dates', {
+                    params: { 
+                        departure_city_id: departureCityId,
+                        destination_city_id: destinationCityId
+                    },
+                    headers: {
+                        'Accept-Language': currentLocale.value
+                    }
+                });
+                return response.data || response;
+            } catch (error) {
+                console.error('Error fetching available dates:', error);
+                throw error;
+            } finally {
+                loading.availableDates = false;
+            }
+        },
+
+        async getAvailableFlights(departureCityId, destinationCityId, date) {
+            try {
+                loading.availableFlights = true;
+                const response = await apiService.get('/charter-flights/available-flights', {
+                    params: { 
+                        departure_city_id: departureCityId,
+                        destination_city_id: destinationCityId,
+                        date: date
+                    },
+                    headers: {
+                        'Accept-Language': currentLocale.value
+                    }
+                });
+                return response.data || response;
+            } catch (error) {
+                console.error('Error fetching available flights:', error);
+                throw error;
+            } finally {
+                loading.availableFlights = false;
+            }
         }
-
-        if (!arrivalCityCode.value) {
-            errors.value.arrivalCityCode = "required";
-        }
-
-        if (!departureDate.value) {
-            errors.value.departureDate = "required";
-        }
-
-        if (tripType.value === 'round-trip' && !returnDate.value) {
-            errors.value.returnDate = "required";
-        }
-
-        console.log(errors.value);
-        return Object.keys(errors.value).length === 0;
     };
 
-    // Form submission handler
-    // const handleSubmit = (event) => {
-    //     if (!validateForm()) return;
-    //     event.preventDefault()
+    // Load departure cities on component mount
+    const loadDepartureCities = async () => {
+        try {
+            departureCities.value = await charterFlightAPI.getDepartureCities();
+        } catch (error) {
+            errors.value.departureCities = t('errors.failedToLoadDepartureCities');
+        }
+    };
 
-    //     // Prepare query parameters
-    //     const queryParams = {
-    //         tripType: tripType.value,
-    //         departureCityCode: departureCityCode.value,
-    //         departureCity: departureCity.value,
-    //         arrivalCityCode: arrivalCityCode.value,
-    //         arrivalCity: arrivalCity.value,
-    //         departureDate: departureDate.value,
-    //         returnDate: returnDate.value,
+    // Load destination cities when departure city changes
+    const loadDestinationCities = async (departureCityId) => {
+        if (!departureCityId) {
+            destinationCities.value = [];
+            return;
+        }
 
-    //         adults: counts.value.adult,
-    //         children: counts.value.child,
-    //         infants: counts.value.infant,
-    //         flightClass: selectedClass.value
-    //     }
+        try {
+            destinationCities.value = await charterFlightAPI.getDestinationCities(departureCityId);
+            delete errors.value.destinationCities;
+        } catch (error) {
+            errors.value.destinationCities = t('errors.failedToLoadDestinationCities');
+            destinationCities.value = [];
+        }
+    };
 
-    //     if (route.name === 'flights') {
-    //         window.location.href = router.resolve({
-    //             name: 'flights',
-    //             query: queryParams
-    //         }).href
-    //     } else {
-    //         router.push({
-    //             name: 'flights',
-    //             query: queryParams,
-    //             force: true
-    //         })
-    //     }
-    // }
+    // Load available dates when both cities are selected
+    const loadAvailableDates = async (departureCityId, destinationCityId) => {
+        if (!departureCityId || !destinationCityId) {
+            availableDates.value = [];
+            return;
+        }
 
-    // Close modal when clicking outside
+        try {
+            availableDates.value = await charterFlightAPI.getAvailableDates(departureCityId, destinationCityId);
+            delete errors.value.availableDates;
+        } catch (error) {
+            errors.value.availableDates = t('errors.failedToLoadAvailableDates');
+            availableDates.value = [];
+        }
+    };
+
+    // Load available flights when all selections are made
+    const loadAvailableFlights = async (departureCityId, destinationCityId, date) => {
+        if (!departureCityId || !destinationCityId || !date) {
+            availableFlights.value = [];
+            return;
+        }
+
+        try {
+            availableFlights.value = await charterFlightAPI.getAvailableFlights(departureCityId, destinationCityId, date);
+            delete errors.value.availableFlights;
+        } catch (error) {
+            errors.value.availableFlights = t('errors.failedToLoadAvailableFlights');
+            availableFlights.value = [];
+        }
+    };
+
+    // Watchers for dependent dropdowns
+    watch(selectedDepartureCity, async (newDepartureCityId, oldDepartureCityId) => {
+        if (newDepartureCityId !== oldDepartureCityId) {
+            // Reset dependent selections
+            selectedDestinationCity.value = null;
+            selectedDate.value = null;
+            availableDates.value = [];
+            availableFlights.value = [];
+
+            // Load destination cities for new departure city
+            await loadDestinationCities(newDepartureCityId);
+        }
+    });
+
+    watch(selectedDestinationCity, async (newDestinationCityId, oldDestinationCityId) => {
+        if (newDestinationCityId !== oldDestinationCityId) {
+            // Reset dependent selections
+            selectedDate.value = null;
+            availableFlights.value = [];
+
+            // Load available dates for selected cities
+            await loadAvailableDates(selectedDepartureCity.value, newDestinationCityId);
+        }
+    });
+
+    watch(selectedDate, async (newDate, oldDate) => {
+        if (newDate !== oldDate) {
+            // Load available flights for selected date
+            await loadAvailableFlights(selectedDepartureCity.value, selectedDestinationCity.value, newDate);
+        }
+    });
+
+    // Watch locale changes to reload data
+    watch(currentLocale, async () => {
+        await loadDepartureCities();
+        if (selectedDepartureCity.value) {
+            await loadDestinationCities(selectedDepartureCity.value);
+        }
+        if (selectedDepartureCity.value && selectedDestinationCity.value) {
+            await loadAvailableDates(selectedDepartureCity.value, selectedDestinationCity.value);
+        }
+        if (selectedDepartureCity.value && selectedDestinationCity.value && selectedDate.value) {
+            await loadAvailableFlights(selectedDepartureCity.value, selectedDestinationCity.value, selectedDate.value);
+        }
+    });
+
+    // Format date for display
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString(currentLocale.value, {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    };
+
+    // Format time for display
+    const formatTime = (datetime) => {
+        if (!datetime) return '';
+        const date = new Date(datetime);
+        return date.toLocaleTimeString(currentLocale.value, {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    // Format price for display
+    const formatPrice = (price) => {
+        if (!price) return '';
+        return new Intl.NumberFormat(currentLocale.value, {
+            style: 'currency',
+            currency: 'USD'
+        }).format(price);
+    };
+
+    // Handle flight booking (placeholder for future implementation)
+    const handleFlightBooking = (flight) => {
+        // WhatsApp number in international format (without + and spaces)
+        const whatsappNumber = '99361387806';
+        
+        // Create a pre-filled message with flight details using localized text
+        const message = `${t('whatsappBooking.greeting')}
+
+🛫 ${t('whatsappBooking.route')}: ${flight.city_from?.name || 'N/A'} → ${flight.city_to?.name || 'N/A'}
+📅 ${t('whatsappBooking.date')}: ${formatDate(flight.departure_datetime)}
+🕐 ${t('whatsappBooking.time')}: ${formatTime(flight.departure_datetime)}
+💰 ${t('whatsappBooking.price')}: ${formatPrice(flight.price)}
+
+${t('whatsappBooking.request')}
+
+${t('whatsappBooking.thanks')}`;
+
+        // URL encode the message
+        const encodedMessage = encodeURIComponent(message);
+        
+        // Create WhatsApp URL
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+        
+        // Open WhatsApp in a new tab/window
+        window.open(whatsappUrl, '_blank');
+        
+        console.log('Opening WhatsApp for flight booking:', flight);
+    };
+
+    // Lifecycle hooks
+    onMounted(async () => {
+        await loadDepartureCities();
+        document.addEventListener('click', handleOutsideClick);
+    });
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleOutsideClick);
+    });
+
+    // Close modal when clicking outside (keeping existing functionality)
     const handleOutsideClick = (event) => {
-        if (showModal.value && !event.target.closest('.modal') && !event.target.closest('#passengers-input')) {
-            showModal.value = false;
-        }
-
-        if (autocompleteContainer.value && !autocompleteContainer.value.contains(event.target)) {
-            state.flights = {};
-        }
+        // Existing outside click logic can be kept here if needed
     };
-
 
     const state = reactive({
         flights: [],
@@ -105,78 +313,126 @@
 </script>
 
 <template>
-    <form class="w-full relative" @submit.prevent="handleSubmit">
+    <form class="w-full relative">
         <div
             class="content w-full pt-5 px-[30px] pb-[60px] bg-white rounded-tr-none md:rounded-tr-3xl rounded-r-3xl rounded-bl-3xl">
 
             <div class="flex flex-wrap z-20 1xl:flex-nowrap items-center justify-between gap-y-3">
+                <!-- Departure City Dropdown -->
                 <div class="w-full md:w-[calc(50%-25px)] lg:w-[calc(33.33%-25px)]">
                     <label class="text-sm font-normal mb-2 block">
                         {{ $t("searchForm.routeFrom.label") }}
                     </label>
                     <select
-                        class=" text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
-
-                        <option class="text-base text-black">
-                            Asgabat
+                        v-model="selectedDepartureCity"
+                        :disabled="loading.departureCities"
+                        class="text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                        :class="{ 'opacity-50': loading.departureCities, 'border-red-500': errors.departureCities }">
+                        
+                        <option value="" disabled selected>
+                            {{ loading.departureCities ? $t('loading') : $t('selectDepartureCity') }}
                         </option>
-                        <option class="text-base text-black">
-                            Balkan
-                        </option>
-                        <option class="text-base text-black">
-                            Lebap
+                        <option 
+                            v-for="city in departureCities" 
+                            :key="city.id" 
+                            :value="city.id"
+                            class="text-base text-black">
+                            {{ city.name }}
                         </option>
                     </select>
+                    <div v-if="errors.departureCities" class="text-red-500 text-sm mt-1">
+                        {{ errors.departureCities }}
+                    </div>
                 </div>
 
                 <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden md:block"></span>
 
+                <!-- Destination City Dropdown -->
                 <div class="w-full md:w-[calc(50%-25px)] lg:w-[calc(33.33%-25px)]">
                     <label class="text-sm font-normal mb-2 block">
                         {{ $t("searchForm.routeTo.label") }}
                     </label>
                     <select
-                        class=" text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
-
-                        <option class="text-base text-black">
-                            Asgabat
+                        v-model="selectedDestinationCity"
+                        :disabled="!selectedDepartureCity || loading.destinationCities"
+                        class="text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                        :class="{ 'opacity-50': !selectedDepartureCity || loading.destinationCities, 'border-red-500': errors.destinationCities }">
+                        
+                        <option value="" disabled selected>
+                            <span v-if="!selectedDepartureCity">{{ $t('selectDepartureCityFirst') }}</span>
+                            <span v-else-if="loading.destinationCities">{{ $t('loading') }}</span>
+                            <span v-else>{{ $t('selectDestinationCity') }}</span>
                         </option>
-                        <option class="text-base text-black">
-                            Balkan
-                        </option>
-                        <option class="text-base text-black">
-                            Lebap
+                        <option 
+                            v-for="city in destinationCities" 
+                            :key="city.id" 
+                            :value="city.id"
+                            class="text-base text-black">
+                            {{ city.name }}
                         </option>
                     </select>
+                    <div v-if="errors.destinationCities" class="text-red-500 text-sm mt-1">
+                        {{ errors.destinationCities }}
+                    </div>
                 </div>
 
                 <span class="bg-[#F2F3F4] w-[3px] h-[73px] rounded hidden lg:block"></span>
 
+                <!-- Date Dropdown -->
                 <div class="w-full md:w-[calc(50%-25px)] lg:w-[calc(33.33%-25px)]">
                     <label class="text-sm font-normal mb-2 block">
                         {{ $t("searchForm.datePicker.placeholder") }}
                     </label>
                     <select
-                        class=" text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
-
-                        <option class="text-base text-black">
-                            21.07.2025
+                        v-model="selectedDate"
+                        :disabled="!selectedDepartureCity || !selectedDestinationCity || loading.availableDates"
+                        class="text-sm lg:text-base font-normal w-full py-[14px] min-h-[54px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded"
+                        :class="{ 'opacity-50': !selectedDepartureCity || !selectedDestinationCity || loading.availableDates, 'border-red-500': errors.availableDates }">
+                        
+                        <option value="" disabled selected>
+                            <span v-if="!selectedDepartureCity || !selectedDestinationCity">{{ $t('selectCitiesFirst') }}</span>
+                            <span v-else-if="loading.availableDates">{{ $t('loading') }}</span>
+                            <span v-else-if="availableDates.length === 0">{{ $t('noDatesAvailable') }}</span>
+                            <span v-else>{{ $t('selectDate') }}</span>
                         </option>
-                        <option class="text-base text-black">
-                            28.07.2025
-                        </option>
-                        <option class="text-base text-black">
-                            31.08.2025
+                        <option 
+                            v-for="date in availableDates" 
+                            :key="date" 
+                            :value="date"
+                            class="text-base text-black">
+                            {{ formatDate(date) }}
                         </option>
                     </select>
+                    <div v-if="errors.availableDates" class="text-red-500 text-sm mt-1">
+                        {{ errors.availableDates }}
+                    </div>
                 </div>
             </div>
 
-            <div class="ticket block sm:flex justify-between border border-solid border-[#A1B0CC] rounded mt-7 px-5 py-4">
+            <!-- Loading indicator for flights -->
+            <div v-if="loading.availableFlights" class="flex justify-center items-center mt-7 p-8">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#223A60]"></div>
+                <span class="ml-3 text-[#223A60]">{{ $t('loadingFlights') }}</span>
+            </div>
+
+            <!-- Error message for flights -->
+            <div v-else-if="errors.availableFlights" class="mt-7 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                {{ errors.availableFlights }}
+            </div>
+
+            <!-- No flights message -->
+            <div v-else-if="selectedDepartureCity && selectedDestinationCity && selectedDate && availableFlights.length === 0 && !loading.availableFlights" 
+                 class="mt-7 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+                {{ $t('noFlightsAvailable') }}
+            </div>
+
+            <!-- Flight Results -->
+            <div v-for="flight in availableFlights" :key="flight.id" 
+                 class="ticket block sm:flex justify-between border border-solid border-[#A1B0CC] rounded mt-7 px-5 py-4">
                 <div class="block">
                     <div class="flex items-center justify-center gap-x-3 mb-3 text-xl">
                         <h6 class="font-medium">
-                            Asgabat
+                            {{ flight.city_from?.name || $t('departure') }}
                         </h6>
                         <span class="block">
                             <svg width="16" height="11" viewBox="0 0 20 14" fill="none"
@@ -187,7 +443,7 @@
                             </svg>
                         </span>
                         <h6 class="font-medium">
-                            Istanbul
+                            {{ flight.city_to?.name || $t('destination') }}
                         </h6>
                     </div>
 
@@ -219,26 +475,29 @@
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </span>
-                        <p class="text-base sm:text-lg ">
-                            25.07.2025 • 21:00
+                        <p class="text-base sm:text-lg">
+                            {{ formatDate(flight.departure_datetime) }} • {{ formatTime(flight.departure_datetime) }}
                         </p>
                     </div>
                 </div>
 
                 <div class="block text-right">
                     <h4 class="hidden sm:block font-medium">
-                        $ 350
+                        {{ formatPrice(flight.price) }}
                     </h4>
 
-                    <a href="#" class="block text-center p-3 mt-3 bg-[#223A60] rounded text-white">
+                    <button 
+                        type="button"
+                        @click="handleFlightBooking(flight)"
+                        class="block w-full text-center p-3 mt-3 bg-[#223A60] rounded text-white hover:bg-[#1a2d4d] transition-colors">
                         <p class="hidden sm:block text-base">
-                            Contact to Book
+                            {{ $t('contactToBook') }}
                         </p>
 
                         <p class="sm:hidden text-xl">
-                            $ 350
+                            {{ formatPrice(flight.price) }}
                         </p>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

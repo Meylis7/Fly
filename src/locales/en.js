@@ -361,6 +361,36 @@ export default {
   loading: "Loading",
   notFound: "No data found.",
 
+  // Charter flights specific translations
+  selectDepartureCity: "Select departure city",
+  selectDestinationCity: "Select destination city",
+  selectDepartureCityFirst: "Select departure city first",
+  selectCitiesFirst: "Select cities first",
+  selectDate: "Select date",
+  noDatesAvailable: "No dates available",
+  noFlightsAvailable: "No flights available for selected route and date",
+  loadingFlights: "Loading flights...",
+  contactToBook: "Contact to Book",
+  departure: "Departure",
+  destination: "Destination",
+  errors: {
+    failedToLoadDepartureCities: "Failed to load departure cities",
+    failedToLoadDestinationCities: "Failed to load destination cities", 
+    failedToLoadAvailableDates: "Failed to load available dates",
+    failedToLoadAvailableFlights: "Failed to load available flights"
+  },
+
+  // WhatsApp booking message
+  whatsappBooking: {
+    greeting: "Hello! I'm interested in booking this charter flight:",
+    route: "Route",
+    date: "Date", 
+    time: "Time",
+    price: "Price",
+    request: "Could you please help me with the booking process?",
+    thanks: "Thank you!"
+  },
+
   profile: {
     tabs: {
       tab_1: "Account",
