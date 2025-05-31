@@ -16,7 +16,7 @@ export default {
     tabs: {
       flights: "Flights",
       hotels: "Hotels",
-      innerFlights: "Inner Flights",
+      charterFlights: "Charter Flights",
     },
     flightType: {
       oneWay: "One-way",

@@ -348,7 +348,7 @@
         cursor: not-allowed;
     }
 
-    .passenger-counter input[type="number"]::-webkit-inner-spin-button,
+    .passenger-counter input[type="number"]::-webkit-charter-spin-button,
     .passenger-counter input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;

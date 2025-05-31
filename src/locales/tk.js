@@ -16,7 +16,7 @@ export default {
     tabs: {
       flights: "Uçarlar",
       hotels: "Myhmanhanalar",
-      innerFlights: "Içerki uçuşlar",
+      charterFlights: "Çarter uçuşlar",
     },
     flightType: {
       oneWay: "Bir taraplaýyn",

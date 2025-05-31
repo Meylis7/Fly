@@ -16,7 +16,7 @@ export default {
     tabs: {
       flights: "Рейсы",
       hotels: "Отели",
-      innerFlights: "Внутренние рейсы",
+      charterFlights: "Частные рейсы",
     },
     flightType: {
       oneWay: "В одну сторону",
