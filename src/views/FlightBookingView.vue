@@ -27,8 +27,11 @@
         country: [],
     });
 
-    const options = ref({});
-    const selectedOptions = ref({});
+    // Updated options structure to handle per_passenger flag
+    const generalOptions = ref({});
+    const perPassengerOptions = ref({});
+    const selectedGeneralOptions = ref({});
+    const selectedPerPassengerOptions = ref({});
 
     const birthdayCalendarVisible = ref([]);
     const expireDateCalendarVisible = ref([]);
@@ -36,6 +39,11 @@
         birthdayInputs: {},
         expireDateInputs: {}
     });
+
+    // Computed properties for easier template usage
+    const hasGeneralOptions = computed(() => Object.keys(generalOptions.value).length > 0);
+    const hasPerPassengerOptions = computed(() => Object.keys(perPassengerOptions.value).length > 0);
+    const hasAnyOptions = computed(() => hasGeneralOptions.value || hasPerPassengerOptions.value);
 
     // Calculate age based on birth date and reference date (flight date)
     const calculateAge = (birthDate, referenceDate) => {
@@ -193,11 +201,49 @@
 
             // If success is true, proceed
             processLoading.value = true;
-            options.value = response.data.options;
+            
+            // Process the new options structure
+            const optionsData = response.data.options;
+            console.log('Raw options data:', optionsData);
+            
+            // Handle both old and new format for backward compatibility
+            if (Array.isArray(optionsData)) {
+                // New format - array of option groups with per_passenger flag
+                generalOptions.value = {};
+                perPassengerOptions.value = {};
+                
+                optionsData.forEach(optionGroup => {
+                    if (optionGroup && optionGroup.name && optionGroup.options) {
+                        if (optionGroup.per_passenger) {
+                            perPassengerOptions.value[optionGroup.name] = optionGroup.options;
+                        } else {
+                            generalOptions.value[optionGroup.name] = optionGroup.options;
+                        }
+                    }
+                });
+            } else if (optionsData && typeof optionsData === 'object') {
+                // Old format - assume all options are general
+                console.log('Using old options format, treating all as general options');
+                generalOptions.value = optionsData;
+                perPassengerOptions.value = {};
+            } else {
+                // No options or invalid format
+                generalOptions.value = {};
+                perPassengerOptions.value = {};
+            }
 
-            Object.keys(options.value).forEach(key => {
-                selectedOptions.value[key] = "";
+            console.log('General options:', generalOptions.value);
+            console.log('Per-passenger options:', perPassengerOptions.value);
+
+            // Initialize selected options
+            Object.keys(generalOptions.value).forEach(key => {
+                selectedGeneralOptions.value[key] = "";
             });
+            
+            Object.keys(perPassengerOptions.value).forEach(key => {
+                selectedPerPassengerOptions.value[key] = {};
+            });
+            
         } catch (error) {
             const errorMessage = error.message || "An error occurred";
             sessionStorage.setItem('fly_error', errorMessage);
@@ -350,6 +396,15 @@
                 birthdayInputs: {},
                 expireDateInputs: {}
             };
+            
+            // Initialize per-passenger options for each passenger
+            Object.keys(perPassengerOptions.value).forEach(optionKey => {
+                selectedPerPassengerOptions.value[optionKey] = {};
+                for (let i = 0; i < passengersCount; i++) {
+                    selectedPerPassengerOptions.value[optionKey][i] = "";
+                }
+            });
+            
         } catch (error) {
             console.error("Error loading countries:", error.message);
             toast.error("Error loading countries: " + error.message, {
@@ -446,18 +501,33 @@
             return date;
         };
 
-        // Add age property to each passenger based on their birthdate and flight date
-        const travellersWithAge = state.passengers.map(passenger => {
+        // Add age property and per-passenger options to each passenger
+        const travellersWithAge = state.passengers.map((passenger, index) => {
             const age = calculateAge(passenger.birthdate, flightDate);
+
+            // Build per-passenger options for this traveller
+            const passengerOptions = {};
+            Object.keys(perPassengerOptions.value).forEach(optionKey => {
+                const selectedValue = selectedPerPassengerOptions.value[optionKey]?.[index];
+                if (selectedValue !== '' && selectedValue !== null) {
+                    passengerOptions[optionKey] = selectedValue;
+                }
+            });
 
             console.log(age)
             return {
                 ...passenger,
                 birthdate: ensureDateFormat(passenger.birthdate),
                 passport_expiry_date: ensureDateFormat(passenger.passport_expiry_date),
-                age: age
+                age: age,
+                options: passengerOptions
             };
         });
+
+        // Build general options (filtering out empty values)
+        const generalOptionsFiltered = Object.fromEntries(
+            Object.entries(selectedGeneralOptions.value).filter(([_, v]) => v !== '' && v !== null)
+        );
 
         const payload = {
             routing_id: bookingData.routing_id,
@@ -466,9 +536,7 @@
             contact_details: state.contact_details,
             travellers: travellersWithAge,
             payment_type: state.payment_type,
-            options: Object.fromEntries(
-                Object.entries(selectedOptions.value).filter(([_, v]) => v !== '' && v !== null)
-            )
+            options: generalOptionsFiltered
         };
 
         try {
@@ -698,18 +766,21 @@
 
                             <!-- Options -->
                             <div class="block rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d] gap-y-[30px]"
-                                v-if="Object.keys(options).length">
+                                v-if="hasGeneralOptions">
                                 <h4 class="text-lg lg:text-2xl font-semibold mb-5">
-                                    {{ $t("booking.options.title") }}
+                                    {{ $t("booking.generalOptions.title") }}
                                 </h4>
+                                <p class="text-sm lg:text-base font-normal mb-5">
+                                    {{ $t("booking.generalOptions.text") }}
+                                </p>
 
                                 <div class="flex flex-wrap gap-x-5 gap-y-4">
-                                    <div v-for="(optionGroup, optionKey) in options" :key="optionKey"
+                                    <div v-for="(optionGroup, optionKey) in generalOptions" :key="optionKey"
                                         class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
                                         <label class="text-sm font-normal mb-2 block">
                                             {{ $t(`booking.options.${optionKey}`) }}
                                         </label>
-                                        <select v-model="selectedOptions[optionKey]"
+                                        <select v-model="selectedGeneralOptions[optionKey]"
                                             class="text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
                                             <option value="" disabled>{{ $t("booking.options.select_placeholder") }}
                                             </option>
@@ -901,6 +972,30 @@
                                             @update:modelValue="onExpireDateSelect(index)" placeholder="Choose Dates"
                                             v-if="expireDateCalendarVisible[index]"
                                             class="!absolute top-[85px] left-0 z-10 bg-[#F2F3F4] text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color" />
+                                    </div>
+                                </div>
+
+                                <!-- Per-Passenger Options -->
+                                <div v-if="hasPerPassengerOptions" class="mt-6">
+                                    <h6 class="text-xl font-semibold mb-5">
+                                        {{ $t("booking.passenger.options") }}
+                                    </h6>
+                                    
+                                    <div class="flex flex-wrap gap-x-5 gap-y-4">
+                                        <div v-for="(optionGroup, optionKey) in perPassengerOptions" :key="optionKey"
+                                            class="input w-[calc(100%-10px)] md:w-[calc(50%-10px)]">
+                                            <label class="text-sm font-normal mb-2 block">
+                                                {{ $t(`booking.options.${optionKey}`) }}
+                                            </label>
+                                            <select v-model="selectedPerPassengerOptions[optionKey][index]"
+                                                class="text-sm lg:text-base font-normal w-full py-[14px] px-3 placeholder:text-[#7C8DB0] border border-solid border-[#A1B0CC] rounded">
+                                                <option value="" disabled>{{ $t("booking.options.select_placeholder") }}
+                                                </option>
+                                                <option v-for="item in optionGroup" :key="item.key" :value="item.key">
+                                                    {{ item.value }}
+                                                </option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

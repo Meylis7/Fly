@@ -299,11 +299,16 @@ export default {
       AdvancedAncillaryOptions: "Ancillary options",
       select_placeholder: "Select an option",
     },
+    generalOptions: {
+      title: "General Booking Options",
+      text: "These options apply to your entire booking",
+    },
     passenger: {
       title: "Passenger",
       text: "Please enter your details as indicated in your travel document.",
       personal: "Personal data",
       documents: "Documents",
+      options: "Passenger Options",
       firstName: {
         label: "First name",
         placeholder: "e.g. Aman",

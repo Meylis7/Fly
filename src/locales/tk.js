@@ -286,11 +286,16 @@ export default {
       AdvancedAncillaryOptions: "Goşmaça opsiýalar",
       select_placeholder: "Bir wariant saýlaň",
     },
+    generalOptions: {
+      title: "Umumy sargyt mümkinçilikleri",
+      text: "Bu mümkinçilikler tutuş sargytyňyza degişlidir",
+    },
     passenger: {
       title: "Ýolagçy",
       text: "Syýahat resminamaňyzda görkezilen maglumatlaryňyzy giriziň.",
       personal: "Şahsy maglumatlar",
       documents: "Resminamalar",
+      options: "Ýolagçy mümkinçilikleri",
       firstName: {
         label: "Ady",
         placeholder: "Aman",

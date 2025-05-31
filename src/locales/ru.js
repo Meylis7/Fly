@@ -286,11 +286,16 @@ export default {
       AdvancedAncillaryOptions: "Дополнительные опции",
       select_placeholder: "Выберите вариант",
     },
+    generalOptions: {
+      title: "Общие опции бронирования",
+      text: "Эти опции применяются ко всему бронированию",
+    },
     passenger: {
       title: "Пассажир",
       text: "Пожалуйста, укажите данные, как в вашем проездном документе.",
       personal: "Личные данные",
       documents: "Документы",
+      options: "Опции пассажира",
       firstName: {
         label: "Имя",
         placeholder: "Аман",
