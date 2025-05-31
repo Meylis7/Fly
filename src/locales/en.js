@@ -15,7 +15,8 @@ export default {
   searchForm: {
     tabs: {
       flights: "Flights",
-      hotels: "Hotes",
+      hotels: "Hotels",
+      innerFlights: "Inner Flights",
     },
     flightType: {
       oneWay: "One-way",

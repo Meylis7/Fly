@@ -16,6 +16,7 @@ export default {
     tabs: {
       flights: "Uçarlar",
       hotels: "Myhmanhanalar",
+      innerFlights: "Içerki uçuşlar",
     },
     flightType: {
       oneWay: "Bir taraplaýyn",
@@ -181,7 +182,7 @@ export default {
     sort: {
       val_1: "Arzan",
       val_2: "Iň gysga",
-      val_3: "Uçuş wagty boýunça"
+      val_3: "Uçuş wagty boýunça",
     },
     stops: {
       title: "Duralgalar",
@@ -239,15 +240,15 @@ export default {
       text: "Habarlaşmak maglumatlaryňyzy giriziň",
       firstName: {
         label: "Ady",
-        placeholder: "Adyňyzy giriziň"
+        placeholder: "Adyňyzy giriziň",
       },
       middleName: {
         label: "Atasynyň ady",
-        placeholder: "Atasynyň adyny giriziň (majburi däl)"
+        placeholder: "Atasynyň adyny giriziň (majburi däl)",
       },
       lastName: {
         label: "Familiýasy",
-        placeholder: "Familiýaňyzy giriziň"
+        placeholder: "Familiýaňyzy giriziň",
       },
       gmail: {
         label: "E-poçta",
@@ -296,7 +297,7 @@ export default {
       },
       middleName: {
         label: "Atasynyň ady",
-        placeholder: "Atasynyň adyny giriziň (majburi däl)"
+        placeholder: "Atasynyň adyny giriziň (majburi däl)",
       },
       lastname: {
         label: "Familiýasy",
@@ -395,27 +396,34 @@ export default {
       download: "Ýükläp almak",
     },
     status: {
-      unconfirmed: "Awiakompaniýa bu bellige almagyň ýagdaýy barada açyk görkezme bermedi. Eger bellige almak üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli bolsaňyz, kömek hyzmatymyz bilen habarlaşyň. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň.",
-      unconfirmedBySupplier: "Awiakompaniýa bu bellige almagyň ýagdaýy barada açyk görkezme bermedi. Eger bellige almak üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli bolsaňyz, kömek hyzmatymyz bilen habarlaşyň. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň.",
-      duplicate: "Sistemimiz sizde eýýäm şol ýolagçy we uçus maglumatlary bilen tassyklanan bellige almagyňyz baradaky maglumatlary tapdy. Haýyş edýäris, bar bolan bellige almagyňyzyň jikme-jikliklerini barlaň.",
-      failed: "Bellige almak üstünliksiz boldy. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň. Eger mesele dowam etse, täzeden synanyşyň ýa-da kömek almak üçin kömek hyzmatymyz bilen habarlaşyň.",
+      unconfirmed:
+        "Awiakompaniýa bu bellige almagyň ýagdaýy barada açyk görkezme bermedi. Eger bellige almak üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli bolsaňyz, kömek hyzmatymyz bilen habarlaşyň. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň.",
+      unconfirmedBySupplier:
+        "Awiakompaniýa bu bellige almagyň ýagdaýy barada açyk görkezme bermedi. Eger bellige almak üstünlikli bolsa, ýakyn wagtda e-poçta arkaly tassyklama almalysyňyz. Şübheli bolsaňyz, kömek hyzmatymyz bilen habarlaşyň. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň.",
+      duplicate:
+        "Sistemimiz sizde eýýäm şol ýolagçy we uçus maglumatlary bilen tassyklanan bellige almagyňyz baradaky maglumatlary tapdy. Haýyş edýäris, bar bolan bellige almagyňyzyň jikme-jikliklerini barlaň.",
+      failed:
+        "Bellige almak üstünliksiz boldy. Haýyş edýäris, soňky ýagdaý kesgitlenilýänçä garaşyň we täzeden bellige almaga synanmaň. Eger mesele dowam etse, täzeden synanyşyň ýa-da kömek almak üçin kömek hyzmatymyz bilen habarlaşyň.",
       succeeded: "Bellige almak üstünlikli tamamlandy!",
       pending: "Bellige almagyňyz gaýta işlenilýär. Haýyş edýäris, garaşyň...",
-      bookingInProgress: "Bellige almagyňyz gaýta işlenilýär. Haýyş edýäris, garaşyň..."
-    }
+      bookingInProgress:
+        "Bellige almagyňyz gaýta işlenilýär. Haýyş edýäris, garaşyň...",
+    },
   },
 
   confirmModal: {
     title: "Sargydy tassyklamak",
     message: "Jemi baha: {amount} {currency}. Sargyt etmek isleýärsiňizmi?",
     cancel: "Ýatyr",
-    confirm: "Tassykla"
+    confirm: "Tassykla",
   },
 
   timer: {
-    resultTitle: "Gözleg sessiýasy tamamlandy. Täze reýslar üçin netijeleri täzeläň.",
-    bookingTitle: "Gözleg sessiýasy tamamlandy. Bilet almak üçin täze gözleg başlaň.",
+    resultTitle:
+      "Gözleg sessiýasy tamamlandy. Täze reýslar üçin netijeleri täzeläň.",
+    bookingTitle:
+      "Gözleg sessiýasy tamamlandy. Bilet almak üçin täze gözleg başlaň.",
     resultBtn: "Netijeleri täzeläň",
-    bookingBtn: "Täze gözleg başla"
+    bookingBtn: "Täze gözleg başla",
   },
 };
