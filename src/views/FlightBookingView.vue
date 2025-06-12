@@ -23,6 +23,17 @@
 
     const bookingData = history.state?.updatedSearchData || {};
 
+    // Check for payment cancellation on component mount
+    onMounted(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('payment') === 'cancelled') {
+            const bookingReference = urlParams.get('booking_reference');
+            toast.warning(t('payment.cancelled'), { autoClose: 5000 });
+            // Clear the URL parameters
+            router.replace({ query: {} });
+        }
+    });
+
     const states = reactive({
         country: [],
     });
@@ -552,7 +563,26 @@
             const bookingPayload = {
                 booking_reference: response.data.booking_reference
             };
-            // Second API call to start booking
+            
+            // Handle Stripe payment
+            if (state.payment_type === 'stripe') {
+                try {
+                    const stripeResponse = await apiService.createStripeCheckout(bookingPayload);
+                    if (stripeResponse.success && stripeResponse.checkout_url) {
+                        // Redirect to Stripe checkout
+                        window.location.href = stripeResponse.checkout_url;
+                        return; // Don't proceed with normal flow
+                    } else {
+                        throw new Error(t('payment.stripe.checkoutFailed'));
+                    }
+                } catch (stripeError) {
+                    toast.error(stripeError.message || t('payment.stripe.error'), { autoClose: 5000 });
+                    loading.value = false;
+                    return;
+                }
+            }
+            
+            // Second API call to start booking (for non-Stripe payments)
             const startResponse = await apiService.startBooking(bookingPayload);
 
             if (startResponse.success) {
@@ -1022,6 +1052,19 @@
                                             name="method" id="balance" value="balance">
                                         <label for="balance">
                                             {{ $t("booking.payment.val_1") }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="payment input w-full">
+                                        <input v-model="state.payment_type" required type="radio" class="peer hidden"
+                                            name="method" id="stripe" value="stripe">
+                                        <label for="stripe">
+                                            <span class="flex items-center">
+                                                <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 6.437 7.166 5.4 7.166 8.184 0 1.073-.92 1.556-2.311 1.556-2.137 0-5.070-.818-6.886-1.681l-.567 5.613C3.221 21.63 6.098 22.5 9.248 22.5c6.832 0 9.675-2.685 9.675-6.184 0-6.798-7.166-5.676-7.166-8.748" fill="currentColor"/>
+                                                </svg>
+                                                {{ $t("booking.payment.stripeCard") }}
+                                            </span>
                                         </label>
                                     </div>
                                 </div>

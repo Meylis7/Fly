@@ -22,6 +22,35 @@
     });
 
     const fetchBookingDetails = async () => {
+        // Check for payment success first
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentStatus = urlParams.get('payment');
+        const sessionId = urlParams.get('session_id');
+        
+        if (paymentStatus === 'success' && sessionId) {
+            try {
+                // Call start booking with session verification
+                const startResponse = await apiService.startBooking({
+                    booking_reference: state.bookId,
+                    session_id: sessionId
+                });
+                
+                if (startResponse.success) {
+                    toast.success(t('payment.stripe.success'), { autoClose: 3000 });
+                    // Clear URL parameters
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    // Start polling immediately to check for status changes
+                    setTimeout(fetchBookingDetails, 2000); // Poll every 2 seconds
+                    return; // Skip the immediate details fetch to avoid race condition
+                } else {
+                    toast.error(t('payment.stripe.verificationFailed'), { autoClose: 5000 });
+                }
+            } catch (error) {
+                console.error('Payment verification error:', error);
+                toast.error(t('payment.stripe.verificationError'), { autoClose: 5000 });
+            }
+        }
+
         const data = await apiService.getBookingDetails(state.bookId);
 
         if (data.data) {

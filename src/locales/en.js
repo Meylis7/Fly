@@ -351,6 +351,15 @@ export default {
       title: "Select payment method",
       val_1: "Pay with balance",
       val_2: "Post pay",
+      stripeCard: "Pay with Card (Stripe)",
+      cancelled: "Payment was cancelled. You can try again.",
+      stripe: {
+        success: "Payment successful! Your booking is being processed.",
+        error: "Payment failed. Please try again.",
+        checkoutFailed: "Failed to create payment session. Please try again.",
+        verificationFailed: "Payment verification failed. Please contact support.",
+        verificationError: "Error verifying payment. Please contact support."
+      }
     },
     submit: "Submit",
     success: "Booking submitted successfully!",

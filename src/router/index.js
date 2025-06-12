@@ -8,8 +8,8 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      // component: HomeView,
-      component: () => import("../views/NemoBookingView.vue"),
+      component: HomeView,
+      // component: () => import("../views/NemoBookingView.vue"),
     },
     {
       path: "/flights",

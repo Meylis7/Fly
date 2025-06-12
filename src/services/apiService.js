@@ -206,6 +206,11 @@ const apiService = {
     return apiRequest("post", `/tfusion/bookings/start`, payload);
   },
 
+  // Create Stripe checkout session
+  createStripeCheckout(payload) {
+    return apiRequest("post", `/tfusion/bookings/stripe/checkout`, payload);
+  },
+
   // My Bookings
   fetchMyFlightBookings() {
     return apiRequest("get", `/bookings`);

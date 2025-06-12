@@ -338,6 +338,15 @@ export default {
       title: "Töleg usulyny saýlaň",
       val_1: "Balans bilen tölemek",
       val_2: "Soň tölemek",
+      stripeCard: "Kart bilen tölemek (Stripe)",
+      cancelled: "Töleg ýatyryldy. Täzeden synap bilersiňiz.",
+      stripe: {
+        success: "Töleg üstünlikli! Siziň broniňiz işlenýär.",
+        error: "Töleg ýalňyşlyk. Täzeden synap görüň.",
+        checkoutFailed: "Töleg sessiýasyny döretmek bolmady. Täzeden synap görüň.",
+        verificationFailed: "Töleg tassyklamasy ýalňyş. Goldaw bilen habarlaşyň.",
+        verificationError: "Töleg tassyklanyşynda ýalňyşlyk. Goldaw bilen habarlaşyň."
+      }
     },
     submit: "Ugrat",
     success: "Ýazgy üstünlikli ugradyldy!",
