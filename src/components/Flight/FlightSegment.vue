@@ -177,7 +177,7 @@
             {{ $t("ticket.waitingDuration") }}:
             <span class="font-normal">
                 <span class="font-semibold">{{ stops[index].Location.Airport
-                }}</span>,
+                    }}</span>,
                 {{ stops[index].Location.Country }}
                 ({{ stops[index].Duration.Hours }} {{ $t("ticket.hour") }} {{
                     stops[index].Duration.Minutes }} {{ $t("ticket.minute") }})
