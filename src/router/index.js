@@ -68,6 +68,38 @@ const router = createRouter({
       component: () => import("../views/FlightBookingView.vue"),
     },
 
+    //
+    {
+      path: "/cookies",
+      name: "cookies",
+      component: () => import("../views/CookieView.vue"),
+    },
+    {
+      path: "/disclaimer",
+      name: "disclaimer",
+      component: () => import("../views/DisclaimerView.vue"),
+    },
+    {
+      path: "/gdp",
+      name: "gdp",
+      component: () => import("../views/GDPView.vue"),
+    },
+    {
+      path: "/privacy",
+      name: "privacy",
+      component: () => import("../views/PrivacyView.vue"),
+    },
+    {
+      path: "/refund",
+      name: "refund",
+      component: () => import("../views/RefundView.vue"),
+    },
+    {
+      path: "/tcs",
+      name: "tcs",
+      component: () => import("../views/TCSView.vue"),
+    },
+
     {
       path: "/signin",
       name: "signin",

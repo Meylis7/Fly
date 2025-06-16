@@ -120,6 +120,15 @@ export default {
     usefullLink: "Полезные ссылки",
     socialMedia: "Социальные сети",
     copyright: "© 2024 Fly-Ashgabat. Все права защищены",
+    links: {
+      cookiePolicyForFA:
+        "Политика использования файлов cookie для Fly Ashgabat",
+      disclaimer: "Отказ от ответственности",
+      gdprForFA: "GDPR для Fly Ashgabat",
+      privacyPolicyForFLY: "Политика конфиденциальности для FLY",
+      refundPolicyForFLY: "Политика возврата средств для FLY",
+      tcsForFLY: "Условия и положения для FLY",
+    },
   },
   goBack: "Вернуться назад",
   loadMore: "Загрузить еще",
@@ -344,9 +353,11 @@ export default {
         success: "Платеж успешен! Ваша бронь обрабатывается.",
         error: "Ошибка платежа. Попробуйте снова.",
         checkoutFailed: "Не удалось создать сессию оплаты. Попробуйте снова.",
-        verificationFailed: "Ошибка подтверждения платежа. Обратитесь в поддержку.",
-        verificationError: "Ошибка при подтверждении платежа. Обратитесь в поддержку."
-      }
+        verificationFailed:
+          "Ошибка подтверждения платежа. Обратитесь в поддержку.",
+        verificationError:
+          "Ошибка при подтверждении платежа. Обратитесь в поддержку.",
+      },
     },
     submit: "Отправить",
     success: "Бронирование успешно отправлено!",
@@ -458,17 +469,18 @@ export default {
     failedToLoadDepartureCities: "Не удалось загрузить города отправления",
     failedToLoadDestinationCities: "Не удалось загрузить города назначения",
     failedToLoadAvailableDates: "Не удалось загрузить доступные даты",
-    failedToLoadAvailableFlights: "Не удалось загрузить доступные рейсы"
+    failedToLoadAvailableFlights: "Не удалось загрузить доступные рейсы",
   },
 
   // WhatsApp booking message
   whatsappBooking: {
-    greeting: "Здравствуйте! Меня интересует бронирование этого чартерного рейса:",
+    greeting:
+      "Здравствуйте! Меня интересует бронирование этого чартерного рейса:",
     route: "Маршрут",
     date: "Дата",
-    time: "Время", 
+    time: "Время",
     price: "Цена",
     request: "Не могли бы вы помочь мне с процессом бронирования?",
-    thanks: "Спасибо!"
+    thanks: "Спасибо!",
   },
 };

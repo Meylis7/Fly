@@ -9,6 +9,7 @@ export default {
     signup: "Sign up",
     signin: "Sign in",
   },
+
   heroTitle:
     "Start your adventure with Fly-Ashgabat where your perfect trip begins.",
 
@@ -132,6 +133,14 @@ export default {
     usefullLink: "Useful Link",
     socialMedia: "Social media",
     copyright: "© 2024 Fly-Ashgabat. All Rights Reserved",
+    links: {
+      cookiePolicyForFA: "Cookie Policy for Fly Ashgabat",
+      disclaimer: "Disclaimer",
+      gdprForFA: "GDPR for Fly Ashgabat",
+      privacyPolicyForFLY: "Privacy Policy for FLY",
+      refundPolicyForFLY: "Refund Policy for FLY",
+      tcsForFLY: "T&C's for FLY",
+    },
   },
   goBack: "Go back",
   loadMore: "Load more",
@@ -195,7 +204,7 @@ export default {
     sort: {
       val_1: "Cheaper first",
       val_2: "Shortest",
-      val_3: "By departure time"
+      val_3: "By departure time",
     },
     stops: {
       title: "Stop",
@@ -253,15 +262,15 @@ export default {
       text: "Please provide your contact information",
       firstName: {
         label: "First Name",
-        placeholder: "Enter your first name"
+        placeholder: "Enter your first name",
       },
       middleName: {
         label: "Middle Name",
-        placeholder: "Enter your middle name (optional)"
+        placeholder: "Enter your middle name (optional)",
       },
       lastName: {
         label: "Last Name",
-        placeholder: "Enter your last name"
+        placeholder: "Enter your last name",
       },
       gmail: {
         label: "Email",
@@ -315,7 +324,7 @@ export default {
       },
       middleName: {
         label: "Middle name",
-        placeholder: "Enter middle name (optional)"
+        placeholder: "Enter middle name (optional)",
       },
       lastname: {
         label: "Last name",
@@ -357,9 +366,10 @@ export default {
         success: "Payment successful! Your booking is being processed.",
         error: "Payment failed. Please try again.",
         checkoutFailed: "Failed to create payment session. Please try again.",
-        verificationFailed: "Payment verification failed. Please contact support.",
-        verificationError: "Error verifying payment. Please contact support."
-      }
+        verificationFailed:
+          "Payment verification failed. Please contact support.",
+        verificationError: "Error verifying payment. Please contact support.",
+      },
     },
     submit: "Submit",
     success: "Booking submitted successfully!",
@@ -384,20 +394,20 @@ export default {
   destination: "Destination",
   errors: {
     failedToLoadDepartureCities: "Failed to load departure cities",
-    failedToLoadDestinationCities: "Failed to load destination cities", 
+    failedToLoadDestinationCities: "Failed to load destination cities",
     failedToLoadAvailableDates: "Failed to load available dates",
-    failedToLoadAvailableFlights: "Failed to load available flights"
+    failedToLoadAvailableFlights: "Failed to load available flights",
   },
 
   // WhatsApp booking message
   whatsappBooking: {
     greeting: "Hello! I'm interested in booking this charter flight:",
     route: "Route",
-    date: "Date", 
+    date: "Date",
     time: "Time",
     price: "Price",
     request: "Could you please help me with the booking process?",
-    thanks: "Thank you!"
+    thanks: "Thank you!",
   },
 
   profile: {
@@ -453,27 +463,34 @@ export default {
       download: "Download",
     },
     status: {
-      unconfirmed: "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk. Please wait and do not attempt to re-book until the final status is established.",
-      unconfirmedBySupplier: "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk. Please wait and do not attempt to re-book until the final status is established.",
-      duplicate: "Our system has detected that you already have a confirmed booking with the same passenger and flight details. Please check your existing booking details.",
-      failed: "The booking has failed. Please try again or contact our help desk for assistance. Please wait and do not attempt to re-book until the final status is established.",
+      unconfirmed:
+        "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk. Please wait and do not attempt to re-book until the final status is established.",
+      unconfirmedBySupplier:
+        "The airline did not give a clear indication of the status of this booking. If the booking succeeded, you should receive an email confirmation from them shortly. If in doubt, please contact our help desk. Please wait and do not attempt to re-book until the final status is established.",
+      duplicate:
+        "Our system has detected that you already have a confirmed booking with the same passenger and flight details. Please check your existing booking details.",
+      failed:
+        "The booking has failed. Please try again or contact our help desk for assistance. Please wait and do not attempt to re-book until the final status is established.",
       succeeded: "Booking completed successfully!",
       pending: "Your booking is being processed. Please wait...",
-      bookingInProgress: "Your booking is being processed. Please wait..."
-    }
+      bookingInProgress: "Your booking is being processed. Please wait...",
+    },
   },
 
   confirmModal: {
     title: "Confirm Your Booking",
-    message: "The final price is: {amount} {currency}. Do you want to proceed with the booking?",
+    message:
+      "The final price is: {amount} {currency}. Do you want to proceed with the booking?",
     cancel: "Cancel",
-    confirm: "Confirm"
+    confirm: "Confirm",
   },
 
   timer: {
-    resultTitle: "Your search session has expired. Please update the results to see the latest flights.",
-    bookingTitle: "Your search session has expired. Please start a new search to book flights.",
+    resultTitle:
+      "Your search session has expired. Please update the results to see the latest flights.",
+    bookingTitle:
+      "Your search session has expired. Please start a new search to book flights.",
     resultBtn: "Update Results",
-    bookingBtn: "Start New Search"
+    bookingBtn: "Start New Search",
   },
 };

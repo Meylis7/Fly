@@ -120,6 +120,14 @@ export default {
     usefullLink: "Peýdaly Baglanyşyklar",
     socialMedia: "Sosial ulgamlar",
     copyright: "© 2024 Fly-Ashgabat. Ähli Hukuklar Goralan",
+    links: {
+      cookiePolicyForFA: "Fly Aşgabat üçin gutapjyk syýasaty",
+      disclaimer: "Jogapkärçilikden ýüz öwürmek",
+      gdprForFA: "Fly Aşgabat üçin GDPR",
+      privacyPolicyForFLY: "FLY üçin gizlinlik syýasaty",
+      refundPolicyForFLY: "FLY üçin pul gaýtaryş syýasaty",
+      tcsForFLY: "FLY üçin şertler we düzgünler",
+    },
   },
   goBack: "Yza Dolanmak",
   loadMore: "Ýene görkez",
@@ -343,10 +351,13 @@ export default {
       stripe: {
         success: "Töleg üstünlikli! Siziň broniňiz işlenýär.",
         error: "Töleg ýalňyşlyk. Täzeden synap görüň.",
-        checkoutFailed: "Töleg sessiýasyny döretmek bolmady. Täzeden synap görüň.",
-        verificationFailed: "Töleg tassyklamasy ýalňyş. Goldaw bilen habarlaşyň.",
-        verificationError: "Töleg tassyklanyşynda ýalňyşlyk. Goldaw bilen habarlaşyň."
-      }
+        checkoutFailed:
+          "Töleg sessiýasyny döretmek bolmady. Täzeden synap görüň.",
+        verificationFailed:
+          "Töleg tassyklamasy ýalňyş. Goldaw bilen habarlaşyň.",
+        verificationError:
+          "Töleg tassyklanyşynda ýalňyşlyk. Goldaw bilen habarlaşyň.",
+      },
     },
     submit: "Ugrat",
     success: "Ýazgy üstünlikli ugradyldy!",
@@ -443,7 +454,7 @@ export default {
 
   // Charter flights specific translations
   selectDepartureCity: "Uçuş şäherini saýlaň",
-  selectDestinationCity: "Baryş şäherini saýlaň", 
+  selectDestinationCity: "Baryş şäherini saýlaň",
   selectDepartureCityFirst: "Ilki uçuş şäherini saýlaň",
   selectCitiesFirst: "Ilki şäherleri saýlaň",
   selectDate: "Senäni saýlaň",
@@ -456,8 +467,8 @@ export default {
   errors: {
     failedToLoadDepartureCities: "Uçuş şäherlerini ýükläp bolmady",
     failedToLoadDestinationCities: "Baryş şäherlerini ýükläp bolmady",
-    failedToLoadAvailableDates: "Elýeterli seneleri ýükläp bolmady", 
-    failedToLoadAvailableFlights: "Elýeterli uçuşlary ýükläp bolmady"
+    failedToLoadAvailableDates: "Elýeterli seneleri ýükläp bolmady",
+    failedToLoadAvailableFlights: "Elýeterli uçuşlary ýükläp bolmady",
   },
 
   // WhatsApp booking message
@@ -466,8 +477,8 @@ export default {
     route: "Ugur",
     date: "Sene",
     time: "Wagt",
-    price: "Baha", 
+    price: "Baha",
     request: "Ýazylmak prosesi bilen kömek edip bilersiňizmi?",
-    thanks: "Sag boluň!"
+    thanks: "Sag boluň!",
   },
 };
