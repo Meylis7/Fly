@@ -140,7 +140,7 @@ export default {
   login: "Giriş",
   signIn: {
     title: "Giriş",
-    text: "Golobe hasabyňyza girmek üçin giriş ediň",
+    text: "Fly Ashgabat hasabyňyza girmek üçin giriş ediň",
     email: {
       label: "E-poçta",
       placeholder: "Aman{@}gmail.com",
@@ -154,7 +154,7 @@ export default {
   },
   signUp: {
     title: "Hasap döret",
-    text: "Golobe hasabyňyza girmek üçin hasap dörediň",
+    text: "Fly Ashgabat hasabyňyza girmek üçin hasap dörediň",
     name: {
       label: "Ady",
       placeholder: "Aman",

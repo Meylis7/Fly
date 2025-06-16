@@ -154,7 +154,7 @@ export default {
   login: "Login",
   signIn: {
     title: "Login",
-    text: "Login to access your Golobe account",
+    text: "Login to access your Fly-Ashgabat account",
     email: {
       label: "Email",
       placeholder: "Aman{@}gmail.com",
@@ -168,7 +168,7 @@ export default {
   },
   signUp: {
     title: "Sign up",
-    text: "Login to access your Golobe account",
+    text: "Login to access your Fly Ashgabat account",
     name: {
       label: "First name",
       placeholder: "Aman",

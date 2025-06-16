@@ -141,7 +141,7 @@ export default {
   login: "Войти",
   signIn: {
     title: "Вход",
-    text: "Войдите, чтобы получить доступ к своей учетной записи Golobe",
+    text: "Войдите, чтобы получить доступ к своей учетной записи Fly Ashgabat",
     email: {
       label: "Электронная почта",
       placeholder: "Aman{@}gmail.com",
@@ -155,7 +155,7 @@ export default {
   },
   signUp: {
     title: "Регистрация",
-    text: "Зарегистрируйтесь, чтобы получить доступ к своей учетной записи Golobe",
+    text: "Зарегистрируйтесь, чтобы получить доступ к своей учетной записи Fly-Ashgabat",
     name: {
       label: "Имя",
       placeholder: "Аман",
