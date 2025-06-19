@@ -300,10 +300,17 @@ watch(departureCity, () => {
 });
 
 // 
+const arrivalInput = ref(null);
+
 const handleDepartureCitySelected = (selectedCity) => {
     departureCity.value = selectedCity.city;
     departureCityCode.value = selectedCity.cityCode;
     lastValidDeparture.value = selectedCity.city; // Store valid selection
+
+    // Focus the arrival input after a short delay to ensure DOM update
+    setTimeout(() => {
+        arrivalInput.value?.focus();
+    }, 0);
 };
 
 const handleDepartureAirportSelected = (selectedAirport) => {
@@ -445,7 +452,7 @@ const openArrivalModal = () => {
                             </span>
                         </label>
 
-                        <input type="text" v-model="arrivalCity" :placeholder="$t('searchForm.routeTo.placeholder')"
+                        <input type="text" v-model="arrivalCity" ref="arrivalInput" :placeholder="$t('searchForm.routeTo.placeholder')"
                             class="bg-[#F2F3F4] w-full text-base font-medium p-3 rounded-md focus:ring-1 focus:ring-prime-color"
                             :class="errors.arrivalCityCode ? 'border-red-500 border-solid border' : ''"
                             @click="openArrivalModal" @focus="handleFocus" @blur="handleArrivalBlur">
