@@ -138,7 +138,7 @@ const selectedClass = ref('all'); // Default selected class
 const passengerDisplay = computed(() => {
     // Get the selected class text (Econom or Business)
     // const selectedClassText = selectedClass.value === 'econom' ? 'Econom' : selectedClass.value === 'all' ? 'All' : 'Business';
-    const selectedClassText = selectedClass.value === 'econom' ? `${t('searchForm.typeFlights[1].title')}` : selectedClass.value === 'all' ? `${t('searchForm.typeFlights[0].title')}` : `${t('searchForm.typeFlights[2].title')}`;
+    const selectedClassText = selectedClass.value === 'economy' ? `${t('searchForm.typeFlights[1].title')}` : selectedClass.value === 'all' ? `${t('searchForm.typeFlights[0].title')}` : `${t('searchForm.typeFlights[2].title')}`;
 
     // const selectedClassText = t(`searchForm.typeFlights.find(flight => flight.value === '${selectedClass.value}').title`);
     return `${totalCount.value} ${t('searchForm.passengers.label')}, ${selectedClassText}`;
@@ -601,8 +601,8 @@ const openArrivalModal = () => {
                         <label for="all"> {{ $t("searchForm.typeFlights[0].title") }}</label>
                     </div>
                     <div class="class-type w-[calc(100%-10px)] text-center sm:w-[33.33%]">
-                        <input type="radio" id="econom" name="flight-type" value="econom" v-model="selectedClass">
-                        <label for="econom">{{ $t("searchForm.typeFlights[1].title") }}</label>
+                        <input type="radio" id="economy" name="flight-type" value="economy" v-model="selectedClass">
+                        <label for="economy">{{ $t("searchForm.typeFlights[1].title") }}</label>
                     </div>
                     <div class="class-type w-[calc(100%-10px)] text-center sm:w-[33.33%]">
                         <input type="radio" id="business" name="flight-type" value="business" v-model="selectedClass">

@@ -367,6 +367,7 @@ export default {
 
   loading: "Ýüklenýär",
   notFound: "Maglumat tapylmady.",
+  notFoundFlight: "Elýeterli uçuşlar tapylmady.",
 
   profile: {
     tabs: {

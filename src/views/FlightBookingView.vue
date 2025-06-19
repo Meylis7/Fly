@@ -1031,6 +1031,7 @@
                             </div>
                         </div>
 
+                        <!-- Payment type -->
                         <div class=" block w-full xl:w-[480px] ">
                             <div class=" block rounded-[10px] p-[30px] bg-white border border-solid border-[#223a604d]
                             gap-y-[30px]">

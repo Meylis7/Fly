@@ -379,6 +379,7 @@ export default {
 
   loading: "Loading",
   notFound: "No data found.",
+  notFoundFlight: "No available flights found.",
 
   // Charter flights specific translations
   selectDepartureCity: "Select departure city",

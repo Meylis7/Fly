@@ -4,6 +4,7 @@
   import { Vue3Lottie } from 'vue3-lottie'
   import LoadAnimationJSON from '@/assets/ticket-loading.json'
   import NotFoundJson from '@/assets/not-found.json'
+  import NoAvailable from '@/assets/noAvailable.json'
   import { toast } from 'vue3-toastify'
 
   import apiService from "@/services/apiService";
@@ -214,6 +215,9 @@
     return flights.value && flights.value.message === "No result found" || flights.value.length == 0;
   });
 
+  const showNoAvailableFiltered = computed(() => {
+    return !loading.value && filteredFlights.value.length === 0;
+  });
 
   // Tabs ============================
   const activeTab = ref('src-1');
@@ -333,6 +337,14 @@
             <div>
               <FlightResultItem v-for="(flight, index) in displayedFlights" :key="flight.id" :flight="flight"
                 :searchData="searchData" :index="index" class="last:mb-0" />
+            </div>
+
+            <div v-if="showNoAvailableFiltered" class="w-full pt-10 flex flex-col items-center min-h-[700px]">
+              <h4 class="text-3xl font-semibold text-center">
+                {{ $t("notFoundFlight") }}
+              </h4>
+
+              <Vue3Lottie :animationData="NoAvailable" class="w-full md:!w-[400px] !h-[400px]" />
             </div>
 
             <LoadMore 

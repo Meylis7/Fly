@@ -367,6 +367,7 @@ export default {
 
   loading: "Загрузка",
   notFound: "Данные не найдены.",
+  notFoundFlight: "Нет доступных рейсов.",
 
   profile: {
     tabs: {
