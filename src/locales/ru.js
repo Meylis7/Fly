@@ -122,12 +122,12 @@ export default {
     copyright: "© 2024 Fly-Ashgabat. Все права защищены",
     links: {
       cookiePolicyForFA:
-        "Политика использования файлов cookie для Fly Ashgabat",
+        "Политика использования файлов cookie",
       disclaimer: "Отказ от ответственности",
-      gdprForFA: "GDPR для Fly Ashgabat",
-      privacyPolicyForFLY: "Политика конфиденциальности для FLY",
-      refundPolicyForFLY: "Политика возврата средств для FLY",
-      tcsForFLY: "Условия и положения для FLY",
+      gdprForFA: "GDPR",
+      privacyPolicyForFLY: "Политика конфиденциальности",
+      refundPolicyForFLY: "Политика возврата средств",
+      tcsForFLY: "Условия и положения",
     },
   },
   goBack: "Вернуться назад",
